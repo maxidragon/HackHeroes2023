@@ -14,7 +14,7 @@ export default function Home() {
         animate={{ scaleX: 0, transition: { duration: 0.6, ease: "circOut" } }}
         exit={{ scaleX: 1, transition: { duration: 0.6, ease: "circIn" } }}
         style={{ originX: isPresent ? 0 : 1 }}
-        className="privacy-screen bg-purple-400 z-50"
+        className="privacy-screen bg-indigo-400 z-50"
       />
     </>
   );

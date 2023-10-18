@@ -1,4 +1,3 @@
-import "./App.css";
 import { useLocation, useRoutes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { cloneElement } from "react";
