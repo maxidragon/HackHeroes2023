@@ -25,10 +25,9 @@ jobs:
       run: npm run build
       working-directory: ./frontend
     - name: Copy files to /var/www
-      run: cp -r ~/hackheroes/_work/HackHeroes2023/HackHeroes2023/frontend/dist /var/www/productive.maksymiliangala.com/      
+      run: cp -r ~/hackheroes/_work/HackHeroes2023/HackHeroes2023/frontend/dist /var/www/hackheroes.maksymiliangala.com/      
     - name: Cleanup
-      run: rm -rf node_modules/
-      working-directory: ./frontend
+      run: rm -rf frontend/
     - name: Install backend dependencies
       run: npm install
       working-directory: ./backend 
