@@ -8,12 +8,17 @@ import { useRef } from "react";
 
 export default function Login() {
   const isPresent = useIsPresent();
-  const usernameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const login = () => {
-    if (!usernameRef.current?.value || !passwordRef.current?.value) {
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+
+    if (!emailRef.current?.value || !passwordRef.current?.value) {
       toast.error("Fill all the fields!");
+      return;
+    } else if (!emailRegex.test(emailRef.current?.value)) {
+      toast.error("Invalid email!");
       return;
     }
 
@@ -22,16 +27,16 @@ export default function Login() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
-        username: usernameRef.current?.value,
+        email: emailRef.current?.value,
         password: passwordRef.current?.value,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        if (data.error) {
-          toast.error(data.error);
+        if (data.statusCode >= 400) {
+          toast.error("Wrong email or password!");
           return;
         } else {
           toast.success("Logged in successfully!");
@@ -55,7 +60,7 @@ export default function Login() {
           Back to home
         </Link>
         <h1 className="text-7xl mb-16 roboto">Login</h1>
-        <Input placeholder="Username" ref={usernameRef} />
+        <Input placeholder="E-Mail" ref={emailRef} type="email"/>
         <Input placeholder="Password" type="password" ref={passwordRef} />
         <Button type="default" onClick={login}>
           LOGIN
