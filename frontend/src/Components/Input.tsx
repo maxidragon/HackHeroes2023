@@ -1,3 +1,5 @@
+import { forwardRef } from "react";
+
 interface InputProps {
   id?: string;
   type?: string;
@@ -9,16 +11,19 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function Input({
-  id,
-  type,
-  placeholder,
-  className,
-  value,
-  onChange,
-  readonly,
-  name,
-}: InputProps) {
+export default forwardRef(function Input(
+  {
+    id,
+    type,
+    placeholder,
+    className,
+    value,
+    onChange,
+    readonly,
+    name,
+  }: InputProps,
+  ref: any
+) {
   return (
     <div className="relative">
       <input
@@ -30,13 +35,15 @@ export default function Input({
         name={name}
         id={id || ""}
         placeholder=" "
+        ref={ref}
       />
       <label
         htmlFor={id || ""}
         className="absolute text-lg cursor-text text-gray-500 duration-300 transform -translate-y-4 scale-75 top-1 z-10 origin-[0] bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-purple-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+        onClick={() => ref.current?.focus()}
       >
         {placeholder}
       </label>
     </div>
   );
-}
+});

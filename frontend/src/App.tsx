@@ -4,6 +4,7 @@ import { cloneElement } from "react";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Home from "./Pages/Home/Home";
+import ToasterComponent from "./Components/Toaster";
 
 function App() {
   const element = useRoutes([
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
+      <ToasterComponent />
       {cloneElement(element, { key: location.pathname })}
     </AnimatePresence>
   );

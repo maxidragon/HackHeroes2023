@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,4 +22,8 @@ h1, h2, a {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.roboto {
+  font-family: 'Roboto Slab', serif;
 }

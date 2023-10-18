@@ -13,7 +13,7 @@ export default function Register() {
         <Link className="absolute top-4 left-4" to="/">
           Back to home
         </Link>
-        <h1 className="text-7xl mb-16">Register</h1>
+        <h1 className="text-7xl mb-16 roboto">Register</h1>
         <Input placeholder="Username" />
         <Input placeholder="E-Mail" type="email" />
         <Input
