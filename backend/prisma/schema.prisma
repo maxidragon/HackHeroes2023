@@ -22,10 +22,21 @@ model User {
   fingerprint   String?
   privateKey    String?
   firebaseToken String?
+  TODO          Todo[]
 }
 
 model RestURL {
   id    Int    @id @default(autoincrement())
   url   String @unique
   users User[] @relation()
+}
+
+model Todo {
+  id        Int      @id @default(autoincrement())
+  text      String
+  done      Boolean  @default(false)
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
