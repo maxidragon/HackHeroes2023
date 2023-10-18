@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  frontend:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [19.x] 
+        
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install frontend dependencies
+      run: npm install
+      working-directory: ./frontend
+    - name: Build
+      run: npm run build
+      working-directory: ./frontend
+    - name: Cleanup
+      run: rm -rf node_modules/
+      working-directory: ./frontend
+    - name: Install backend dependencies
+      run: npm install
+      working-directory: ./backend 
+    - name: Create .env
+      run: echo "${{ secrets.ENV_PRODUCTION }}" > .env
+      working-directory: ./backend
+    - name: Generate prisma
+      run: npx prisma generate
+      working-directory: ./backend      
+    - name: Build project
+      run: npm run build
+      working-directory: ./backend
+    - name: Restart service
+      run: pm2 restart HackHeroes2023-backend
+      working-directory: ./backend
