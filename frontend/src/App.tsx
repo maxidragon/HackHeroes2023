@@ -5,12 +5,34 @@ import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Home from "./Pages/Home/Home";
 import ToasterComponent from "./Components/Toaster";
+import Header from "./Layout/Header";
+import Notes from "./Pages/Notes/Notes";
+import ClassRegister from "./Pages/ClassRegister/ClassRegister";
+import Todo from "./Pages/Todo/Todo";
 
 function App() {
   const element = useRoutes([
     {
       path: "/",
-      element: <Home />,
+      element: <Header />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/notes",
+          element: <Notes />,
+        },
+        {
+          path: "/class-register",
+          element: <ClassRegister />,
+        },
+        {
+          path: "/todo",
+          element: <Todo />,
+        },
+      ],
     },
     {
       path: "/login",

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, useIsPresent } from "framer-motion";
 import background from "../../graphics/loginBackground.jpg";
 import Input from "../../Components/Input";
@@ -10,6 +10,7 @@ export default function Login() {
   const isPresent = useIsPresent();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const login = () => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -40,6 +41,9 @@ export default function Login() {
           return;
         } else {
           toast.success("Logged in successfully!");
+          setTimeout(() => {
+            navigate("/");
+          }, 750);
         }
       })
       .catch((err: any) => {

@@ -1,0 +1,17 @@
+{
+  "name": "hack-heroes-2023",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently -n \"FRONTEND,BACKEND\" -c \"blue, green\" \"npm:start:frontend\" \"npm:start:backend\" ",
+    "start:backend": "npm run start:dev --prefix backend",
+    "start:frontend": "npm run dev --prefix frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

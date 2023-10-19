@@ -22,7 +22,7 @@ h1, h2, a {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, #8400FC 0%, #CCA6EE 100%);
+  background: linear-gradient(45deg, #8400FC 0%, #e27bfc 100%);
 }
 
 .roboto {
