@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgClr: "#1A1B1D",
+        bgClr: "#2e2f30",
+        bgLght: "#393a3a",
       },
     },
     plugins: [],

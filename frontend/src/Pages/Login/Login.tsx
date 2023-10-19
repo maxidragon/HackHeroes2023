@@ -5,12 +5,16 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import toast from "react-hot-toast";
 import { useRef } from "react";
+import { useAtom } from "jotai";
+import { userAtom } from "../../Atoms";
+import getUserObject from "../../lib/getUser";
 
 export default function Login() {
   const isPresent = useIsPresent();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [, setUser] = useAtom(userAtom);
 
   const login = () => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -41,6 +45,7 @@ export default function Login() {
           return;
         } else {
           toast.success("Logged in successfully!");
+          setUser(() => getUserObject());
           setTimeout(() => {
             navigate("/");
           }, 750);

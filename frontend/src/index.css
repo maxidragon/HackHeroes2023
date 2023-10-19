@@ -9,7 +9,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: rgb(26, 27, 29);
+  background-color: #2e2f30;
 }
 
 h1, h2, a {
@@ -27,4 +27,8 @@ h1, h2, a {
 
 .roboto {
   font-family: 'Roboto Slab', serif;
+}
+
+.linkAnimation {
+  transition: all 150ms linear;
 }
