@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { LoginModule } from './login/login.module';
+import { ResetModule } from './reset/reset.module';
 
 const { SECRET: secret = 'secret', EXPIRES_IN: expiresIn = 3600 * 24 } =
   process.env;
@@ -14,6 +15,7 @@ const { SECRET: secret = 'secret', EXPIRES_IN: expiresIn = 3600 * 24 } =
   imports: [
     forwardRef(() => RegisterModule),
     forwardRef(() => LoginModule),
+    forwardRef(() => ResetModule),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret,
