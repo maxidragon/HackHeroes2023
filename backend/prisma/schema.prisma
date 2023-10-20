@@ -11,21 +11,22 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique
-  username      String?
-  password      String
-  description   String?
-  avatar       Bytes?
-  banner       Bytes?
-  loginID       Int?
-  restURL       RestURL? @relation(fields: [restURLId], references: [id])
-  restURLId     Int?
-  certificate   String?
-  fingerprint   String?
-  privateKey    String?
-  firebaseToken String?
-  TODO          Todo[]
+  id                   Int                   @id @default(autoincrement())
+  email                String                @unique
+  username             String?
+  password             String
+  description          String?
+  avatar               Bytes?
+  banner               Bytes?
+  loginID              Int?
+  restURL              RestURL?              @relation(fields: [restURLId], references: [id])
+  restURLId            Int?
+  certificate          String?
+  fingerprint          String?
+  privateKey           String?
+  firebaseToken        String?
+  TODO                 Todo[]
+  PasswordResetRequest PasswordResetRequest?
 }
 
 model RestURL {
@@ -42,4 +43,10 @@ model Todo {
   user      User?    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PasswordResetRequest {
+  hash   String @id
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
