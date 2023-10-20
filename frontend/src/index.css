@@ -29,6 +29,8 @@ h1, h2, a {
   font-family: 'Roboto Slab', serif;
 }
 
-.linkAnimation {
-  transition: all 150ms linear;
+.link {
+  transition: all 400ms linear;
+  background: linear-gradient(90deg, #7100db 0%, #ba64cf 25%, #393a3a 50%);
+  background-size: 400% 400%;
 }

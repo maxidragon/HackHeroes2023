@@ -20,7 +20,7 @@ export default function Header() {
       setTimeout(() => {
         window.location.reload();
       }, 750);
-    })
+    });
   }
 
   return (
@@ -28,14 +28,29 @@ export default function Header() {
       <header className="w-screen border-b-2 border-purple-400 h-auto flex justify-between items-center px-8 py-2">
         <Link to="/" className="flex items-center w-fit">
           <img src={logo} alt="Study_sphere_logo" className="w-16" />
-          <h1 className="roboto text-3xl">Study Sphere</h1>
+          <h1 className="roboto text-3xl">Edu Sphere</h1>
         </Link>
         <nav className="roboto uppercase flex items-center gap-8 text-2xl h-8">
           <NavLink
             className={({ isActive }) => {
-              return isActive
-                ? "text-slate-200 bg-purple-600 rounded-xl px-4 linkAnimation"
-                : "text-gray-400 bg-bgLght rounded-xl px-4 linkAnimation";
+              return `rounded-full px-4 link ${
+                isActive
+                  ? "text-slate-200 !bg-left"
+                  : "text-gray-400 bg-bgLght !bg-right"
+              }`;
+            }}
+            to="/flashcards"
+          >
+            Flash cards
+          </NavLink>
+          <div className="w-1 rounded-xl h-full bg-bgLght" />
+          <NavLink
+            className={({ isActive }) => {
+              return `rounded-full px-4 link ${
+                isActive
+                  ? "text-slate-200 !bg-left"
+                  : "text-gray-400 bg-bgLght !bg-right"
+              }`;
             }}
             to="/notes"
           >
@@ -45,9 +60,11 @@ export default function Header() {
           <NavLink
             to="/class-register"
             className={({ isActive }) => {
-              return isActive
-                ? "text-slate-200 bg-purple-600 rounded-xl px-4 linkAnimation"
-                : "text-gray-400 bg-bgLght rounded-xl px-4 linkAnimation";
+              return `rounded-full px-4 link ${
+                isActive
+                  ? "text-slate-200 !bg-left"
+                  : "text-gray-400 bg-bgLght !bg-right"
+              }`;
             }}
           >
             Class register
@@ -56,9 +73,11 @@ export default function Header() {
           <NavLink
             to="/todo"
             className={({ isActive }) => {
-              return isActive
-                ? "text-slate-200 bg-purple-600 rounded-xl px-4 linkAnimation"
-                : "text-gray-400 bg-bgLght rounded-xl px-4 linkAnimation";
+              return `rounded-full px-4 link ${
+                isActive
+                  ? "text-slate-200 !bg-left"
+                  : "text-gray-400 bg-bgLght !bg-right"
+              }`;
             }}
           >
             Todo
@@ -70,7 +89,7 @@ export default function Header() {
               to={`/profile/${user.id}`}
               className="flex items-center gap-4"
             >
-              <div className="rounded-xl bg-purple-400 w-8 h-8" />
+              <div className="rounded-full bg-purple-400 w-8 h-8" />
               {user.username}
             </Link>
             <Button

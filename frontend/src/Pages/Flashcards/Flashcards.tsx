@@ -1,11 +1,11 @@
 import { motion, useIsPresent } from "framer-motion";
 
-export default function Notes() {
+export default function Flashcards() {
   const isPresent = useIsPresent();
 
   return (
     <div className="flex-1">
-      <h1>Notes</h1>
+      <h1>Flashcards</h1>
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{

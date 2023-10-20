@@ -9,6 +9,7 @@ import Header from "./Layout/Header";
 import Notes from "./Pages/Notes/Notes";
 import ClassRegister from "./Pages/ClassRegister/ClassRegister";
 import Todo from "./Pages/Todo/Todo";
+import Flashcards from "./Pages/Flashcards/Flashcards";
 
 function App() {
   const element = useRoutes([
@@ -19,6 +20,10 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/flashcards",
+          element: <Flashcards />,
         },
         {
           path: "/notes",
