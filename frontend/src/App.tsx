@@ -10,6 +10,7 @@ import Notes from "./Pages/Notes/Notes";
 import ClassRegister from "./Pages/ClassRegister/ClassRegister";
 import Todo from "./Pages/Todo/Todo";
 import Flashcards from "./Pages/Flashcards/Flashcards";
+import Profile from "./Pages/Profile/Profile";
 
 function App() {
   const element = useRoutes([
@@ -36,6 +37,10 @@ function App() {
         {
           path: "/todo",
           element: <Todo />,
+        },
+        {
+          path: "/profile/:userId",
+          element: <Profile />,
         },
       ],
     },

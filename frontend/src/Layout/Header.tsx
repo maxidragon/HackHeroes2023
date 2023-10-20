@@ -4,6 +4,7 @@ import Button from "../Components/Button";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../Atoms";
 import toast from "react-hot-toast";
+import AvatarComponent from "../Components/AvatarComponent";
 
 export default function Header() {
   const user = useAtomValue(userAtom);
@@ -84,14 +85,22 @@ export default function Header() {
           </NavLink>
         </nav>
         {user.username ? (
-          <div className="flex items-center gap-4 roboto text-3xl">
-            <Link
+          <div className="flex items-center gap-8 roboto text-3xl">
+            <NavLink
               to={`/profile/${user.id}`}
-              className="flex items-center gap-4"
+              className={({ isActive }) => {
+                return `flex items-center gap-2 transition ${
+                  isActive ? "text-gray-100" : "text-gray-400"
+                } `;
+              }}
             >
-              <div className="rounded-full bg-purple-400 w-8 h-8" />
+              <AvatarComponent
+                userId={+(user.id || -10)}
+                userName={user.username}
+                size="2rem"
+              />
               {user.username}
-            </Link>
+            </NavLink>
             <Button
               type="default"
               className="roboto text-center"
