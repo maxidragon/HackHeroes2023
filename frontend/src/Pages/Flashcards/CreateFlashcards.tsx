@@ -65,7 +65,7 @@ export default function CreateFlashcards() {
       <Input containerClassName="w-full" className="sm:w-full" placeholder="Title" ref={titleRef} type="text" />
       {flashcards.map((flashcard, index) => {
         return (
-          <div className="w-full p-5 flex flex-col gap-4 border-4 border-violet-900 rounded-lg">
+          <div key={index} className="w-full p-5 flex flex-col gap-4 border-4 border-violet-900 rounded-lg">
             <p className="text-white">Flashcard nr. {index + 1}</p>
             <Input className="sm:w-full" id={`concept-${index}`} placeholder="Concept" />
             <Input className="sm:w-full" id={`definition-${index}`} placeholder="Definition" />
