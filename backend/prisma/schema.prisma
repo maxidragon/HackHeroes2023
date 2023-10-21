@@ -31,6 +31,7 @@ model User {
   firebaseToken        String?               @db.LongText
   TODO                 Todo[]
   PasswordResetRequest PasswordResetRequest?
+  FlashCardSet         FlashCardSet[]
 }
 
 model RestURL {
@@ -53,4 +54,32 @@ model PasswordResetRequest {
   hash   String @id
   userId Int    @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FlashCardSet {
+  id          Int                @id @default(autoincrement())
+  title       String
+  description String?
+  cards       FlashCard[]
+  user        User?              @relation(fields: [userId], references: [id])
+  userId      Int?
+  publicity   FlashCardPublicity
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model FlashCard {
+  id        Int                @id @default(autoincrement())
+  question  String
+  answer    String
+  set       FlashCardSet?      @relation(fields: [setId], references: [id])
+  setId     Int?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+enum FlashCardPublicity {
+  PUBLIC
+  PRIVATE
+  CLASS
 }

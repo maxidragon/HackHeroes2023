@@ -7,6 +7,7 @@ import { VulcanModule } from './vulcan/vulcan.module';
 import { TodoModule } from './todo/todo.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { UserModule } from './user/user.module';
+import { FlashcardModule } from './flashcard/flashcard.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UserModule } from './user/user.module';
       }),
     }),
     UserModule,
+    FlashcardModule,
   ],
   providers: [VulcanService],
   controllers: [VulcanController],
