@@ -14,6 +14,10 @@ model User {
   id                   Int                   @id @default(autoincrement())
   email                String                @unique
   username             String?
+  firstName            String?
+  lastName             String?
+  schoolClass          String?
+  schoolName           String?
   password             String
   description          String?
   avatar               Bytes?

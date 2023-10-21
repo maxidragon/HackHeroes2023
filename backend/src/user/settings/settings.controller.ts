@@ -14,8 +14,8 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { SettingsService } from './settings.service';
-import { GetUser } from '../auth/decorator/getUser.decorator';
-import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
+import { GetUser } from '../../auth/decorator/getUser.decorator';
+import { JwtAuthDto } from '../../auth/dto/jwt-auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { SettingsDto } from './dto/settings.dto';
 import { Response } from 'express';

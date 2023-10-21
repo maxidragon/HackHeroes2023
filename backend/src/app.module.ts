@@ -5,8 +5,8 @@ import { VulcanService } from './vulcan/vulcan.service';
 import { VulcanController } from './vulcan/vulcan.controller';
 import { VulcanModule } from './vulcan/vulcan.module';
 import { TodoModule } from './todo/todo.module';
-import { SettingsModule } from './settings/settings.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -14,7 +14,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
     DbModule,
     VulcanModule,
     TodoModule,
-    SettingsModule,
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
@@ -31,6 +30,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
         },
       }),
     }),
+    UserModule,
   ],
   providers: [VulcanService],
   controllers: [VulcanController],
