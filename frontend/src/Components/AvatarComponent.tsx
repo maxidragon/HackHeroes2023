@@ -19,7 +19,7 @@ const AvatarComponent = (props: {
       ariaLabel="blocks-loading"
       wrapperStyle={{}}
       wrapperClass="blocks-wrapper"
-      colors={["##a78bfa", "##5b21b6", "##9333ea", "##e879f9", "##f5d0fe"]}
+      colors={["#a78bfa", "#5b21b6", "#9333ea", "#e879f9", "#f5d0fe"]}
     />
   );
 

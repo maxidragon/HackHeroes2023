@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../Atoms";
 import getUserObject from "../../lib/getUser";
+import { TbArrowLeft } from "react-icons/tb";
 
 export default function Login() {
   const isPresent = useIsPresent();
@@ -65,11 +66,12 @@ export default function Login() {
         alt=""
       />
       <div className="xl:w-1/3 lg:w-1/2 w-screen flex flex-col items-center justify-center gap-6 relative">
-        <Link className="absolute top-4 left-4" to="/">
+        <Link className="absolute top-4 left-4 text-gray-400 flex items-center gap-2 hover:text-white transition-all" to="/">
+          <TbArrowLeft />
           Back to home
         </Link>
         <h1 className="text-7xl mb-16 roboto">Login</h1>
-        <Input placeholder="E-Mail" ref={emailRef} type="email"/>
+        <Input placeholder="E-Mail" ref={emailRef} type="email" />
         <Input placeholder="Password" type="password" ref={passwordRef} />
         <Button type="default" onClick={login}>
           LOGIN

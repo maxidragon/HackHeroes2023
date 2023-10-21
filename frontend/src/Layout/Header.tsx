@@ -1,13 +1,15 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import logo from "../graphics/logo.svg";
 import Button from "../Components/Button";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../Atoms";
 import toast from "react-hot-toast";
 import AvatarComponent from "../Components/AvatarComponent";
+import { TbCardsFilled, TbCheckupList, TbLogin2, TbLogout, TbNotebook, TbNotes } from "react-icons/tb";
 
 export default function Header() {
   const user = useAtomValue(userAtom);
+  const navigate = useNavigate();
 
   function logout() {
     fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
@@ -18,6 +20,7 @@ export default function Header() {
       },
     }).then(() => {
       toast.success("Logged out successfully!");
+      navigate("/");
       setTimeout(() => {
         window.location.reload();
       }, 750);
@@ -34,7 +37,7 @@ export default function Header() {
         <nav className="roboto uppercase flex items-center gap-8 text-2xl h-8">
           <NavLink
             className={({ isActive }) => {
-              return `rounded-full px-4 link ${
+              return `rounded-full px-4 link flex items-center gap-2 ${
                 isActive
                   ? "text-slate-200 !bg-left"
                   : "text-gray-400 bg-bgLght !bg-right"
@@ -42,12 +45,13 @@ export default function Header() {
             }}
             to="/flashcards"
           >
+            <TbCardsFilled />
             Flash cards
           </NavLink>
           <div className="w-1 rounded-xl h-full bg-bgLght" />
           <NavLink
             className={({ isActive }) => {
-              return `rounded-full px-4 link ${
+              return `rounded-full px-4 link flex items-center gap-2 ${
                 isActive
                   ? "text-slate-200 !bg-left"
                   : "text-gray-400 bg-bgLght !bg-right"
@@ -55,32 +59,35 @@ export default function Header() {
             }}
             to="/notes"
           >
+            <TbNotes />
             Notes
           </NavLink>
           <div className="w-1 rounded-xl h-full bg-bgLght" />
           <NavLink
             to="/class-register"
             className={({ isActive }) => {
-              return `rounded-full px-4 link ${
+              return `rounded-full px-4 link flex items-center gap-2 ${
                 isActive
                   ? "text-slate-200 !bg-left"
                   : "text-gray-400 bg-bgLght !bg-right"
               }`;
             }}
           >
+            <TbNotebook />
             Class register
           </NavLink>
           <div className="w-1 rounded-xl h-full bg-bgLght" />
           <NavLink
             to="/todo"
             className={({ isActive }) => {
-              return `rounded-full px-4 link ${
+              return `rounded-full px-4 link flex items-center gap-2 ${
                 isActive
                   ? "text-slate-200 !bg-left"
                   : "text-gray-400 bg-bgLght !bg-right"
               }`;
             }}
           >
+            <TbCheckupList />
             Todo
           </NavLink>
         </nav>
@@ -104,10 +111,11 @@ export default function Header() {
             <Button
               type="default"
               className="roboto text-center"
-              width="w-28"
+              width="w-36"
               onClick={logout}
             >
               Logout
+              <TbLogout />
             </Button>
           </div>
         ) : (
@@ -119,6 +127,7 @@ export default function Header() {
             width="w-48"
           >
             Login
+            <TbLogin2 />
           </Button>
         )}
       </header>

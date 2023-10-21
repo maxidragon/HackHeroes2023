@@ -5,6 +5,7 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { useRef } from "react";
 import toast from "react-hot-toast";
+import { TbArrowLeft } from "react-icons/tb";
 
 export default function Register() {
   const isPresent = useIsPresent();
@@ -73,7 +74,11 @@ export default function Register() {
   return (
     <div className="w-screen h-screen flex">
       <div className="xl:w-1/3 lg:w-1/2 w-screen flex flex-col items-center justify-center gap-6 relative">
-        <Link className="absolute top-4 left-4" to="/">
+        <Link
+          className="absolute top-4 left-4 text-gray-400 flex items-center gap-2 hover:text-white transition-all"
+          to="/"
+        >
+          <TbArrowLeft />
           Back to home
         </Link>
         <h1 className="text-7xl mb-16 roboto">Register</h1>

@@ -28,7 +28,7 @@ export default function Button({
         type === "alt"
           ? "active:scale-90 transition-all border-purple-600 border-2 text-2xl p-2 text-purple-600 box-border font-sans rounded-lg"
           : "active:scale-90 transition-all bg-purple-600 text-2xl p-2 text-white font-sans rounded-lg box-border border-2 border-purple-600"
-      } ${className || ""} ${width || "sm:w-96 w-72"}`}
+      } flex items-center justify-center gap-2 ${className} ${width || "sm:w-96 w-72"}`}
     >
       {children}
     </Link>
@@ -41,7 +41,7 @@ export default function Button({
         type === "alt"
           ? "active:scale-90 transition-all border-purple-600 border-2 text-2xl p-2 text-purple-600 box-border font-sans rounded-lg"
           : "active:scale-90 transition-all bg-purple-600 text-2xl p-2 text-white font-sans rounded-lg box-border border-2 border-purple-600"
-      } ${className || ""}  ${width || "sm:w-96 w-72"}`}
+      } flex gap-2 items-center justify-center ${className}  ${width || "sm:w-96 w-72"}`}
       type={submit ? "submit" : "button"}
     >
       {children}

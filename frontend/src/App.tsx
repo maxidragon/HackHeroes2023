@@ -11,6 +11,7 @@ import ClassRegister from "./Pages/ClassRegister/ClassRegister";
 import Todo from "./Pages/Todo/Todo";
 import Flashcards from "./Pages/Flashcards/Flashcards";
 import Profile from "./Pages/Profile/Profile";
+import Settings from "./Pages/Profile/Settings/Settings";
 
 function App() {
   const element = useRoutes([
@@ -41,6 +42,10 @@ function App() {
         {
           path: "/profile/:userId",
           element: <Profile />,
+        },
+        {
+          path: "/settings",
+          element: <Settings />,
         },
       ],
     },

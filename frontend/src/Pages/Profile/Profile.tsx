@@ -1,7 +1,8 @@
 import { motion, useIsPresent } from "framer-motion";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AvatarComponent from "../../Components/AvatarComponent";
+import { TbSettingsFilled } from "react-icons/tb";
 
 export default function Profile() {
   const isPresent = useIsPresent();
@@ -11,6 +12,7 @@ export default function Profile() {
   useEffect(() => {
     //made this only to shot the warning of not using setUserData
     setUserData({
+      id: 1,
       username: "username",
       email: "email@email.com",
       name: "name",
@@ -23,7 +25,7 @@ export default function Profile() {
   return (
     <div className="flex-1">
       <div
-        className={`h-2/5 flex items-center justify-center ${
+        className={`h-2/5 flex items-center justify-center relative ${
           userData?.banner
             ? `bg-[url('${userData.banner}')]`
             : "bg-gradient-to-r from-violet-500 to-fuchsia-500"
@@ -37,6 +39,11 @@ export default function Profile() {
           />
           {userData?.username}
         </div>
+        {userData?.id === +(userId || -10) && (
+          <Link to="/settings">
+            <TbSettingsFilled className="absolute right-4 top-4 cursor-pointer text-bgClr hover:text-gray-100 hover:rotate-90 text-2xl transition-all" />
+          </Link>
+        )}
       </div>
       <div className="h-3/5 flex items-center md:flex-row flex-col">
         <div className="h-full md:w-1/2 w-full xl:text-2xl md:text-xl quicksand box-border p-8 text-gray-400">
