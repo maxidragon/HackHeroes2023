@@ -25,10 +25,10 @@ model User {
   loginID              Int?
   restURL              RestURL?              @relation(fields: [restURLId], references: [id])
   restURLId            Int?
-  certificate          String?
-  fingerprint          String?
-  privateKey           String?
-  firebaseToken        String?
+  certificate          String?               @db.LongText
+  fingerprint          String?               @db.LongText
+  privateKey           String?               @db.LongText
+  firebaseToken        String?               @db.LongText
   TODO                 Todo[]
   PasswordResetRequest PasswordResetRequest?
 }

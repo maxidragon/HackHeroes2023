@@ -80,7 +80,9 @@ export class VulcanService {
     await vulcanClient.selectStudent();
 
     const student = (await vulcanClient.getStudents())[0];
-
+    const lastSemester = student.periods.at(-1);
+    const schoolName = student.unit.name;
+    const lesson = (await vulcanClient.getLessons(lastSemester?.start.Date))[0];
     const restURL = await this.prisma.restURL.upsert({
       create: {
         url: vulcanAccount.restUrl,
@@ -94,6 +96,10 @@ export class VulcanService {
     await this.prisma.user.update({
       where: { id: user.userId },
       data: {
+        firstName: student.pupil.firstName,
+        lastName: student.pupil.surname,
+        schoolClass: lastSemester?.level + (lesson?.class?.symbol ?? ''),
+        schoolName: schoolName,
         loginID: student.pupil.loginId,
         restURLId: restURL.id,
         certificate: keystore.certificate,
