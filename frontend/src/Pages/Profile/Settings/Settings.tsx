@@ -82,7 +82,7 @@ export default function Settings() {
             toast.error("Something went wrong!");
             navigate(`/profile/${user.id}`);
           } else {
-            res.json().then((data) => {
+            res.blob().then((data) => {
               setBanner(data);
             });
           }
@@ -95,7 +95,7 @@ export default function Settings() {
     };
 
     fetchData();
-    fetchBanner()
+    fetchBanner();
   }, []);
 
   function setBannerUrl(e: any) {
@@ -196,7 +196,7 @@ export default function Settings() {
                   : {}
               }
             >
-              <div className="flex items-center flex-col gap-4 text-4xl roboto text-gray-100">
+              <div className="flex items-center flex-col gap-4 text-4xl roboto text-gray-100 drop-shadow-[0px_0px_8px_rgba(0,0,0,1)]">
                 {!isUserEditingAvatar && avatarBlob ? (
                   <img
                     src={URL.createObjectURL(avatarBlob)}
