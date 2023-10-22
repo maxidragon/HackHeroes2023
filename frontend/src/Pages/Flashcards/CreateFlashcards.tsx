@@ -10,14 +10,6 @@ interface flashcard {
   definition: string
 }
 
-interface flashcardSet {
-  title: string,
-  description: string,
-  publicity: string,
-  flashcards: flashcard[]
-}
-
-
 export default function CreateFlashcards() {
 
   const isPresent = useIsPresent();
@@ -55,16 +47,9 @@ export default function CreateFlashcards() {
 
     const flashcardsArray: flashcard[] = [];
 
-    const set: flashcardSet = {
-      title: titleRef.current?.value || "",
-      description: descriptionRef.current?.value || "",
-      publicity: publicityRef.current?.value || "PRIVATE",
-      flashcards: flashcardsArray
-    };
-
     flashcards.map((_flashcard, index) => {
       const concept = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
-      const definition = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
+      const definition = (document.querySelector(`#definition-${index}`) as HTMLInputElement).value || "";
 
 
       flashcardsArray.push({
@@ -73,7 +58,7 @@ export default function CreateFlashcards() {
       });
     });
 
-    if (set.title.length === 0) throw Error("Title must be filled!");
+    if (titleRef.current?.value.length === 0) throw Error("Title must be filled!");
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set`, {
       method: "POST",
@@ -81,12 +66,17 @@ export default function CreateFlashcards() {
         "Content-Type": "application/json"
       },
       credentials: "include",
-      body: JSON.stringify(set)
+      body: JSON.stringify({
+        title: titleRef.current?.value || "",
+        description: descriptionRef.current?.value || "",
+        publicity: publicityRef.current?.value || "PRIVATE",
+        flashCards: flashcardsArray
+      })
     });
 
     if (!response.ok) throw Error("Something went wrong!");
 
-    const data = response.json();
+    const data = await response.json();
 
     console.log(data);
   };
