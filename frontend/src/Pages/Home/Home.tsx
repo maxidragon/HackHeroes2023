@@ -6,7 +6,7 @@ export default function Home() {
 
   return (
     <div className="h-screen">
-      <h1>{t('home.title')}</h1>
+      <h1>{t('homeTitle')}</h1>
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{ scaleX: 0, transition: { duration: 0.6, ease: "circOut" } }}

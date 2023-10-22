@@ -6,7 +6,7 @@ export default function ClassRegister() {
 
     return (
       <div className="flex-1">
-        <h1>{t('classRegister.title')}</h1>
+        <h1>{t('classRegisterTitle')}</h1>
         <motion.div
           initial={{ scaleX: 1 }}
           animate={{

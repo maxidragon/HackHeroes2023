@@ -22,10 +22,10 @@ export default function Login() {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (!emailRef.current?.value || !passwordRef.current?.value) {
-      toast.error(t('login.error.allFieldsRequired'));
+      toast.error(t('loginErrorsAllFieldsRequired'));
       return;
     } else if (!emailRegex.test(emailRef.current?.value)) {
-      toast.error(t('login.errors.emailInvalid'));
+      toast.error(t('loginErrorsEmailInvalid'));
       return;
     }
 
@@ -43,10 +43,10 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode >= 400) {
-          toast.error(t('login.errors.invalidCredentials'));
+          toast.error(t('loginErrorsInvalidCredentials'));
           return;
         } else {
-          toast.success(t('login.success'));
+          toast.success(t('loginSuccess'));
           setUser(() => getUserObject());
           setTimeout(() => {
             navigate("/");
@@ -54,7 +54,7 @@ export default function Login() {
         }
       })
       .catch((err) => {
-        toast.error(t('login.errors.somethingWentWrong'));
+        toast.error(t('loginEerrorsSomethingWentWrong'));
         console.log(err);
       });
   };
@@ -69,13 +69,13 @@ export default function Login() {
       <div className="xl:w-1/3 lg:w-1/2 w-screen flex flex-col items-center justify-center gap-6 relative">
         <Link className="absolute top-4 left-4 text-gray-400 flex items-center gap-2 hover:text-white transition-all" to="/">
           <TbArrowLeft />
-          {t('login.backToHome')}
+          {t('loginBackToHome')}
         </Link>
         <h1 className="text-7xl mb-16 roboto">Login</h1>
         <Input placeholder={t('login.email')} ref={emailRef} type="email" />
         <Input placeholder={t('login.password')} type="password" ref={passwordRef} />
         <Button type="default" onClick={login}>
-          {t('login.title')}
+          {t('loginTitle')}
         </Button>
         <Link to="/register">{t('login.registerLink')}</Link>
       </div>

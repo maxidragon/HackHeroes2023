@@ -3,7 +3,7 @@ import { motion, useIsPresent } from "framer-motion";
 import { t } from "i18next";
 import { Todo as TodoInterface } from "../../lib/interfaces";
 import { Link } from "react-router-dom";
-import TodoCard from "./components/TodoCard";
+import TodoCard from "./Components/TodoCard";
 
 export default function Todo() {
   const isPresent = useIsPresent();
@@ -27,7 +27,7 @@ export default function Todo() {
   }, []);
   return (
     <div className="flex-1">
-      <h1>{t('todo.title')}</h1>
+      <h1>{t('todoTitle')}</h1>
       <div className="flex flex-row flex-wrap justify-center gap-4">
         {todos.length ? "" : <p className="text-2xl text-white py-4">{t('todo.notTodos')}</p>}
         {todos.map((todo: TodoInterface) => (
