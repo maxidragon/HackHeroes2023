@@ -2,6 +2,11 @@ import { motion, useIsPresent } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+interface flashcard {
+  id: number,
+  title: string
+}
+
 export default function Flashcards() {
   const isPresent = useIsPresent();
   const [myFlashcards, setMyFlashcards] = useState([]);
@@ -34,7 +39,7 @@ export default function Flashcards() {
       <div className="mx-auto text-center py-10">
         {myFlashcards.length ? "" : <p className="text-2xl text-white py-4">You do not have any flashcards!</p>}
         <Link to="/flashcards/create" className="hover:text-purple-500 transition">Create new flashcard set</Link>
-        {myFlashcards.map(flashcard => {
+        {myFlashcards.map((flashcard: flashcard) => {
           return (
             <Link to={`/flashcards/${flashcard.id}`}>
               <h3>{flashcard.title}</h3>
