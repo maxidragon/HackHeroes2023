@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { motion, useIsPresent } from "framer-motion";
 import { t } from "i18next";
 import { Todo as TodoInterface } from "../../lib/interfaces";
-import { Link } from "react-router-dom";
 import TodoCard from "./Components/TodoCard";
 
 export default function Todo() {
