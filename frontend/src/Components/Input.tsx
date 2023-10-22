@@ -30,7 +30,7 @@ export default forwardRef(function Input(
     <div className={`relative ${containerClassName}`}>
       <input
         type={type || "text"}
-        className={`quicksand block px-2.5 pb-2.5 pt-4 sm:w-96 w-72 text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600 peer ${className}`}
+        className={`${className} quicksand block px-2.5 pb-2.5 pt-4 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600 peer`}
         defaultValue={value || ""}
         onChange={onChange}
         readOnly={readonly}
