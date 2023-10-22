@@ -3,11 +3,20 @@ import Input from "../../Components/Input.tsx";
 import { useRef } from "react";
 import Button from "../../Components/Button.tsx";
 import { useState } from "react";
+import Select from "../../Components/Select.tsx";
 
 interface flashcard {
   concept: string,
   definition: string
 }
+
+interface flashcardSet {
+  title: string,
+  description: string,
+  publicity: string,
+  flashcards: flashcard[]
+}
+
 
 export default function CreateFlashcards() {
 
@@ -19,7 +28,11 @@ export default function CreateFlashcards() {
       definition: ""
     }
   ]);
+
   const titleRef = useRef<HTMLInputElement>(null);
+  const publicityRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
 
   const addFlashcard = () => {
 
@@ -38,18 +51,20 @@ export default function CreateFlashcards() {
     });
   };
 
-  const createSet = () => {
+  const createSet = async () => {
 
     const flashcardsArray: flashcard[] = [];
 
-    const set = {
-      title: titleRef.current?.value,
+    const set: flashcardSet = {
+      title: titleRef.current?.value || "",
+      description: descriptionRef.current?.value || "",
+      publicity: publicityRef.current?.value || "PRIVATE",
       flashcards: flashcardsArray
     };
 
     flashcards.map((_flashcard, index) => {
-      const concept = (document.getElementById(`#concept-${index}`) as HTMLInputElement).value;
-      const definition = (document.getElementById(`#concept-${index}`) as HTMLInputElement).value;
+      const concept = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
+      const definition = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
 
 
       flashcardsArray.push({
@@ -58,7 +73,22 @@ export default function CreateFlashcards() {
       });
     });
 
-    console.log(set);
+    if (set.title.length === 0) throw Error("Title must be filled!");
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify(set)
+    });
+
+    if (!response.ok) throw Error("Something went wrong!");
+
+    const data = response.json();
+
+    console.log(data);
   };
 
   return (
@@ -67,7 +97,24 @@ export default function CreateFlashcards() {
         <h2 className="text-3xl">Create new flashcards set!</h2>
         <Button type="default" onClick={createSet}>Create</Button>
       </div>
-      <Input containerClassName="w-full" className="sm:w-full" placeholder="Title" ref={titleRef} type="text" />
+      <div className="w-full flex gap-4">
+        <Input containerClassName="w-full" className="sm:w-full" placeholder="Title" ref={titleRef} type="text" />
+        <Select ref={publicityRef} defaultValue={"PRIVATE"}>
+          <option value="PRIVATE">Private</option>
+          <option value="PUBLIC">Public</option>
+          <option value="CLASS">Class</option>
+        </Select>
+      </div>
+      <div className="w-full flex flex-col gap-4">
+        <label htmlFor="flashcards-desc" className="text-white text-xl">Description</label>
+        <textarea
+          ref={descriptionRef}
+          placeholder="Here goes your description for this awesome flashcards set ..."
+          id="flashcards-desc"
+          className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
+        >
+      </textarea>
+      </div>
       {flashcards.map((_flashcard: flashcard, index) => {
         return (
           <div key={index} className="w-full p-5 flex flex-col gap-4 border-4 border-violet-900 rounded-lg">
