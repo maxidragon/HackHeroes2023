@@ -60,6 +60,7 @@ model FlashCardSet {
   id          Int                @id @default(autoincrement())
   title       String
   description String?
+  forkedFrom  String?
   cards       FlashCard[]
   user        User?              @relation(fields: [userId], references: [id])
   userId      Int?
