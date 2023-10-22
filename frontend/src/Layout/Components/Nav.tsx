@@ -100,12 +100,12 @@ export default function Nav({ user, logout }: any) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.4 }}
             exit={{ opacity: 0 }}
-            className="2xl:hidden absolute w-screen h-screen top-0 left-0 block bg-bgClr opacity-40"
+            className="2xl:hidden fixed w-screen h-screen top-0 left-0 block bg-bgClr opacity-40"
           />
         )}
       </AnimatePresence>
       <nav
-        className={`z-50 2xl:hidden flex-col flex roboto uppercase items-center justify-center gap-8 text-2xl xl:w-1/4 lg:w-1/3 md:w-1/2 w-screen h-screen absolute top-0 duration-300 ${
+        className={`z-50 2xl:hidden flex-col flex roboto uppercase items-center justify-center gap-8 text-2xl xl:w-1/4 lg:w-1/3 md:w-1/2 w-screen h-screen fixed top-0 duration-300 ${
           isShown
             ? "right-0 "
             : "xl:-right-1/4 lx:-right-1/3 md:-right-1/2 -right-full"

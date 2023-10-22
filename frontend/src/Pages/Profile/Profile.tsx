@@ -85,7 +85,7 @@ export default function Profile() {
   return (
     <div className="flex-1">
       <div
-        className={`flex items-center justify-center relative p-4 rounded-xl h-2/5 ${
+        className={`flex items-center justify-center relative p-4 h-2/5 ${
           !banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
         }`}
         style={
@@ -106,7 +106,7 @@ export default function Profile() {
         </div>
         {loggedUser.id === +(userId || -10) && (
           <Link to="/settings">
-            <TbSettingsFilled className="absolute right-4 top-4 cursor-pointer text-gray-100 hover:text-purple-400 hover:rotate-90 text-2xl transition-all" />
+            <TbSettingsFilled className="absolute right-4 top-4 cursor-pointer text-gray-100 drop-shadow-[0px_0px_8px_rgba(0,0,0,1)] hover:text-purple-400 hover:rotate-90 text-2xl transition-all" />
           </Link>
         )}
       </div>
