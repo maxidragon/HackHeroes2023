@@ -46,7 +46,7 @@ export class FlashcardService {
     dto: CreateFlashCardSetDto,
     userId: number,
   ): Promise<object> {
-    return this.prisma.flashCardSet.create({
+    const flashCardSet = await this.prisma.flashCardSet.create({
       data: {
         title: dto.title,
         description: dto.description,
@@ -56,6 +56,18 @@ export class FlashcardService {
         },
       },
     });
+
+    const flashCards = dto.flashCards.map((card) => {
+      return {
+        setId: flashCardSet.id,
+        concept: card.concept,
+        definition: card.definition,
+      };
+    });
+
+    await this.createManyFlashCards(flashCards, userId);
+
+    return { id: flashCardSet.id };
   }
 
   async createFlashCard(
@@ -74,8 +86,8 @@ export class FlashcardService {
     }
     return this.prisma.flashCard.create({
       data: {
-        question: dto.question,
-        answer: dto.answer,
+        question: dto.concept,
+        answer: dto.definition,
         set: {
           connect: { id: dto.setId },
         },
@@ -100,8 +112,8 @@ export class FlashcardService {
     return this.prisma.flashCard.createMany({
       data: dto.map((card) => {
         return {
-          question: card.question,
-          answer: card.answer,
+          question: card.concept,
+          answer: card.definition,
           setId: card.setId,
         };
       }),
@@ -217,8 +229,8 @@ export class FlashcardService {
     return this.prisma.flashCard.update({
       where: { id: cardId },
       data: {
-        question: dto.question,
-        answer: dto.answer,
+        question: dto.concept,
+        answer: dto.definition,
       },
     });
   }

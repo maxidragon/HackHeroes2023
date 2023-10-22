@@ -1,4 +1,5 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { CreateFlashCardDto } from './createFlashCard.dto';
 
 enum Publicity {
   PUBLIC = 'PUBLIC',
@@ -16,4 +17,7 @@ export class CreateFlashCardSetDto {
 
   @IsEnum(Publicity)
   publicity: Publicity;
+
+  @IsNotEmpty()
+  flashCards: CreateFlashCardDto[];
 }

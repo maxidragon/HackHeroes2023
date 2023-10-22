@@ -1,14 +1,15 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateFlashCardDto {
   @IsString()
   @IsNotEmpty()
-  question: string;
+  concept: string;
 
   @IsString()
   @IsNotEmpty()
-  answer: string;
+  definition: string;
 
   @IsInt()
+  @IsOptional()
   setId: number;
 }
