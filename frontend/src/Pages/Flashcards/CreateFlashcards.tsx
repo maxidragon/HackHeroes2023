@@ -13,9 +13,10 @@ interface flashcard {
 interface flashcardSet {
   title: string,
   description: string,
-  publicity: "PUBLIC" | "PRIVATE" | "CLASS",
+  publicity: string,
   flashcards: flashcard[]
 }
+
 
 export default function CreateFlashcards() {
 
@@ -30,6 +31,8 @@ export default function CreateFlashcards() {
 
   const titleRef = useRef<HTMLInputElement>(null);
   const publicityRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
 
   const addFlashcard = () => {
 
@@ -54,8 +57,8 @@ export default function CreateFlashcards() {
 
     const set: flashcardSet = {
       title: titleRef.current?.value || "",
-      description: "Some desc",
-      publicity: "PRIVATE",
+      description: descriptionRef.current?.value || "",
+      publicity: publicityRef.current?.value || "PRIVATE",
       flashcards: flashcardsArray
     };
 
@@ -70,7 +73,22 @@ export default function CreateFlashcards() {
       });
     });
 
-    console.log(set);
+    if (set.title.length === 0) throw Error("Title must be filled!");
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify(set)
+    });
+
+    if (!response.ok) throw Error("Something went wrong!");
+
+    const data = response.json();
+
+    console.log(data);
   };
 
   return (
@@ -90,6 +108,7 @@ export default function CreateFlashcards() {
       <div className="w-full flex flex-col gap-4">
         <label htmlFor="flashcards-desc" className="text-white text-xl">Description</label>
         <textarea
+          ref={descriptionRef}
           placeholder="Here goes your description for this awesome flashcards set ..."
           id="flashcards-desc"
           className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
