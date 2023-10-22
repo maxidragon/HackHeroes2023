@@ -7,11 +7,12 @@ import Home from "./Pages/Home/Home";
 import ToasterComponent from "./Components/Toaster";
 import Header from "./Layout/Header";
 import Notes from "./Pages/Notes/Notes";
+import Flashcards from "./Pages/Flashcards/Flashcards.tsx";
 import ClassRegister from "./Pages/ClassRegister/ClassRegister";
 import Todo from "./Pages/Todo/Todo";
-import Flashcards from "./Pages/Flashcards/Flashcards";
 import Profile from "./Pages/Profile/Profile";
 import Settings from "./Pages/Profile/Settings/Settings";
+import CreateFlashcards from "./Pages/Flashcards/CreateFlashcards.tsx";
 
 function App() {
   const element = useRoutes([
@@ -21,42 +22,46 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <Home />
         },
         {
           path: "/flashcards",
-          element: <Flashcards />,
+          element: <Flashcards />
+        },
+        {
+          path: "/flashcards/create",
+          element: <CreateFlashcards />
         },
         {
           path: "/notes",
-          element: <Notes />,
+          element: <Notes />
         },
         {
           path: "/class-register",
-          element: <ClassRegister />,
+          element: <ClassRegister />
         },
         {
           path: "/todo",
-          element: <Todo />,
+          element: <Todo />
         },
         {
           path: "/profile/:userId",
-          element: <Profile />,
+          element: <Profile />
         },
         {
           path: "/settings",
-          element: <Settings />,
-        },
-      ],
+          element: <Settings />
+        }
+      ]
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <Login />
     },
     {
       path: "/register",
-      element: <Register />,
-    },
+      element: <Register />
+    }
   ]);
 
   const location = useLocation();

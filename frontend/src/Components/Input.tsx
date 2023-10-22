@@ -5,6 +5,7 @@ interface InputProps {
   type?: string;
   placeholder: string;
   className?: string;
+  containerClassName?: string;
   name?: string;
   value?: string;
   readonly?: boolean;
@@ -17,6 +18,7 @@ export default forwardRef(function Input(
     type,
     placeholder,
     className,
+    containerClassName,
     value,
     onChange,
     readonly,
@@ -25,10 +27,10 @@ export default forwardRef(function Input(
   ref: any
 ) {
   return (
-    <div className="relative">
+    <div className={`relative ${containerClassName}`}>
       <input
         type={type || "text"}
-        className={`${className} quicksand block px-2.5 pb-2.5 pt-4 sm:w-96 w-72 text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600 peer`}
+        className={`quicksand block px-2.5 pb-2.5 pt-4 sm:w-96 w-72 text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600 peer ${className}`}
         defaultValue={value || ""}
         onChange={onChange}
         readOnly={readonly}
