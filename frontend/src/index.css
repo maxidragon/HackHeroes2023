@@ -40,9 +40,3 @@ h1, h2, a {
   background: linear-gradient(90deg, #7100db 0%, #ba64cf 25%, #393a3a 50%);
   background-size: 400% 400%;
 }
-
-.linkDark {
-  transition: all 400ms linear;
-  background: linear-gradient(90deg, #7100db 0%, #ba64cf 25%, #2e2f30 50%);
-  background-size: 400% 400%;
-}

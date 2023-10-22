@@ -80,21 +80,36 @@ export default function Register() {
           to="/"
         >
           <TbArrowLeft />
-          {t('registerBackToHome')}
+          {t("registerBackToHome")}
         </Link>
         <h1 className="text-7xl mb-16 roboto">Register</h1>
-        <Input placeholder={t('registerUsername')} ref={usernameRef} />
-        <Input placeholder={t('registerEmail')} type="email" ref={emailRef} />
-        <Input placeholder={t('registerPassword')} type="password" ref={passwordRef} />
         <Input
-          placeholder={t('registerRepeatPassword')}
+          placeholder={t("registerUsername")}
+          ref={usernameRef}
+          containerClassName="sm:w-96 w-72"
+        />
+        <Input
+          placeholder={t("registerEmail")}
+          type="email"
+          ref={emailRef}
+          containerClassName="sm:w-96 w-72"
+        />
+        <Input
+          placeholder={t("registerPassword")}
+          type="password"
+          ref={passwordRef}
+          containerClassName="sm:w-96 w-72"
+        />
+        <Input
+          placeholder={t("registerRepeatPassword")}
           type="password"
           ref={repeatPasswordRef}
+          containerClassName="sm:w-96 w-72"
         />
         <Button type="default" onClick={register}>
-          {t('registerTitle')}
+          {t("registerTitle")}
         </Button>
-        <Link to="/login">{t('registerLoginLink')}</Link>
+        <Link to="/login">{t("registerLoginLink")}</Link>
       </div>
       <img
         src={background}

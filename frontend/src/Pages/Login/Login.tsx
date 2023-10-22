@@ -67,17 +67,30 @@ export default function Login() {
         alt=""
       />
       <div className="xl:w-1/3 lg:w-1/2 w-screen flex flex-col items-center justify-center gap-6 relative">
-        <Link className="absolute top-4 left-4 text-gray-400 flex items-center gap-2 hover:text-white transition-all" to="/">
+        <Link
+          className="absolute top-4 left-4 text-gray-400 flex items-center gap-2 hover:text-white transition-all"
+          to="/"
+        >
           <TbArrowLeft />
-          {t('loginBackToHome')}
+          {t("loginBackToHome")}
         </Link>
         <h1 className="text-7xl mb-16 roboto">Login</h1>
-        <Input placeholder={t('login.email')} ref={emailRef} type="email" />
-        <Input placeholder={t('login.password')} type="password" ref={passwordRef} />
+        <Input
+          placeholder={t("loginEmail")}
+          ref={emailRef}
+          type="email"
+          containerClassName="sm:w-96 w-72"
+        />
+        <Input
+          containerClassName="sm:w-96 w-72"
+          placeholder={t("loginPassword")}
+          type="password"
+          ref={passwordRef}
+        />
         <Button type="default" onClick={login}>
-          {t('loginTitle')}
+          {t("loginTitle")}
         </Button>
-        <Link to="/register">{t('login.registerLink')}</Link>
+        <Link to="/register">{t("loginRegisterLink")}</Link>
       </div>
       <motion.div
         initial={{ scaleX: 1 }}

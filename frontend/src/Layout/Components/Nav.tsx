@@ -14,11 +14,11 @@ import { Fragment, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import AvatarComponent from "../../Components/AvatarComponent";
 import Button from "../../Components/Button";
-import {t} from "i18next";
+import { t } from "i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const navigationLinks = [
-  { to: "/flashcards", label: 'navFlashCards', icon: TbCardsFilled },
+  { to: "/flashcards", label: "navFlashCards", icon: TbCardsFilled },
   { to: "/notes", label: "navNotes", icon: TbNotes },
   { to: "/class-register", label: "navClassRegister", icon: TbNotebook },
   { to: "/todo", label: "navTodo", icon: TbCheckupList },
@@ -27,10 +27,11 @@ const navigationLinks = [
 export default function Nav({ user, logout }: any) {
   const [isShown, setIsShown] = useState(false);
 
-  const menuLinkClass = (isActive: boolean) =>
-    `rounded-full px-4 link flex items-center gap-2 ${
+  const menuLinkClass = (isActive: boolean) => {
+    return `rounded-full px-4 link flex items-center gap-2 ${
       isActive ? "text-slate-200 !bg-left" : "text-gray-400 bg-bgLght !bg-right"
     }`;
+  };
 
   return (
     <>
@@ -54,10 +55,10 @@ export default function Nav({ user, logout }: any) {
         onClick={() => setIsShown(true)}
         className="roboto uppercase 2xl:hidden flex items-center gap-4 cursor-pointer text-2xl text-gray-400 hover:text-gray-100 transition-colors duration-200"
       >
-        <p className="sm:block hidden">{t('navOpenMenu')}</p>
+        <p className="sm:block hidden">{t("navOpenMenu")}</p>
         <TbMenu2 />
       </div>
-      <LanguageSwitcher />
+      <LanguageSwitcher className="lg:flex hidden" />
       {user.username ? (
         <div className="hidden lg:flex items-center gap-8 roboto text-3xl">
           <NavLink
@@ -174,7 +175,7 @@ export default function Nav({ user, logout }: any) {
             <TbLogin2 />
           </Button>
         )}
-          <LanguageSwitcher />
+        <LanguageSwitcher className="lg:hidden flex" />
       </nav>
     </>
   );
