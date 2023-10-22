@@ -9,6 +9,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "../../Atoms";
 import getUserObject from "../../lib/getUser";
 import { TbArrowLeft } from "react-icons/tb";
+import { t } from "i18next";
 
 export default function Login() {
   const isPresent = useIsPresent();
@@ -21,10 +22,10 @@ export default function Login() {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (!emailRef.current?.value || !passwordRef.current?.value) {
-      toast.error("Fill all the fields!");
+      toast.error(t('login.error.allFieldsRequired'));
       return;
     } else if (!emailRegex.test(emailRef.current?.value)) {
-      toast.error("Invalid email!");
+      toast.error(t('login.errors.emailInvalid'));
       return;
     }
 
@@ -42,18 +43,18 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode >= 400) {
-          toast.error("Wrong email or password!");
+          toast.error(t('login.errors.invalidCredentials'));
           return;
         } else {
-          toast.success("Logged in successfully!");
+          toast.success(t('login.success'));
           setUser(() => getUserObject());
           setTimeout(() => {
             navigate("/");
           }, 750);
         }
       })
-      .catch((err: any) => {
-        toast.error("Something went wrong!");
+      .catch((err) => {
+        toast.error(t('login.errors.somethingWentWrong'));
         console.log(err);
       });
   };
@@ -68,15 +69,15 @@ export default function Login() {
       <div className="xl:w-1/3 lg:w-1/2 w-screen flex flex-col items-center justify-center gap-6 relative">
         <Link className="absolute top-4 left-4 text-gray-400 flex items-center gap-2 hover:text-white transition-all" to="/">
           <TbArrowLeft />
-          Back to home
+          {t('login.backToHome')}
         </Link>
         <h1 className="text-7xl mb-16 roboto">Login</h1>
-        <Input placeholder="E-Mail" ref={emailRef} type="email" />
-        <Input placeholder="Password" type="password" ref={passwordRef} />
+        <Input placeholder={t('login.email')} ref={emailRef} type="email" />
+        <Input placeholder={t('login.password')} type="password" ref={passwordRef} />
         <Button type="default" onClick={login}>
-          LOGIN
+          {t('login.title')}
         </Button>
-        <Link to="/register">Don't have account yet? Register</Link>
+        <Link to="/register">{t('login.registerLink')}</Link>
       </div>
       <motion.div
         initial={{ scaleX: 1 }}

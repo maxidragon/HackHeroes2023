@@ -14,18 +14,19 @@ import { Fragment, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import AvatarComponent from "../../Components/AvatarComponent";
 import Button from "../../Components/Button";
+import {t} from "i18next";
 
 const navigationLinks = [
-  { to: "/flashcards", label: "Flash cards", icon: TbCardsFilled },
-  { to: "/notes", label: "Notes", icon: TbNotes },
-  { to: "/class-register", label: "Class register", icon: TbNotebook },
-  { to: "/todo", label: "Todo", icon: TbCheckupList },
+  { to: "/flashcards", label: 'nav.flashCards', icon: TbCardsFilled },
+  { to: "/notes", label: "nav.notes", icon: TbNotes },
+  { to: "/class-register", label: "nav.classRegister", icon: TbNotebook },
+  { to: "/todo", label: "nav.todo", icon: TbCheckupList },
 ];
 
 export default function Nav({ user, logout }: any) {
   const [isShown, setIsShown] = useState(false);
 
-  const menuLinkClass = (isActive: any) =>
+  const menuLinkClass = (isActive: boolean) =>
     `rounded-full px-4 link flex items-center gap-2 ${
       isActive ? "text-slate-200 !bg-left" : "text-gray-400 bg-bgLght !bg-right"
     }`;
@@ -40,7 +41,7 @@ export default function Nav({ user, logout }: any) {
               to={link.to}
             >
               <link.icon />
-              {link.label}
+              {t(link.label)}
             </NavLink>
             {index < navigationLinks.length - 1 && (
               <div className="w-1 rounded-xl h-full bg-bgLght" />
@@ -52,7 +53,7 @@ export default function Nav({ user, logout }: any) {
         onClick={() => setIsShown(true)}
         className="roboto uppercase 2xl:hidden flex items-center gap-4 cursor-pointer text-2xl text-gray-400 hover:text-gray-100 transition-colors duration-200"
       >
-        <p className="sm:block hidden">Open menu</p>
+        <p className="sm:block hidden">{t('nav.openMenu')}</p>
         <TbMenu2 />
       </div>
       {user.username ? (
@@ -78,7 +79,7 @@ export default function Nav({ user, logout }: any) {
             width="w-36"
             onClick={logout}
           >
-            Logout
+            {t("nav.logout")}
             <TbLogout />
           </Button>
         </div>
@@ -90,7 +91,7 @@ export default function Nav({ user, logout }: any) {
           className="roboto text-center"
           width="w-48"
         >
-          Login
+          {t("nav.login")}
           <TbLogin2 />
         </Button>
       )}
@@ -115,12 +116,12 @@ export default function Nav({ user, logout }: any) {
           onClick={() => setIsShown(false)}
           className="roboto flex items-center gap-4 cursor-pointer text-2xl text-gray-400 hover:text-gray-100 transition-colors duration-200"
         >
-          Close
+          {t("nav.close")}
           <TbX />
         </div>
         <NavLink className={({ isActive }) => menuLinkClass(isActive)} to="/">
           <TbHome />
-          Home
+          {t("nav.home")}
         </NavLink>
         {navigationLinks.map((link) => (
           <NavLink
@@ -129,7 +130,7 @@ export default function Nav({ user, logout }: any) {
             key={link.to}
           >
             <link.icon />
-            {link.label}
+            {t(link.label)}
           </NavLink>
         ))}
         {user.username ? (
@@ -155,7 +156,7 @@ export default function Nav({ user, logout }: any) {
               width="w-36"
               onClick={logout}
             >
-              Logout
+              {t("nav.logout")}
               <TbLogout />
             </Button>
           </div>
@@ -167,7 +168,7 @@ export default function Nav({ user, logout }: any) {
             className="roboto text-center"
             width="w-48"
           >
-            Login
+            {t("nav.login")}
             <TbLogin2 />
           </Button>
         )}

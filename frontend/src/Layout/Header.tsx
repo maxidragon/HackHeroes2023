@@ -30,7 +30,7 @@ export default function Header() {
       <header className="w-screen border-b-2 border-purple-400 flex justify-between items-center px-8 py-2 overflow-y-hidden">
         <Link to="/" className="flex items-center w-fit">
           <img src={logo} alt="Study_sphere_logo" className="w-16" />
-          <h1 className="roboto text-3xl">Edu Sphere</h1>
+          <h1 className="roboto text-3xl">EduSphere</h1>
         </Link>
         <Nav user={user} logout={logout} />
       </header>

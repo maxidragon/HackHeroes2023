@@ -1,0 +1,61 @@
+{
+    "nav": {
+        "flashCards": "Flash cards",
+        "notes": "Notes",
+        "classRegister": "Class register",
+        "todo": "To do",
+        "logout": "Logout",
+        "login": "Login",
+        "close": "Close",
+        "home": "Home",
+        "openMenu": "Open menu"
+    },
+    "classRegister": {
+        "title": "Class register"
+    },
+    "home": {
+        "title": "Home"
+    },
+    "notes": {
+        "title": "Notes"
+    },
+    "todo": {
+        "title": "To do"
+    },
+    "login": {
+        "title": "Login",
+        "backToHome": "Back to home",
+        "email": "Email",
+        "password": "Password",
+        "registerLink": "Don't have account yet? Register",
+        "forgotPassword": "Forgot password?",
+        "errors": {
+            "allFieldsRequired": "Fill all the fields!",
+            "invalidEmail": "Invalid email!",
+            "invalidCredentials": "Wrong email or password!",
+            "somethingWentWrong": "Something went wrong! Try again later!"
+        },
+        "success": "Succesfully logged in!"
+    },
+    "register": {
+        "title": "Register",
+        "backToHome": "Back to home",
+        "loginLink": "Already have an account? Login",
+        "email": "Email",
+        "username": "Username",
+        "password": "Password",
+        "repeatPassword": "Repeat password",    
+        "registerLink": "Don't have account yet? Register",
+        "forgotPassword": "Forgot password?",
+        "errors": {
+            "allFieldsRequired": "Fill all the fields!",
+            "passwordsDontMatch": "Passwords do not match!",
+            "invalidEmail": "Invalid email!",
+            "invalidCredentials": "Wrong email or password!",
+            "passwordIsTooShort": "Password must be at least 8 characters long!",
+            "somethingWentWrong": "Something went wrong! Try again later!"
+        },
+        "success": "Succesfully registered a new account!"
+    }
+
+}

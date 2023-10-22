@@ -6,6 +6,7 @@ import Button from "../../Components/Button";
 import { useRef } from "react";
 import toast from "react-hot-toast";
 import { TbArrowLeft } from "react-icons/tb";
+import { t } from "i18next";
 
 export default function Register() {
   const isPresent = useIsPresent();
@@ -26,18 +27,18 @@ export default function Register() {
       !repeatPasswordRef.current?.value ||
       !usernameRef.current?.value
     ) {
-      toast.error("Fill all the fields!");
+      toast.error(t('register.errors.allFieldsRequired'));
       return;
     } else if (!emailRegex.test(emailRef.current?.value)) {
-      toast.error("Invalid email!");
+      toast.error(t('register.errors.invalidEmail'));
       return;
     } else if (
       passwordRef.current?.value !== repeatPasswordRef.current?.value
     ) {
-      toast.error("Passwords do not match!");
+      toast.error(t('register.errors.passwordsDontMatch'));
       return;
     } else if (passwordRef.current?.value.length < 8) {
-      toast.error("Password must be at least 8 characters long!");
+      toast.error(t('register.errors.passwordIsTooShort'));
       return;
     }
 
@@ -59,14 +60,14 @@ export default function Register() {
           toast.error("Data already taken!");
           return;
         } else {
-          toast.success("Registered successfully!");
+          toast.success(t('register.success'))
           setTimeout(() => {
             navigate("/login");
           }, 1000);
         }
       })
-      .catch((err: any) => {
-        toast.error("Something went wrong!");
+      .catch((err) => {
+        toast.error(t('register.errors.somethingWentWrong'));
         console.log(err);
       });
   };
@@ -79,21 +80,21 @@ export default function Register() {
           to="/"
         >
           <TbArrowLeft />
-          Back to home
+          {t('register.backToHome')}
         </Link>
         <h1 className="text-7xl mb-16 roboto">Register</h1>
-        <Input placeholder="Username" ref={usernameRef} />
-        <Input placeholder="E-Mail" type="email" ref={emailRef} />
-        <Input placeholder="Password" type="password" ref={passwordRef} />
+        <Input placeholder={t('register.username')} ref={usernameRef} />
+        <Input placeholder={t('register.email')} type="email" ref={emailRef} />
+        <Input placeholder={t('register.password')} type="password" ref={passwordRef} />
         <Input
-          placeholder="Repeat Password"
+          placeholder={t('register.repeatPassword')}
           type="password"
           ref={repeatPasswordRef}
         />
         <Button type="default" onClick={register}>
-          REGISTER
+          {t('register.title')}
         </Button>
-        <Link to="/login">Already have an account? Login</Link>
+        <Link to="/login">{t('register.loginLink')}</Link>
       </div>
       <img
         src={background}
