@@ -48,8 +48,8 @@ export default function CreateFlashcards() {
     };
 
     flashcards.map((_flashcard, index) => {
-      const concept = (document.getElementById(`#concept-${index}`) as HTMLInputElement).value;
-      const definition = (document.getElementById(`#concept-${index}`) as HTMLInputElement).value;
+      const concept = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
+      const definition = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
 
 
       flashcardsArray.push({
