@@ -166,7 +166,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="flex-1 flex justify-center">
+    <div className="flex-1 flex justify-center overflow-x-auto py-8">
       {isUserEditingAvatar && (
         <AvatarEditorModal
           avatarEditingOptions={avatarEditingOptions}
@@ -176,12 +176,12 @@ export default function Settings() {
           avatarBlob={avatarBlob}
         />
       )}
-      <div className="flex w-3/5 flex-col gap-8">
+      <div className="flex w-4/5 xl:w-3/5 flex-col gap-8 box-border">
         <h1 className="text-center roboto text-gray-100 text-4xl mt-4">
           Settings
         </h1>
-        <div className="flex gap-4">
-          <div className="flex flex-col w-2/3 gap-2">
+        <div className="flex gap-4 2xl:flex-row flex-col">
+          <div className="flex flex-col 2xl:w-2/3 w-full gap-2">
             <div
               className={`flex items-center justify-center relative p-4 rounded-xl ${
                 !banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
@@ -250,13 +250,14 @@ export default function Settings() {
               </div>
             </div>
           </div>
-          <div className="w-1/3 flex flex-col gap-4">
+          <div className="2xl:w-1/3 w-1/2 flex flex-col gap-4">
             <Input
               placeholder="Username"
               value={userData?.username}
               onChange={(e) => {
                 setUserData({ ...userData, username: e.target.value });
               }}
+              className="w-full"
             />
             <Input
               placeholder="Email"
@@ -265,18 +266,27 @@ export default function Settings() {
               onChange={(e) => {
                 setUserData({ ...userData, email: e.target.value });
               }}
+              className="w-full"
             />
             <textarea
               placeholder="Description"
               defaultValue={userData?.description}
-              className="h-full block px-2.5 py-2.5 sm:w-96 w-72 text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
+              className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
               onChange={(e) => {
                 setUserData({ ...userData, description: e.target.value });
               }}
             />
           </div>
+          <Button
+            type="default"
+            width="2xl:hidden w-1/4 mb-8"
+            onClick={saveData}
+          >
+            <TbDeviceFloppy />
+            Save
+          </Button>
         </div>
-        <Button type="default" width="w-1/4" onClick={saveData}>
+        <Button type="default" width="2xl:flex hidden w-1/4 mb-8" onClick={saveData}>
           <TbDeviceFloppy />
           Save
         </Button>

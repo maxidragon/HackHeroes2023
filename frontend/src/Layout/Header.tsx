@@ -27,7 +27,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="w-screen border-b-2 border-purple-400 flex justify-between items-center px-8 py-2 overflow-y-hidden">
+      <header className="w-screen border-b-2 border-purple-400 flex justify-between items-center sm:px-8 px-4 py-2">
         <Link to="/" className="flex items-center w-fit">
           <img src={logo} alt="Study_sphere_logo" className="w-16" />
           <h1 className="roboto text-3xl">EduSphere</h1>

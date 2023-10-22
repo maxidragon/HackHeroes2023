@@ -90,7 +90,7 @@ export default function Nav({ user, logout }: any) {
           type="default"
           isLink
           to="/login"
-          className="roboto text-center"
+          className="roboto text-center lg:flex hidden"
           width="w-48"
         >
           {t("navLogin")}
@@ -167,7 +167,7 @@ export default function Nav({ user, logout }: any) {
             type="default"
             isLink
             to="/login"
-            className="roboto text-center"
+            className="roboto text-center lg:hidden flex"
             width="w-48"
           >
             {t("navLogin")}
