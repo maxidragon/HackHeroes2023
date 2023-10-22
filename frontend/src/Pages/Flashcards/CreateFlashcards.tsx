@@ -4,6 +4,11 @@ import { useRef } from "react";
 import Button from "../../Components/Button.tsx";
 import { useState } from "react";
 
+interface flashcard {
+  concept: string,
+  definition: string
+}
+
 export default function CreateFlashcards() {
 
   const isPresent = useIsPresent();
@@ -35,19 +40,19 @@ export default function CreateFlashcards() {
 
   const createSet = () => {
 
-    const flashcardsArray = [];
+    const flashcardsArray: flashcard[] = [];
 
     const set = {
-      title: titleRef.current.value,
+      title: titleRef.current?.value,
       flashcards: flashcardsArray
     };
 
-    flashcards.map((flashcard, index) => {
-      const concept = document.querySelector(`#concept-${index}`).value;
-      const definition = document.querySelector(`#definition-${index}`).value;
+    flashcards.map((_flashcard, index) => {
+      const concept = (document.getElementById(`#concept-${index}`) as HTMLInputElement).value;
+      const definition = (document.getElementById(`#concept-${index}`) as HTMLInputElement).value;
+
 
       flashcardsArray.push({
-        id: index,
         concept,
         definition
       });
@@ -63,7 +68,7 @@ export default function CreateFlashcards() {
         <Button type="default" onClick={createSet}>Create</Button>
       </div>
       <Input containerClassName="w-full" className="sm:w-full" placeholder="Title" ref={titleRef} type="text" />
-      {flashcards.map((flashcard, index) => {
+      {flashcards.map((_flashcard: flashcard, index) => {
         return (
           <div key={index} className="w-full p-5 flex flex-col gap-4 border-4 border-violet-900 rounded-lg">
             <p className="text-white">Flashcard nr. {index + 1}</p>
@@ -73,7 +78,8 @@ export default function CreateFlashcards() {
         );
       })}
       <div className="flex gap-4 w-full justify-center">
-        {flashcards.length > 1 ? <Button type="alt" className="w-fit" onClick={removeLastFlashcard}>Delete</Button> : ""}
+        {flashcards.length > 1 ?
+          <Button type="alt" className="w-fit" onClick={removeLastFlashcard}>Delete</Button> : ""}
         <Button type="alt" className="w-fit" onClick={addFlashcard}>Add</Button>
       </div>
 
