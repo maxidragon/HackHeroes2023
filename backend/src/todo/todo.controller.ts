@@ -20,9 +20,9 @@ import { UpdateTodoDto } from './dto/updateTodo.dto';
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  @Get('')
-  async getAllTodos(@GetUser() user: JwtAuthDto) {
-    return await this.todoService.getAllTodos(user.userId);
+  @Get()
+  async getAllUserTodos(@GetUser() user: JwtAuthDto) {
+    return await this.todoService.getAllUserTodos(user.userId);
   }
 
   @Get(':id')

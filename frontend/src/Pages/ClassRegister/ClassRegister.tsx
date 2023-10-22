@@ -1,11 +1,12 @@
 import { motion, useIsPresent } from "framer-motion";
+import { t } from "i18next";
 
 export default function ClassRegister() {
     const isPresent = useIsPresent();
 
     return (
       <div className="flex-1">
-        <h1>Class Register</h1>
+        <h1>{t('classRegisterTitle')}</h1>
         <motion.div
           initial={{ scaleX: 1 }}
           animate={{

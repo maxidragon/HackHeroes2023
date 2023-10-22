@@ -1,7 +1,8 @@
 import { DbService } from './../db/db.service';
 import { HttpException, Injectable } from '@nestjs/common';
 import { CreateFlashCardSetDto } from './dto/createFlashCardSet.dto';
-import { CreateFlashCardDto } from './dto/createFlashCardDto';
+import { CreateFlashCardDto } from './dto/createFlashCard.dto';
+import { ForkFlashCardSetDto } from './dto/forkFlashCardSet.dto';
 
 @Injectable()
 export class FlashcardService {
@@ -79,6 +80,169 @@ export class FlashcardService {
           connect: { id: dto.setId },
         },
       },
+    });
+  }
+
+  async createManyFlashCards(
+    dto: CreateFlashCardDto[],
+    userId: number,
+  ): Promise<object> {
+    const flashCardSet = await this.prisma.flashCardSet.findUnique({
+      where: { id: dto[0].setId },
+    });
+
+    if (flashCardSet.userId !== userId) {
+      throw new HttpException(
+        'You are not the owner of this flashcard set!',
+        403,
+      );
+    }
+    return this.prisma.flashCard.createMany({
+      data: dto.map((card) => {
+        return {
+          question: card.question,
+          answer: card.answer,
+          setId: card.setId,
+        };
+      }),
+    });
+  }
+
+  async updateFlashCardSet(
+    dto: CreateFlashCardSetDto,
+    setId: number,
+    userId: number,
+  ): Promise<object> {
+    const flashCardSet = await this.prisma.flashCardSet.findUnique({
+      where: { id: setId },
+    });
+
+    if (flashCardSet.userId !== userId) {
+      throw new HttpException(
+        'You are not the owner of this flashcard set!',
+        403,
+      );
+    }
+    return this.prisma.flashCardSet.update({
+      where: { id: setId },
+      data: {
+        title: dto.title,
+        description: dto.description,
+        publicity: dto.publicity,
+      },
+    });
+  }
+
+  async deleteFlashCardSet(setId: number, userId: number): Promise<object> {
+    const flashCardSet = await this.prisma.flashCardSet.findUnique({
+      where: { id: setId },
+    });
+
+    if (flashCardSet.userId !== userId) {
+      throw new HttpException(
+        'You are not the owner of this flashcard set!',
+        403,
+      );
+    }
+    return this.prisma.flashCardSet.delete({
+      where: { id: setId },
+    });
+  }
+
+  async forkFlashCardSet(
+    data: ForkFlashCardSetDto,
+    userId: number,
+  ): Promise<object> {
+    const flashCardSet = await this.prisma.flashCardSet.findUnique({
+      where: { id: data.setId },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+
+    await this.prisma.flashCardSet.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        publicity: data.publicity,
+        forkedFrom: `${flashCardSet.title} by ${flashCardSet.user.username}`,
+        user: {
+          connect: { id: userId },
+        },
+      },
+    });
+
+    const flashCards = await this.prisma.flashCard.findMany({
+      where: { setId: data.setId },
+    });
+
+    await this.prisma.flashCard.createMany({
+      data: flashCards.map((card) => {
+        return {
+          question: card.question,
+          answer: card.answer,
+          setId: card.setId,
+        };
+      }),
+    });
+    return { message: 'Flashcard set forked successfully!' };
+  }
+
+  async updateFlashCard(
+    dto: CreateFlashCardDto,
+    cardId: number,
+    userId: number,
+  ): Promise<object> {
+    const flashCard = await this.prisma.flashCard.findUnique({
+      where: { id: cardId },
+      include: {
+        set: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+    });
+
+    if (flashCard.set.userId !== userId) {
+      throw new HttpException(
+        'You are not the owner of this flashcard set!',
+        403,
+      );
+    }
+    return this.prisma.flashCard.update({
+      where: { id: cardId },
+      data: {
+        question: dto.question,
+        answer: dto.answer,
+      },
+    });
+  }
+
+  async deleteFlashCard(cardId: number, userId: number): Promise<object> {
+    const flashCard = await this.prisma.flashCard.findUnique({
+      where: { id: cardId },
+      include: {
+        set: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+    });
+
+    if (flashCard.set.userId !== userId) {
+      throw new HttpException(
+        'You are not the owner of this flashcard set!',
+        403,
+      );
+    }
+    return this.prisma.flashCard.delete({
+      where: { id: cardId },
     });
   }
 }
