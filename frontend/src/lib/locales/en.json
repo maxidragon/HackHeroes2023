@@ -20,7 +20,8 @@
         "title": "Notes"
     },
     "todo": {
-        "title": "To do"
+        "title": "To do",
+        "notTodos": "You don't have any todos yet!"
     },
     "login": {
         "title": "Login",
