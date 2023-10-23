@@ -35,6 +35,14 @@ export class FlashcardController {
     return await this.flashcardService.getFlashCardSet(user.userId);
   }
 
+  @Get('search')
+  async searchFlashCardSets(
+    @GetUser() user: JwtAuthDto,
+    @Body('search') search: string,
+  ): Promise<object> {
+    return await this.flashcardService.searchFlashCards(search, user.userId);
+  }
+
   @Post('/set')
   async createFlashCardSet(
     @Body() dto: CreateFlashCardSetDto,

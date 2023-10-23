@@ -257,4 +257,20 @@ export class FlashcardService {
       where: { id: cardId },
     });
   }
+
+  async searchFlashCards(search: string, userId: number): Promise<object> {
+    return this.prisma.flashCard.findMany({
+      where: {
+        set: {
+          user: {
+            id: userId,
+          },
+        },
+        OR: [
+          { question: { contains: search } },
+          { answer: { contains: search } },
+        ],
+      },
+    });
+  }
 }
