@@ -213,7 +213,7 @@ export default function Settings() {
                 {userData?.username}
               </div>
             </div>
-            <div className="flex items-center justify-around gap-4">
+            <div className="sm:flex-row flex-col flex items-center justify-around gap-4">
               <div className="w-full flex flex-col gap-2">
                 <label
                   htmlFor="banner"
@@ -249,8 +249,46 @@ export default function Settings() {
                 />
               </div>
             </div>
+            <div className="flex w-full md:flex-row flex-col gap-4">
+              <div className="w-full flex flex-col md:justify-between gap-4">
+                <p className="text-sm text-gray-400 roboto">
+                  Vulcan access keys (we hold them, but we don't display them)
+                </p>
+                <Input placeholder="Token" className="w-full" />
+                <Input placeholder="Symbol" className="w-full" />
+                <Input placeholder="Pin" className="w-full" />
+              </div>
+              <div className="2xl:hidden w-full flex flex-col gap-4">
+                <Input
+                  placeholder="Username"
+                  value={userData?.username}
+                  onChange={(e) => {
+                    setUserData({ ...userData, username: e.target.value });
+                  }}
+                  className="w-full"
+                />
+                <Input
+                  placeholder="Email"
+                  value={userData?.email}
+                  type="email"
+                  onChange={(e) => {
+                    setUserData({ ...userData, email: e.target.value });
+                  }}
+                  className="w-full"
+                />
+                <textarea
+                  placeholder="Description"
+                  defaultValue={userData?.description}
+                  maxLength={300}
+                  className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
+                  onChange={(e) => {
+                    setUserData({ ...userData, description: e.target.value });
+                  }}
+                />
+              </div>
+            </div>
           </div>
-          <div className="2xl:w-1/3 w-1/2 flex flex-col gap-4">
+          <div className="2xl:flex w-1/2 hidden flex-col gap-4">
             <Input
               placeholder="Username"
               value={userData?.username}
@@ -271,7 +309,7 @@ export default function Settings() {
             <textarea
               placeholder="Description"
               defaultValue={userData?.description}
-              className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
+              className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
               onChange={(e) => {
                 setUserData({ ...userData, description: e.target.value });
               }}
@@ -279,14 +317,18 @@ export default function Settings() {
           </div>
           <Button
             type="default"
-            width="2xl:hidden w-1/4 mb-8"
+            width="2xl:hidden sm:w-1/4 w-full mb-8"
             onClick={saveData}
           >
             <TbDeviceFloppy />
             Save
           </Button>
         </div>
-        <Button type="default" width="2xl:flex hidden w-1/4 mb-8" onClick={saveData}>
+        <Button
+          type="default"
+          width="2xl:flex hidden w-1/4 mb-8"
+          onClick={saveData}
+        >
           <TbDeviceFloppy />
           Save
         </Button>
