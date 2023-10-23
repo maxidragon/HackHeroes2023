@@ -35,6 +35,11 @@ export class TodoController {
     return await this.todoService.createTodo(data, user.userId);
   }
 
+  @Get('complete/:id')
+  async completeTodoById(@Param('id') id: number, @GetUser() user: JwtAuthDto) {
+    return await this.todoService.completeTodoById(id, user.userId);
+  }
+
   @Put(':id')
   async updateTodoById(
     @Param('id') id: number,
