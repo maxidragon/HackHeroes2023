@@ -76,9 +76,15 @@ export class AuthService {
       select: {
         id: true,
         username: true,
+        loginID: true,
       },
     });
-    return userPublicInfo;
+    const data = {
+      id: userPublicInfo.id,
+      username: userPublicInfo.username,
+      isVulcanEnabled: userPublicInfo.loginID ? true : false,
+    };
+    return data;
   }
   async sendResetEmail(email: string): Promise<void> {
     const user = await this.prisma.user.findUniqueOrThrow({
