@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Button from "../../../Components/Button";
 import { TbDeviceFloppy } from "react-icons/tb";
 import AvatarEditorModal from "./Components/AvatarEditorModal";
+import { t } from "i18next";
 
 interface userData {
   username?: string;
@@ -51,7 +52,7 @@ export default function Settings() {
       })
         .then((res) => {
           if (res.status >= 400) {
-            toast.error("Something went wrong!");
+            toast.error(t('somethingWentWrong'));
             navigate(`/profile/${user.id}`);
           } else {
             res.json().then((data) => {
@@ -60,7 +61,7 @@ export default function Settings() {
           }
         })
         .catch((err) => {
-          toast.error("Something went wrong!");
+          toast.error(t('somethingWentWrong'));
           navigate(`/profile/${user.id}`);
           console.log(err);
         });
@@ -79,7 +80,7 @@ export default function Settings() {
       )
         .then((res) => {
           if (res.status >= 400) {
-            toast.error("Something went wrong!");
+            toast.error(t('somethingWentWrong'));
             navigate(`/profile/${user.id}`);
           } else {
             res.blob().then((data) => {
@@ -88,7 +89,7 @@ export default function Settings() {
           }
         })
         .catch((err) => {
-          toast.error("Something went wrong!");
+          toast.error(t('somethingWentWrong'));
           navigate(`/profile/${user.id}`);
           console.log(err);
         });
@@ -102,7 +103,7 @@ export default function Settings() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
-      toast.error("Only .png and .jpeg files are allowed!");
+      toast.error(t('settingsErrorAvatarFormat'));
       return;
     }
     setBanner(file);
@@ -112,7 +113,7 @@ export default function Settings() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
-      toast.error("Only .png and .jpeg files are allowed!");
+      toast.error(t('settingsErrorAvatarFormat'));
       return;
     }
     setAvatarBlob(file);
@@ -123,10 +124,10 @@ export default function Settings() {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (userData?.username === "" || userData?.email === "") {
-      toast.error("Username and email are required!");
+      toast.error(t('settingsErrorRequired'));
       return;
     } else if (!emailRegex.test(userData?.email || "")) {
-      toast.error("Provide correct email!");
+      toast.error(t('registerErrorsInvalidEmail'));
     }
 
     let avatarFile;
@@ -153,14 +154,14 @@ export default function Settings() {
     })
       .then((res) => {
         if (res.status >= 400) {
-          toast.error("Something went wrong!");
+          toast.error(t('somethingWentWrong'));
           return;
         } else {
-          toast.success("Saved successfully!");
+          toast.success(t('savedSuccessfully'));
         }
       })
       .catch((err) => {
-        toast.error("Something went wrong!");
+        toast.error(t('somethingWentWrong'));
         console.log(err);
       });
   }
@@ -178,7 +179,7 @@ export default function Settings() {
       )}
       <div className="flex w-4/5 xl:w-3/5 flex-col gap-8 box-border">
         <h1 className="text-center roboto text-gray-100 text-4xl mt-4">
-          Settings
+          {t('settingsTitle')}
         </h1>
         <div className="flex gap-4 2xl:flex-row flex-col">
           <div className="flex flex-col 2xl:w-2/3 w-full gap-2">
@@ -219,7 +220,7 @@ export default function Settings() {
                   htmlFor="banner"
                   className="text-xl roboto text-gray-400"
                 >
-                  Upload banner
+                  {t('settingsUploadBanner')}
                 </label>
                 <input
                   type="file"
@@ -237,7 +238,7 @@ export default function Settings() {
                   htmlFor="avatar"
                   className="text-xl roboto text-gray-400"
                 >
-                  Upload avatar
+                  {t('settingsUploadBanner')}
                 </label>
                 <input
                   type="file"

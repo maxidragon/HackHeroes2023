@@ -1,5 +1,7 @@
 {
     "errorForbidden": "You don't have permission to perform this action!",
+    "somethingWentWrong": "Something went wrong! Try again later!",
+    "savedSuccessfully": "Succesfully saved!",
     "navFlashCards": "Flash cards",
     "navNotes": "Notes",
     "navClassRegister": "Class register",
@@ -45,5 +47,10 @@
     "registerErrorsDataAlreadyTaken": "Data already taken!",
     "registerErrorsPasswordIsTooShort": "Password must be at least 8 characters long!",
     "registerErrorsSomethingWentWrong": "Something went wrong! Try again later!",
-    "registerSuccess": "Succesfully registered a new account!"
+    "registerSuccess": "Succesfully registered a new account!",
+    "settingsTitle": "Settings",
+    "settingsUploadBanner": "Upload banner",
+    "settingsUploadAvatar": "Upload avatar",
+    "settingsErrorRequired": "Username and email are required!",
+    "settingsErrorAvatarFormat": "Only .png and .jpeg files are allowed!"
 }
