@@ -52,5 +52,9 @@
     "settingsUploadBanner": "Upload banner",
     "settingsUploadAvatar": "Upload avatar",
     "settingsErrorRequired": "Username and email are required!",
-    "settingsErrorAvatarFormat": "Only .png and .jpeg files are allowed!"
+    "settingsErrorAvatarFormat": "Only .png and .jpeg files are allowed!",
+    "settingsUsername": "Username",
+    "settingsEmail": "Email",
+    "settingsDescription": "Description",
+    "save": "Save"
 }

@@ -184,16 +184,15 @@ export default function Settings() {
         <div className="flex gap-4 2xl:flex-row flex-col">
           <div className="flex flex-col 2xl:w-2/3 w-full gap-2">
             <div
-              className={`flex items-center justify-center relative p-4 rounded-xl ${
-                !banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
-              }`}
+              className={`flex items-center justify-center relative p-4 rounded-xl ${!banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
+                }`}
               style={
                 banner
                   ? {
-                      background: `url('${URL.createObjectURL(
-                        banner
-                      )}') no-repeat center center`,
-                    }
+                    background: `url('${URL.createObjectURL(
+                      banner
+                    )}') no-repeat center center`,
+                  }
                   : {}
               }
             >
@@ -261,7 +260,7 @@ export default function Settings() {
               </div>
               <div className="2xl:hidden w-full flex flex-col gap-4">
                 <Input
-                  placeholder="Username"
+                  placeholder={t('settingsUsername')}
                   value={userData?.username}
                   onChange={(e) => {
                     setUserData({ ...userData, username: e.target.value });
@@ -269,7 +268,7 @@ export default function Settings() {
                   className="w-full"
                 />
                 <Input
-                  placeholder="Email"
+                  placeholder={t('settingsEmail')}
                   value={userData?.email}
                   type="email"
                   onChange={(e) => {
@@ -278,7 +277,7 @@ export default function Settings() {
                   className="w-full"
                 />
                 <textarea
-                  placeholder="Description"
+                  placeholder={t('settingsDescription')}
                   defaultValue={userData?.description}
                   maxLength={300}
                   className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
@@ -291,7 +290,7 @@ export default function Settings() {
           </div>
           <div className="2xl:flex w-1/2 hidden flex-col gap-4">
             <Input
-              placeholder="Username"
+              placeholder={t('settingsUsername')}
               value={userData?.username}
               onChange={(e) => {
                 setUserData({ ...userData, username: e.target.value });
@@ -299,7 +298,7 @@ export default function Settings() {
               className="w-full"
             />
             <Input
-              placeholder="Email"
+              placeholder={t('settingsEmail')}
               value={userData?.email}
               type="email"
               onChange={(e) => {
@@ -308,7 +307,7 @@ export default function Settings() {
               className="w-full"
             />
             <textarea
-              placeholder="Description"
+              placeholder={t('settingsDescription')}
               defaultValue={userData?.description}
               className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
               onChange={(e) => {
@@ -322,7 +321,7 @@ export default function Settings() {
             onClick={saveData}
           >
             <TbDeviceFloppy />
-            Save
+            {t('save')}
           </Button>
         </div>
         <Button
@@ -331,7 +330,7 @@ export default function Settings() {
           onClick={saveData}
         >
           <TbDeviceFloppy />
-          Save
+          {t('save')}
         </Button>
       </div>
       <motion.div

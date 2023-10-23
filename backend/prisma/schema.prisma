@@ -75,7 +75,7 @@ model FlashCard {
   id        Int           @id @default(autoincrement())
   question  String
   answer    String
-  set       FlashCardSet? @relation(fields: [setId], references: [id])
+  set       FlashCardSet? @relation(fields: [setId], references: [id], onDelete: Cascade)
   setId     Int?
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -88,7 +88,7 @@ model Note {
   user       User?         @relation(fields: [userId], references: [id])
   userId     Int?
   categoryId Int?
-  category   NoteCategory? @relation(fields: [categoryId], references: [id])
+  category   NoteCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 }
