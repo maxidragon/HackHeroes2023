@@ -37,9 +37,24 @@ export class FlashcardService {
   }
 
   async getFlashCardSet(flashCardSetId: number): Promise<object> {
-    return this.prisma.flashCardSet.findUnique({
-      where: { id: flashCardSetId },
+    let set = await this.prisma.flashCardSet.findUnique({
+      where: {
+        id: flashCardSetId,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
     });
+
+    return [set].map((set) => {
+      delete set.userId;
+      return set;
+    })[0];
   }
 
   async createFlashCardSet(

@@ -22,6 +22,12 @@ interface avatarOptions {
   rotate?: number;
 }
 
+interface vulcanTokens {
+  token?: string;
+  symbol?: string;
+  pin?: string;
+}
+
 export default function Settings() {
   const isPresent = useIsPresent();
   const user = useAtomValue(userAtom);
@@ -33,6 +39,11 @@ export default function Settings() {
     useState<boolean>(false);
   const [avatarEditingOptions, setAvatarEditingOptions] =
     useState<avatarOptions>();
+  const [vulcanTokens, setVulcanTokens] = useState<vulcanTokens>({
+    token: "",
+    symbol: "",
+    pin: "",
+  });
 
   const bannerRef = useRef<any>(null);
 
@@ -52,7 +63,7 @@ export default function Settings() {
       })
         .then((res) => {
           if (res.status >= 400) {
-            toast.error(t('somethingWentWrong'));
+            toast.error(t("somethingWentWrong"));
             navigate(`/profile/${user.id}`);
           } else {
             res.json().then((data) => {
@@ -61,7 +72,7 @@ export default function Settings() {
           }
         })
         .catch((err) => {
-          toast.error(t('somethingWentWrong'));
+          toast.error(t("somethingWentWrong"));
           navigate(`/profile/${user.id}`);
           console.log(err);
         });
@@ -80,7 +91,7 @@ export default function Settings() {
       )
         .then((res) => {
           if (res.status >= 400) {
-            toast.error(t('somethingWentWrong'));
+            toast.error(t("somethingWentWrong"));
             navigate(`/profile/${user.id}`);
           } else {
             res.blob().then((data) => {
@@ -89,7 +100,7 @@ export default function Settings() {
           }
         })
         .catch((err) => {
-          toast.error(t('somethingWentWrong'));
+          toast.error(t("somethingWentWrong"));
           navigate(`/profile/${user.id}`);
           console.log(err);
         });
@@ -103,7 +114,7 @@ export default function Settings() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
-      toast.error(t('settingsErrorAvatarFormat'));
+      toast.error(t("settingsErrorAvatarFormat"));
       return;
     }
     setBanner(file);
@@ -113,7 +124,7 @@ export default function Settings() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
-      toast.error(t('settingsErrorAvatarFormat'));
+      toast.error(t("settingsErrorAvatarFormat"));
       return;
     }
     setAvatarBlob(file);
@@ -124,10 +135,10 @@ export default function Settings() {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (userData?.username === "" || userData?.email === "") {
-      toast.error(t('settingsErrorRequired'));
+      toast.error(t("settingsErrorRequired"));
       return;
     } else if (!emailRegex.test(userData?.email || "")) {
-      toast.error(t('registerErrorsInvalidEmail'));
+      toast.error(t("registerErrorsInvalidEmail"));
     }
 
     let avatarFile;
@@ -154,14 +165,14 @@ export default function Settings() {
     })
       .then((res) => {
         if (res.status >= 400) {
-          toast.error(t('somethingWentWrong'));
+          toast.error(t("somethingWentWrong"));
           return;
         } else {
-          toast.success(t('savedSuccessfully'));
+          toast.success(t("savedSuccessfully"));
         }
       })
       .catch((err) => {
-        toast.error(t('somethingWentWrong'));
+        toast.error(t("somethingWentWrong"));
         console.log(err);
       });
   }
@@ -179,7 +190,7 @@ export default function Settings() {
       )}
       <div className="flex w-4/5 xl:w-3/5 flex-col gap-8 box-border">
         <h1 className="text-center roboto text-gray-100 text-4xl mt-4">
-          {t('settingsTitle')}
+          {t("settingsTitle")}
         </h1>
         <div className="flex gap-4 2xl:flex-row flex-col">
           <div className="flex flex-col 2xl:w-2/3 w-full gap-2">
@@ -219,7 +230,7 @@ export default function Settings() {
                   htmlFor="banner"
                   className="text-xl roboto text-gray-400"
                 >
-                  {t('settingsUploadBanner')}
+                  {t("settingsUploadBanner")}
                 </label>
                 <input
                   type="file"
@@ -237,7 +248,7 @@ export default function Settings() {
                   htmlFor="avatar"
                   className="text-xl roboto text-gray-400"
                 >
-                  {t('settingsUploadBanner')}
+                  {t("settingsUploadAvatar")}
                 </label>
                 <input
                   type="file"
@@ -254,9 +265,39 @@ export default function Settings() {
                 <p className="text-sm text-gray-400 roboto">
                   Vulcan access keys (we hold them, but we don't display them)
                 </p>
-                <Input placeholder="Token" className="w-full" />
-                <Input placeholder="Symbol" className="w-full" />
-                <Input placeholder="Pin" className="w-full" />
+                <Input
+                  placeholder="Token"
+                  className="w-full"
+                  value={vulcanTokens?.token}
+                  onChange={(e) => {
+                    setVulcanTokens({
+                      ...vulcanTokens,
+                      token: e.target.value,
+                    });
+                  }}
+                />
+                <Input
+                  placeholder="Symbol"
+                  className="w-full"
+                  value={vulcanTokens?.symbol}
+                  onChange={(e) => {
+                    setVulcanTokens({
+                      ...vulcanTokens,
+                      symbol: e.target.value,
+                    });
+                  }}
+                />
+                <Input
+                  placeholder="Pin"
+                  className="w-full"
+                  value={vulcanTokens?.pin}
+                  onChange={(e) => {
+                    setVulcanTokens({
+                      ...vulcanTokens,
+                      pin: e.target.value,
+                    });
+                  }}
+                />
               </div>
               <div className="2xl:hidden w-full flex flex-col gap-4">
                 <Input
@@ -309,7 +350,7 @@ export default function Settings() {
             <textarea
               placeholder={t('settingsDescription')}
               defaultValue={userData?.description}
-              className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
+              className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
               onChange={(e) => {
                 setUserData({ ...userData, description: e.target.value });
               }}
