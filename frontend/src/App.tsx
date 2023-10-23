@@ -13,6 +13,7 @@ import Todo from "./Pages/Todo/Todo";
 import Profile from "./Pages/Profile/Profile";
 import Settings from "./Pages/Profile/Settings/Settings";
 import CreateFlashcards from "./Pages/Flashcards/CreateFlashcards.tsx";
+import FlashcardsDetails from "./Pages/Flashcards/FlashcardsDetails.tsx";
 
 function App() {
   const element = useRoutes([
@@ -31,6 +32,10 @@ function App() {
         {
           path: "/flashcards/create",
           element: <CreateFlashcards />
+        },
+        {
+          path: "/flashcards/details/:id",
+          element: <FlashcardsDetails />
         },
         {
           path: "/notes",

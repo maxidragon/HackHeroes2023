@@ -68,8 +68,9 @@ export default function Flashcards() {
         <div className="grid grid-cols-4 gap-4 w-full">
           {myFlashcards.map((flashcard: flashcard) => {
             return (
-              <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg" key={flashcard.id}
-                    to={`/flashcards/${flashcard.id}`}>
+              <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg"
+                    key={flashcard.id}
+                    to={`/flashcards/details/${flashcard.id}`}>
                 <h3>{flashcard.title}</h3>
               </Link>
             );
@@ -78,12 +79,14 @@ export default function Flashcards() {
       </div>
       <div className="w-full py-6">
         <h2 className="py-4 text-2xl">Your class flashcards sets:</h2>
-        {classFlashcards.length ? "" : <p className="text-xl text-red-400 py-4">You do not have any class flashcards!</p>}
+        {classFlashcards.length ? "" :
+          <p className="text-xl text-red-400 py-4">You do not have any class flashcards!</p>}
         <div className="grid grid-cols-4 gap-4 w-full">
           {classFlashcards.map((flashcard: flashcard) => {
             return (
-              <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg" key={flashcard.id}
-                    to={`/flashcards/${flashcard.id}`}>
+              <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg"
+                    key={flashcard.id}
+                    to={`/flashcards/details/${flashcard.id}`}>
                 <h3>{flashcard.title}</h3>
               </Link>
             );
