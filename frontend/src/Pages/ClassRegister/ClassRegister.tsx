@@ -4,7 +4,7 @@ import { userAtom } from "../../Atoms";
 import NoVulcan from "./Pages/NoVulcan";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import FancyNavbar from "./Components/FancyNavbar";
+//import FancyNavbar from "./Components/FancyNavbar";
 
 export default function ClassRegister() {
   const isPresent = useIsPresent();

@@ -29,6 +29,7 @@ interface vulcanTokens {
 }
 
 export default function Settings() {
+  const [activatedVulcan, setActivatedVulcan] = useState<boolean>(false);
   const isPresent = useIsPresent();
   const user = useAtomValue(userAtom);
   const navigate = useNavigate();
@@ -106,6 +107,23 @@ export default function Settings() {
         });
     };
 
+    const fetchVulcan = async () => {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/vulcan/active`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.json();
+
+      setActivatedVulcan(data.isActivated);
+    };
+
+    fetchVulcan();
     fetchData();
     fetchBanner();
   }, []);
@@ -176,6 +194,27 @@ export default function Settings() {
         console.log(err);
       });
   }
+
+  const removeVulcan = async () => {
+    await fetch(`${import.meta.env.VITE_API_URL}/vulcan/remove`, {
+      method: "DELETE",
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.status >= 400) {
+          toast.error(t("somethingWentWrong"));
+          return;
+        } else {
+          toast.success(t("vulcanRemoved"));
+          setActivatedVulcan(false);
+        }
+      })
+      .catch((err) => {
+        toast.error(t("somethingWentWrong"));
+        console.log(err);
+      });
+  };
+
 
   return (
     <div className="flex-1 flex justify-center overflow-x-auto py-8">
@@ -262,42 +301,53 @@ export default function Settings() {
             </div>
             <div className="flex w-full md:flex-row flex-col gap-4">
               <div className="w-full flex flex-col md:justify-between gap-4">
-                <p className="text-sm text-gray-400 roboto">
-                  Vulcan access keys (we hold them, but we don't display them)
-                </p>
-                <Input
-                  placeholder="Token"
-                  className="w-full"
-                  value={vulcanTokens?.token}
-                  onChange={(e) => {
-                    setVulcanTokens({
-                      ...vulcanTokens,
-                      token: e.target.value,
-                    });
-                  }}
-                />
-                <Input
-                  placeholder="Symbol"
-                  className="w-full"
-                  value={vulcanTokens?.symbol}
-                  onChange={(e) => {
-                    setVulcanTokens({
-                      ...vulcanTokens,
-                      symbol: e.target.value,
-                    });
-                  }}
-                />
-                <Input
-                  placeholder="Pin"
-                  className="w-full"
-                  value={vulcanTokens?.pin}
-                  onChange={(e) => {
-                    setVulcanTokens({
-                      ...vulcanTokens,
-                      pin: e.target.value,
-                    });
-                  }}
-                />
+                {activatedVulcan ? (
+                  <>
+                    <p className="text-sm text-gray-400 roboto">
+                      You have Vulcan added to your account. You can remove it here.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-400 roboto">
+                      Add your vulcan data from mobile access tab
+                    </p>
+                    <Input
+                      placeholder="Token"
+                      className="w-full"
+                      value={vulcanTokens?.token}
+                      onChange={(e) => {
+                        setVulcanTokens({
+                          ...vulcanTokens,
+                          token: e.target.value,
+                        });
+                      }}
+                    />
+                    <Input
+                      placeholder="Symbol"
+                      className="w-full"
+                      value={vulcanTokens?.symbol}
+                      onChange={(e) => {
+                        setVulcanTokens({
+                          ...vulcanTokens,
+                          symbol: e.target.value,
+                        });
+                      }}
+                    />
+                    <Input
+                      placeholder="Pin"
+                      className="w-full"
+                      value={vulcanTokens?.pin}
+                      onChange={(e) => {
+                        setVulcanTokens({
+                          ...vulcanTokens,
+                          pin: e.target.value,
+                        });
+                      }}
+                    />
+
+                  </>
+                )}
               </div>
               <div className="2xl:hidden w-full flex flex-col gap-4">
                 <Input
@@ -365,14 +415,21 @@ export default function Settings() {
             {t('save')}
           </Button>
         </div>
-        <Button
-          type="default"
-          width="2xl:flex hidden w-1/4 mb-8"
-          onClick={saveData}
-        >
-          <TbDeviceFloppy />
-          {t('save')}
-        </Button>
+        <div className="flex gap-4 flex-row">
+          {activatedVulcan && (
+            <Button type="default" width="2xl:flex hiddden w-1/4 wb-8" onClick={removeVulcan}>
+              {t('removeVulcanButton')}
+            </Button>
+          )}
+          <Button
+            type="default"
+            width="2xl:flex hidden w-1/4 mb-8"
+            onClick={saveData}
+          >
+            <TbDeviceFloppy />
+            {t('save')}
+          </Button>
+        </div>
       </div>
       <motion.div
         initial={{ scaleX: 1 }}

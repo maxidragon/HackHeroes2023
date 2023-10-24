@@ -62,5 +62,7 @@
   "registerGrades": "Grades",
   "registerAttendence": "Attenndence",
   "registerHomework": "Homework",
-  "registerExams": "Exams"
+  "registerExams": "Exams",
+  "removeVulcanButton": "Remove vulcan from this account",
+  "vulcanRemoved": "Vulcan succesfully removed"
 }

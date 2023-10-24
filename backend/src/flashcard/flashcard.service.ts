@@ -46,7 +46,7 @@ export class FlashcardService {
         403,
       );
     }
-    return await this.prisma.flashCardSet.findUnique({
+    const set = await this.prisma.flashCardSet.findUnique({
       where: {
         id: flashCardSetId,
       },
@@ -66,6 +66,21 @@ export class FlashcardService {
         },
       },
     });
+    const flashCards = await this.prisma.flashCard.findMany({
+      where: {
+        setId: flashCardSetId,
+      },
+      select: {
+        id: true,
+        question: true,
+        answer: true,
+      },
+    });
+
+    return {
+      ...set,
+      flashCards: flashCards,
+    };
   }
 
   async createFlashCardSet(
