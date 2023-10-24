@@ -4,6 +4,7 @@ import { DbService } from '../db/db.service';
 import { sha512 } from 'js-sha512';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +12,7 @@ export class AuthService {
     private readonly prisma: DbService,
     private readonly jwtService: JwtService,
     private readonly mailerService: MailerService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signup(dto: RegisterDto): Promise<object> {
@@ -56,11 +58,15 @@ export class AuthService {
   async generateAuthCookie(
     payload: JwtAuthDto,
   ): Promise<[string, string, object]> {
-    const jwt = await this.generateAuthJwt(payload);
+    const jwt = await this.generateAuthJwt(payload as JwtAuthDto);
     return [
       'jwt',
       jwt,
       {
+        domain: this.configService.get<string>(
+          'COOKIE_DOMAIN',
+          this.configService.get<string>('DOMAIN'),
+        ),
         secure: true,
         sameSite: 'lax',
       },
@@ -76,9 +82,15 @@ export class AuthService {
       select: {
         id: true,
         username: true,
+        loginID: true,
       },
     });
-    return userPublicInfo;
+    const data = {
+      id: userPublicInfo.id,
+      username: userPublicInfo.username,
+      isVulcanEnabled: userPublicInfo.loginID ? true : false,
+    };
+    return data;
   }
   async sendResetEmail(email: string): Promise<void> {
     const user = await this.prisma.user.findUniqueOrThrow({

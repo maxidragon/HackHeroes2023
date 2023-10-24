@@ -31,8 +31,19 @@ export class FlashcardController {
   }
 
   @Get('/set/:id')
-  async getFlashCardSet(@GetUser() user: JwtAuthDto): Promise<object> {
-    return await this.flashcardService.getFlashCardSet(user.userId);
+  async getFlashCardSet(
+    @GetUser() user: JwtAuthDto,
+    @Param('id') setId: number,
+  ): Promise<object> {
+    return await this.flashcardService.getFlashCardSet(setId, user.userId);
+  }
+
+  @Get('search')
+  async searchFlashCardSets(
+    @GetUser() user: JwtAuthDto,
+    @Body('search') search: string,
+  ): Promise<object> {
+    return await this.flashcardService.searchFlashCards(search, user.userId);
   }
 
   @Post('/set')

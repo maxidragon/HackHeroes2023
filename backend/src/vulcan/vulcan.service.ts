@@ -214,4 +214,28 @@ export class VulcanService {
     const client = await this.getClient(userId);
     return client.getAttendance(from, to);
   }
+
+  async isActivated(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        loginID: true,
+        restURLId: true,
+        certificate: true,
+        fingerprint: true,
+        privateKey: true,
+        firebaseToken: true,
+      },
+    });
+    const isActivated =
+      user.loginID !== null &&
+      user.restURLId !== null &&
+      user.certificate !== null &&
+      user.fingerprint !== null &&
+      user.privateKey !== null &&
+      user.firebaseToken !== null;
+    return {
+      isActivated: isActivated,
+    };
+  }
 }

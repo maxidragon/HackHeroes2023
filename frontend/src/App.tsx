@@ -13,7 +13,7 @@ import Todo from "./Pages/Todo/Todo";
 import Profile from "./Pages/Profile/Profile";
 import Settings from "./Pages/Profile/Settings/Settings";
 import CreateFlashcards from "./Pages/Flashcards/CreateFlashcards.tsx";
-import FlashcardsDetails from "./Pages/Flashcards/FlashcardsDetails.tsx";
+import Grades from "./Pages/ClassRegister/Pages/Grades.tsx";
 
 function App() {
   const element = useRoutes([
@@ -34,16 +34,30 @@ function App() {
           element: <CreateFlashcards />
         },
         {
-          path: "/flashcards/details/:id",
-          element: <FlashcardsDetails />
-        },
-        {
           path: "/notes",
           element: <Notes />
         },
         {
           path: "/class-register",
-          element: <ClassRegister />
+          element: <ClassRegister />,
+          children: [
+            {
+              path: "/class-register/grades",
+              element: <Grades />
+            },
+            {
+              path: "/class-register/attendence",
+              element: <div>Attendence</div>
+            },
+            {
+              path: "/class-register/homework",
+              element: <div>Homework</div>
+            },
+            {
+              path: "/class-register/exams",
+              element: <div>Exams</div>
+            }
+          ]
         },
         {
           path: "/todo",

@@ -8,6 +8,8 @@ import { TodoModule } from './todo/todo.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { UserModule } from './user/user.module';
 import { FlashcardModule } from './flashcard/flashcard.module';
+import { NotesModule } from './notes/notes.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -15,6 +17,9 @@ import { FlashcardModule } from './flashcard/flashcard.module';
     DbModule,
     VulcanModule,
     TodoModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
@@ -33,6 +38,7 @@ import { FlashcardModule } from './flashcard/flashcard.module';
     }),
     UserModule,
     FlashcardModule,
+    NotesModule,
   ],
   providers: [VulcanService],
   controllers: [VulcanController],

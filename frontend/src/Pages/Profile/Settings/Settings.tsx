@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Button from "../../../Components/Button";
 import { TbDeviceFloppy } from "react-icons/tb";
 import AvatarEditorModal from "./Components/AvatarEditorModal";
+import { t } from "i18next";
 
 interface userData {
   username?: string;
@@ -21,7 +22,14 @@ interface avatarOptions {
   rotate?: number;
 }
 
+interface vulcanTokens {
+  token?: string;
+  symbol?: string;
+  pin?: string;
+}
+
 export default function Settings() {
+  const [activatedVulcan, setActivatedVulcan] = useState<boolean>(false);
   const isPresent = useIsPresent();
   const user = useAtomValue(userAtom);
   const navigate = useNavigate();
@@ -32,6 +40,11 @@ export default function Settings() {
     useState<boolean>(false);
   const [avatarEditingOptions, setAvatarEditingOptions] =
     useState<avatarOptions>();
+  const [vulcanTokens, setVulcanTokens] = useState<vulcanTokens>({
+    token: "",
+    symbol: "",
+    pin: "",
+  });
 
   const bannerRef = useRef<any>(null);
 
@@ -51,7 +64,7 @@ export default function Settings() {
       })
         .then((res) => {
           if (res.status >= 400) {
-            toast.error("Something went wrong!");
+            toast.error(t("somethingWentWrong"));
             navigate(`/profile/${user.id}`);
           } else {
             res.json().then((data) => {
@@ -60,7 +73,7 @@ export default function Settings() {
           }
         })
         .catch((err) => {
-          toast.error("Something went wrong!");
+          toast.error(t("somethingWentWrong"));
           navigate(`/profile/${user.id}`);
           console.log(err);
         });
@@ -79,7 +92,7 @@ export default function Settings() {
       )
         .then((res) => {
           if (res.status >= 400) {
-            toast.error("Something went wrong!");
+            toast.error(t("somethingWentWrong"));
             navigate(`/profile/${user.id}`);
           } else {
             res.blob().then((data) => {
@@ -88,12 +101,29 @@ export default function Settings() {
           }
         })
         .catch((err) => {
-          toast.error("Something went wrong!");
+          toast.error(t("somethingWentWrong"));
           navigate(`/profile/${user.id}`);
           console.log(err);
         });
     };
 
+    const fetchVulcan = async () => {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/vulcan/active`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.json();
+
+      setActivatedVulcan(data.isActivated);
+    };
+
+    fetchVulcan();
     fetchData();
     fetchBanner();
   }, []);
@@ -102,7 +132,7 @@ export default function Settings() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
-      toast.error("Only .png and .jpeg files are allowed!");
+      toast.error(t("settingsErrorAvatarFormat"));
       return;
     }
     setBanner(file);
@@ -112,7 +142,7 @@ export default function Settings() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
-      toast.error("Only .png and .jpeg files are allowed!");
+      toast.error(t("settingsErrorAvatarFormat"));
       return;
     }
     setAvatarBlob(file);
@@ -123,10 +153,10 @@ export default function Settings() {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (userData?.username === "" || userData?.email === "") {
-      toast.error("Username and email are required!");
+      toast.error(t("settingsErrorRequired"));
       return;
     } else if (!emailRegex.test(userData?.email || "")) {
-      toast.error("Provide correct email!");
+      toast.error(t("registerErrorsInvalidEmail"));
     }
 
     let avatarFile;
@@ -153,17 +183,38 @@ export default function Settings() {
     })
       .then((res) => {
         if (res.status >= 400) {
-          toast.error("Something went wrong!");
+          toast.error(t("somethingWentWrong"));
           return;
         } else {
-          toast.success("Saved successfully!");
+          toast.success(t("savedSuccessfully"));
         }
       })
       .catch((err) => {
-        toast.error("Something went wrong!");
+        toast.error(t("somethingWentWrong"));
         console.log(err);
       });
   }
+
+  const removeVulcan = async () => {
+    await fetch(`${import.meta.env.VITE_API_URL}/vulcan/remove`, {
+      method: "DELETE",
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.status >= 400) {
+          toast.error(t("somethingWentWrong"));
+          return;
+        } else {
+          toast.success(t("vulcanRemoved"));
+          setActivatedVulcan(false);
+        }
+      })
+      .catch((err) => {
+        toast.error(t("somethingWentWrong"));
+        console.log(err);
+      });
+  };
+
 
   return (
     <div className="flex-1 flex justify-center overflow-x-auto py-8">
@@ -178,21 +229,20 @@ export default function Settings() {
       )}
       <div className="flex w-4/5 xl:w-3/5 flex-col gap-8 box-border">
         <h1 className="text-center roboto text-gray-100 text-4xl mt-4">
-          Settings
+          {t("settingsTitle")}
         </h1>
         <div className="flex gap-4 2xl:flex-row flex-col">
           <div className="flex flex-col 2xl:w-2/3 w-full gap-2">
             <div
-              className={`flex items-center justify-center relative p-4 rounded-xl ${
-                !banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
-              }`}
+              className={`flex items-center justify-center relative p-4 rounded-xl ${!banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
+                }`}
               style={
                 banner
                   ? {
-                      background: `url('${URL.createObjectURL(
-                        banner
-                      )}') no-repeat center center`,
-                    }
+                    background: `url('${URL.createObjectURL(
+                      banner
+                    )}') no-repeat center center`,
+                  }
                   : {}
               }
             >
@@ -219,7 +269,7 @@ export default function Settings() {
                   htmlFor="banner"
                   className="text-xl roboto text-gray-400"
                 >
-                  Upload banner
+                  {t("settingsUploadBanner")}
                 </label>
                 <input
                   type="file"
@@ -237,7 +287,7 @@ export default function Settings() {
                   htmlFor="avatar"
                   className="text-xl roboto text-gray-400"
                 >
-                  Upload avatar
+                  {t("settingsUploadAvatar")}
                 </label>
                 <input
                   type="file"
@@ -251,16 +301,57 @@ export default function Settings() {
             </div>
             <div className="flex w-full md:flex-row flex-col gap-4">
               <div className="w-full flex flex-col md:justify-between gap-4">
-                <p className="text-sm text-gray-400 roboto">
-                  Vulcan access keys (we hold them, but we don't display them)
-                </p>
-                <Input placeholder="Token" className="w-full" />
-                <Input placeholder="Symbol" className="w-full" />
-                <Input placeholder="Pin" className="w-full" />
+                {activatedVulcan ? (
+                  <>
+                    <p className="text-sm text-gray-400 roboto">
+                      {t('youHaveVulcanAdded')}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-400 roboto">
+                      {t('addYourVulcanData')}
+                    </p>
+                    <Input
+                      placeholder="Token"
+                      className="w-full"
+                      value={vulcanTokens?.token}
+                      onChange={(e) => {
+                        setVulcanTokens({
+                          ...vulcanTokens,
+                          token: e.target.value,
+                        });
+                      }}
+                    />
+                    <Input
+                      placeholder="Symbol"
+                      className="w-full"
+                      value={vulcanTokens?.symbol}
+                      onChange={(e) => {
+                        setVulcanTokens({
+                          ...vulcanTokens,
+                          symbol: e.target.value,
+                        });
+                      }}
+                    />
+                    <Input
+                      placeholder="Pin"
+                      className="w-full"
+                      value={vulcanTokens?.pin}
+                      onChange={(e) => {
+                        setVulcanTokens({
+                          ...vulcanTokens,
+                          pin: e.target.value,
+                        });
+                      }}
+                    />
+
+                  </>
+                )}
               </div>
               <div className="2xl:hidden w-full flex flex-col gap-4">
                 <Input
-                  placeholder="Username"
+                  placeholder={t('settingsUsername')}
                   value={userData?.username}
                   onChange={(e) => {
                     setUserData({ ...userData, username: e.target.value });
@@ -268,7 +359,7 @@ export default function Settings() {
                   className="w-full"
                 />
                 <Input
-                  placeholder="Email"
+                  placeholder={t('settingsEmail')}
                   value={userData?.email}
                   type="email"
                   onChange={(e) => {
@@ -277,7 +368,7 @@ export default function Settings() {
                   className="w-full"
                 />
                 <textarea
-                  placeholder="Description"
+                  placeholder={t('settingsDescription')}
                   defaultValue={userData?.description}
                   maxLength={300}
                   className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
@@ -290,7 +381,7 @@ export default function Settings() {
           </div>
           <div className="2xl:flex w-1/2 hidden flex-col gap-4">
             <Input
-              placeholder="Username"
+              placeholder={t('settingsUsername')}
               value={userData?.username}
               onChange={(e) => {
                 setUserData({ ...userData, username: e.target.value });
@@ -298,7 +389,7 @@ export default function Settings() {
               className="w-full"
             />
             <Input
-              placeholder="Email"
+              placeholder={t('settingsEmail')}
               value={userData?.email}
               type="email"
               onChange={(e) => {
@@ -307,9 +398,9 @@ export default function Settings() {
               className="w-full"
             />
             <textarea
-              placeholder="Description"
+              placeholder={t('settingsDescription')}
               defaultValue={userData?.description}
-              className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
+              className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
               onChange={(e) => {
                 setUserData({ ...userData, description: e.target.value });
               }}
@@ -321,17 +412,24 @@ export default function Settings() {
             onClick={saveData}
           >
             <TbDeviceFloppy />
-            Save
+            {t('save')}
           </Button>
         </div>
-        <Button
-          type="default"
-          width="2xl:flex hidden w-1/4 mb-8"
-          onClick={saveData}
-        >
-          <TbDeviceFloppy />
-          Save
-        </Button>
+        <div className="flex gap-4 flex-row">
+          {activatedVulcan && (
+            <Button type="default" width="2xl:flex hiddden w-1/4 wb-8" onClick={removeVulcan}>
+              {t('removeVulcanButton')}
+            </Button>
+          )}
+          <Button
+            type="default"
+            width="2xl:flex hidden w-1/4 mb-8"
+            onClick={saveData}
+          >
+            <TbDeviceFloppy />
+            {t('save')}
+          </Button>
+        </div>
       </div>
       <motion.div
         initial={{ scaleX: 1 }}

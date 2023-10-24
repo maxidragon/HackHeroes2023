@@ -32,6 +32,8 @@ model User {
   TODO                 Todo[]
   PasswordResetRequest PasswordResetRequest?
   FlashCardSet         FlashCardSet[]
+  Note                 Note[]
+  NoteCategory         NoteCategory[]
 }
 
 model RestURL {
@@ -70,13 +72,35 @@ model FlashCardSet {
 }
 
 model FlashCard {
-  id        Int                @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   question  String
   answer    String
-  set       FlashCardSet?      @relation(fields: [setId], references: [id])
+  set       FlashCardSet? @relation(fields: [setId], references: [id], onDelete: Cascade)
   setId     Int?
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Note {
+  id         Int           @id @default(autoincrement())
+  title      String
+  content    String        @db.Text
+  user       User?         @relation(fields: [userId], references: [id])
+  userId     Int?
+  categoryId Int?
+  category   NoteCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+model NoteCategory {
+  id        Int      @id @default(autoincrement())
+  name      String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Note      Note[]
 }
 
 enum FlashCardPublicity {

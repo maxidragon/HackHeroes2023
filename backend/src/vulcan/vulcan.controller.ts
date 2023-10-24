@@ -91,4 +91,9 @@ export class VulcanController {
   ): Promise<object> {
     return this.vulcanService.register(data, user);
   }
+
+  @Get('active')
+  async isActivated(@GetUser() user: JwtAuthDto): Promise<object> {
+    return this.vulcanService.isActivated(user.userId);
+  }
 }

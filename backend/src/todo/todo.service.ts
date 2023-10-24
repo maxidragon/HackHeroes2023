@@ -52,6 +52,25 @@ export class TodoService {
     });
   }
 
+  async completeTodoById(id: number, userId: number) {
+    const todo = await this.prisma.todo.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (todo.userId !== userId) {
+      throw new Error('You are not authorized to edit this todo');
+    }
+    return await this.prisma.todo.update({
+      where: {
+        id: id,
+      },
+      data: {
+        done: true,
+      },
+    });
+  }
+
   async deleteTodoById(id: number, userId: number) {
     const todo = await this.prisma.todo.findUnique({
       where: {
