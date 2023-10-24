@@ -44,5 +44,9 @@
   "registerGrades": "Oceny",
   "registerAttendence": "Obecność",
   "registerHomework": "Zadania domowe",
-  "registerExams": "Sprawdziany"
+  "registerExams": "Sprawdziany",
+  "removeVulcanButton": "Usuń połączenie z dziennikiem VULCAN",
+  "vulcanRemoved": "Pomyślnie usunięto powiązanie z dziennikiem",
+  "youHaveVulcanAdded": "Z twoim kontem połączony jest dziennik elektroniczny. Możesz go usunąć klikając przycisk poniżej.",
+  "addYourVulcanData": "Dodaj swoje dane dziennika elektronicznego z karty dostęp mobilny"
 }
