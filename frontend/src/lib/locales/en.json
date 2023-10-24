@@ -63,6 +63,7 @@
   "registerAttendence": "Attenndence",
   "registerHomework": "Homework",
   "registerExams": "Exams",
+  "registerNoTab": "Choose tab to start",
   "removeVulcanButton": "Remove vulcan from this account",
   "vulcanRemoved": "Vulcan succesfully removed"
 }

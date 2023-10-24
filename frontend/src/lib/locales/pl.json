@@ -44,5 +44,6 @@
   "registerGrades": "Oceny",
   "registerAttendence": "Obecność",
   "registerHomework": "Zadania domowe",
-  "registerExams": "Sprawdziany"
+  "registerExams": "Sprawdziany",
+  "registerNoTab": "Wybierz zakładkę"
 }

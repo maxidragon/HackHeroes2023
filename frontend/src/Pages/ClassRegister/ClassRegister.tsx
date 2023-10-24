@@ -4,7 +4,7 @@ import { userAtom } from "../../Atoms";
 import NoVulcan from "./Pages/NoVulcan";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-//import FancyNavbar from "./Components/FancyNavbar";
+import FancyNavbar from "./Components/FancyNavbar";
 
 export default function ClassRegister() {
   const isPresent = useIsPresent();
@@ -18,7 +18,7 @@ export default function ClassRegister() {
   }, [user, navigate]);
 
   return (
-    <div className="flex-1">
+    <div className="flex-1 flex flex-col gap-12 items-center">
       {user.isVulcanEnabled ? (
         <>
           <FancyNavbar />
