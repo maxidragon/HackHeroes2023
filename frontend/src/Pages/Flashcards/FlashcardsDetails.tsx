@@ -85,8 +85,8 @@ export default function FlashcardsDetails() {
       </div>
       <p>Author: <Link to={`/profile/${user.id}`}>{user.username}</Link></p>
       {forkedFrom && <p>Forked from: <Link to={`/profile/${forkedFrom.id}`}>{forkedFrom.username}</Link></p>}
-      <p>Created at: {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}</p>
-      <p>Last modified: {formatDistanceToNow(new Date(updatedAt), { addSuffix: true })}</p>
+      <p>Created at: {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), { addSuffix: true }) || ""}</p>
+      <p>Last modified: {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), { addSuffix: true }) || ""}</p>
       <p>Description: {description}</p>
       <p className="text-gray-400">Publicity: {publicity}</p>
       <div className="flex flex-col gap-4 mt-8">
