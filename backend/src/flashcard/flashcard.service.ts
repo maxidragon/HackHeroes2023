@@ -36,12 +36,28 @@ export class FlashcardService {
     });
   }
 
-  async getFlashCardSet(flashCardSetId: number): Promise<object> {
-    let set = await this.prisma.flashCardSet.findUnique({
+  async getFlashCardSet(
+    flashCardSetId: number,
+    userId: number,
+  ): Promise<object> {
+    if (!(await this.hasSetPermission(flashCardSetId, userId))) {
+      throw new HttpException(
+        'You do not have access to this flashcard set!',
+        403,
+      );
+    }
+    return await this.prisma.flashCardSet.findUnique({
       where: {
         id: flashCardSetId,
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        publicity: true,
+        forkedFrom: true,
+        createdAt: true,
+        updatedAt: true,
         user: {
           select: {
             id: true,
@@ -50,11 +66,6 @@ export class FlashcardService {
         },
       },
     });
-
-    return [set].map((set) => {
-      delete set.userId;
-      return set;
-    })[0];
   }
 
   async createFlashCardSet(
@@ -287,5 +298,40 @@ export class FlashcardService {
         ],
       },
     });
+  }
+
+  private async hasSetPermission(setId: number, userId: number) {
+    const flashCardSet = await this.prisma.flashCardSet.findUnique({
+      where: { id: setId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            schoolClass: true,
+            schoolName: true,
+          },
+        },
+      },
+    });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        schoolClass: true,
+        schoolName: true,
+      },
+    });
+    if (
+      flashCardSet.userId !== userId &&
+      flashCardSet.publicity === 'PRIVATE'
+    ) {
+      return false;
+    } else if (
+      flashCardSet.publicity === 'CLASS' &&
+      flashCardSet.user.schoolClass !== user.schoolClass &&
+      flashCardSet.user.schoolName !== user.schoolName
+    ) {
+      return false;
+    }
+    return true;
   }
 }
