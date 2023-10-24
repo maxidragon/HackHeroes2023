@@ -38,7 +38,25 @@ function App() {
         },
         {
           path: "/class-register",
-          element: <ClassRegister />
+          element: <ClassRegister />,
+          children: [
+            {
+              path: "/class-register/grades",
+              element: <div>Grades</div>
+            },
+            {
+              path: "/class-register/attendence",
+              element: <div>Attendence</div>
+            },
+            {
+              path: "/class-register/homework",
+              element: <div>Homework</div>
+            },
+            {
+              path: "/class-register/exams",
+              element: <div>Exams</div>
+            }
+          ]
         },
         {
           path: "/todo",

@@ -58,5 +58,9 @@
   "settingsDescription": "Description",
   "save": "Save",
   "noVulcan": "Connect your vulcan account!",
-  "noVulcanWhereInputs": "You can find inputs for these codes in the settings!"
+  "noVulcanWhereInputs": "You can find inputs for these codes in the settings!",
+  "registerGrades": "Grades",
+  "registerAttendence": "Attenndence",
+  "registerHomework": "Homework",
+  "registerExams": "Exams"
 }

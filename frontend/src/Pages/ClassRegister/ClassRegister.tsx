@@ -2,8 +2,9 @@ import { motion, useIsPresent } from "framer-motion";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../Atoms";
 import NoVulcan from "./Pages/NoVulcan";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import FancyNavbar from "./Components/FancyNavbar";
 
 export default function ClassRegister() {
   const isPresent = useIsPresent();
@@ -11,14 +12,21 @@ export default function ClassRegister() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!user.id) {
       navigate("/login");
     }
   }, [user, navigate]);
 
   return (
     <div className="flex-1">
-      {user.isVulcanEnabled ? <></> : <NoVulcan />}
+      {user.isVulcanEnabled ? (
+        <>
+          <FancyNavbar />
+          <Outlet />
+        </>
+      ) : (
+        <NoVulcan />
+      )}
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{
