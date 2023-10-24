@@ -65,5 +65,7 @@
   "registerExams": "Exams",
   "registerNoTab": "Choose tab to start",
   "removeVulcanButton": "Remove vulcan from this account",
-  "vulcanRemoved": "Vulcan succesfully removed"
+  "vulcanRemoved": "Vulcan succesfully removed",
+  "youHaveVulcanAdded": "You have Vulcan added to your account. You can remove it here.",
+  "addYourVulcanData": "Add your vulcan data from mobile access tab"
 }

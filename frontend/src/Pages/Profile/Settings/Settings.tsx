@@ -304,13 +304,13 @@ export default function Settings() {
                 {activatedVulcan ? (
                   <>
                     <p className="text-sm text-gray-400 roboto">
-                      You have Vulcan added to your account. You can remove it here.
+                      {t('youHaveVulcanAdded')}
                     </p>
                   </>
                 ) : (
                   <>
                     <p className="text-sm text-gray-400 roboto">
-                      Add your vulcan data from mobile access tab
+                      {t('addYourVulcanData')}
                     </p>
                     <Input
                       placeholder="Token"
