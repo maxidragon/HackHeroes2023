@@ -16,6 +16,7 @@ import { VulcanGuard } from './vulcan.guard';
 import { VulcanService } from './vulcan.service';
 import { GradesQueryDto } from './dto/gradesQuery.dto';
 import { VulcanDto } from './dto/vulcan.dto';
+import { LessonsQueryDto } from './dto/lessonsQuery.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('vulcan')
@@ -70,10 +71,12 @@ export class VulcanController {
 
   @UseGuards(VulcanGuard)
   @Get('attendance')
-  async getAttendance(@Query() day: Date, @GetUser() user: JwtAuthDto) {
-    return this.vulcanService.getAttendance(user.userId, day);
+  async getAttendance(
+    @Query() query: LessonsQueryDto,
+    @GetUser() user: JwtAuthDto,
+  ) {
+    return this.vulcanService.getAttendance(user.userId, query.day);
   }
-
   @UseGuards(VulcanGuard)
   @Delete('remove')
   @HttpCode(HttpStatus.NO_CONTENT)
