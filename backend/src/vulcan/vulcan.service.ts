@@ -156,9 +156,27 @@ export class VulcanService {
     return returnObject;
   }
 
-  async getLessons(from: Date, to: Date, userId: number) {
+  async getLessons(day: Date, userId: number) {
     const client = await this.getClient(userId);
-    return client.getLessons(from, to);
+    const data = await client.getLessons(day, day);
+    const newData = data.map((item) => {
+      return {
+        id: item.id,
+        date: item.date.dateDisplay,
+        time: item.timeSlot.display,
+        position: item.timeSlot.position,
+        room: item.room,
+        teacher: item.teacherPrimary.displayName,
+        subject: item.subject.name,
+        group: {
+          shortcut: item.distribution?.shortcut,
+          name: item.distribution?.name,
+        },
+      };
+    });
+    return newData.sort((a, b) => {
+      return a.position - b.position;
+    });
   }
 
   async getLuckyNumber(userId: number) {
@@ -171,15 +189,55 @@ export class VulcanService {
     return (await client.getStudents())[0];
   }
 
-  async getMessages(userId: number): Promise<Message[]> {
+  async getMessages(userId: number) {
     const client = await this.getClient(userId);
     const messageBoxId = (await client.getMessageBoxes())[0].globalKey;
-    return client.getMessages(messageBoxId);
+    const data = await client.getMessages(messageBoxId);
+    const sortedData = data.sort((a, b) => {
+      return (
+        new Date(b.readDate.Date).getTime() -
+        new Date(a.readDate.Date).getTime()
+      );
+    });
+    const newData = sortedData.map((item) => {
+      return {
+        id: item.id,
+        subject: item.subject,
+        content: item.content,
+        sentDate: item.sentDate.dateDisplay,
+        sender: item.sender.name,
+        receivers: item.receivers,
+        attachments: item.attachments,
+        readDate: `${item.readDate.DateDisplay} ${item.readDate.Time}`,
+      };
+    });
+    return newData;
   }
 
   async getHomework(userId: number) {
     const client = await this.getClient(userId);
-    return client.getHomework();
+    const data = await client.getHomework();
+    const newData = [];
+    for (const item of data) {
+      if (item.deadline) {
+        if (
+          new Date(item.deadline.Date).getTime() >=
+          new Date().getTime() - 1000 * 60 * 60 * 24
+        ) {
+          newData.push({
+            id: item.id,
+            content: item.content,
+            createdAt: item.dateCreated.DateDisplay,
+            teacher: item.creator.displayName,
+            subject: item.subject.name,
+            deadline: item.deadline?.DateDisplay,
+          });
+        }
+      }
+    }
+    return newData.sort((a, b) => {
+      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+    });
   }
   async getExams(userId: number, last?: number): Promise<any[]> {
     const client = await this.getClient(userId);
@@ -214,6 +272,13 @@ export class VulcanService {
     const client = await this.getClient(userId);
     const data = await client.getAttendance(day, day);
     const newData = data.map((item) => {
+      const group = item.group
+        ? {
+            id: item.group.id,
+            shortcut: item.group.shortcut,
+            name: item.group.name,
+          }
+        : null;
       return {
         id: item.id,
         lessonId: item.lessonId,
@@ -239,6 +304,7 @@ export class VulcanService {
           justified: item.presenceType.justified,
           deleted: item.presenceType.deleted,
         },
+        group: group,
       };
     });
     return newData.sort((a, b) => {

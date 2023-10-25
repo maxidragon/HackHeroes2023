@@ -35,10 +35,10 @@ export class VulcanController {
   @UseGuards(VulcanGuard)
   @Get('lessons')
   async getLessons(
-    @Query() query: { from: Date; to: Date },
+    @Query() query: LessonsQueryDto,
     @GetUser() user: JwtAuthDto,
   ) {
-    return this.vulcanService.getLessons(query.from, query.to, user.userId);
+    return this.vulcanService.getLessons(query.day, user.userId);
   }
 
   @UseGuards(VulcanGuard)
@@ -52,7 +52,7 @@ export class VulcanController {
     return this.vulcanService.getStudent(user.userId);
   }
   @UseGuards(VulcanGuard)
-  @Get('messages-received')
+  @Get('messages')
   async getReceivedMessages(@GetUser() user: JwtAuthDto): Promise<object> {
     return this.vulcanService.getMessages(user.userId);
   }
