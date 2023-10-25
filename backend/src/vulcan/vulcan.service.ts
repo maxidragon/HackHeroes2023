@@ -212,7 +212,34 @@ export class VulcanService {
 
   async getAttendance(userId: number, from: Date, to: Date) {
     const client = await this.getClient(userId);
-    return client.getAttendance(from, to);
+    const data = await client.getAttendance(from, to);
+    const newData = data.map((item) => {
+      return {
+        id: item.id,
+        lessonId: item.lessonId,
+        replacament: item.replacament,
+        subject: {
+          id: item.subject.id,
+          name: item.subject.name,
+          code: item.subject.code,
+        },
+        teacher: {
+          id: item.teacher.id,
+          name: item.teacher.displayName,
+        },
+        date: item.date.dateDisplay,
+        presenceType: {
+          symbol: item.presenceType.symbol,
+          presence: item.presenceType.presence,
+          absence: item.presenceType.absence,
+          exemption: item.presenceType.exemption,
+          late: item.presenceType.late,
+          justified: item.presenceType.justified,
+          deleted: item.presenceType.deleted,
+        },
+      };
+    });
+    return newData;
   }
 
   async isActivated(userId: number) {
