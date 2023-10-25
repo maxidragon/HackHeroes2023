@@ -210,9 +210,9 @@ export class VulcanService {
     });
   }
 
-  async getAttendance(userId: number, from: Date, to: Date) {
+  async getAttendance(userId: number, day: Date) {
     const client = await this.getClient(userId);
-    const data = await client.getAttendance(from, to);
+    const data = await client.getAttendance(day, day);
     const newData = data.map((item) => {
       return {
         id: item.id,
@@ -228,6 +228,8 @@ export class VulcanService {
           name: item.teacher.displayName,
         },
         date: item.date.dateDisplay,
+        position: item.time.position,
+        time: item.time.display,
         presenceType: {
           symbol: item.presenceType.symbol,
           presence: item.presenceType.presence,
@@ -239,7 +241,9 @@ export class VulcanService {
         },
       };
     });
-    return newData;
+    return newData.sort((a, b) => {
+      return a.position - b.position;
+    });
   }
 
   async isActivated(userId: number) {
