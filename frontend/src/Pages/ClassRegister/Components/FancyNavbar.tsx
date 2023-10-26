@@ -1,4 +1,5 @@
 import { t } from "i18next";
+import { TbCalendarEvent, TbFileSpreadsheet, TbSquare5Filled, TbUserCheck } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 
 export default function FancyNavbar() {
@@ -12,18 +13,22 @@ export default function FancyNavbar() {
     <>
     <div className="flex text-xl gap-4 w-fit mt-8">
       <NavLink to="grades" className={({ isActive }) => menuLinkClass(isActive)}>
+        <TbSquare5Filled />
         {t("registerGrades")}
       </NavLink>
       <div className="w-1 rounded-xl h-8 bg-bgLght" />
-      <NavLink to="attendence" className={({ isActive }) => menuLinkClass(isActive)}>
-        {t("registerAttendence")}
+      <NavLink to="attendance" className={({ isActive }) => menuLinkClass(isActive)}>
+        <TbUserCheck />
+        {t("registerAttendance")}
       </NavLink>
       <div className="w-1 rounded-xl h-8 bg-bgLght" />
       <NavLink to="homework" className={({ isActive }) => menuLinkClass(isActive)}>
+        <TbFileSpreadsheet />
         {t("registerHomework")}
       </NavLink>
       <div className="w-1 rounded-xl h-8 bg-bgLght" />
       <NavLink to="exams" className={({ isActive }) => menuLinkClass(isActive)}>
+        <TbCalendarEvent />
         {t("registerExams")}
       </NavLink>
     </div>
