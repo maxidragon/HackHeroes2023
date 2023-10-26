@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion, useIsPresent } from "framer-motion";
 import background from "../../graphics/loginBackground.jpg";
 import Input from "../../Components/Input";
@@ -8,31 +8,24 @@ import toast from "react-hot-toast";
 import { TbArrowLeft } from "react-icons/tb";
 import { t } from "i18next";
 
-export default function Register() {
+export default function ResetPassword() {
+  const { hash } = useParams();
   const isPresent = useIsPresent();
 
-  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const repeatPasswordRef = useRef<HTMLInputElement>(null);
-  const usernameRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
   const register = () => {
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (
-      !emailRef.current?.value ||
       !passwordRef.current?.value ||
-      !repeatPasswordRef.current?.value ||
-      !usernameRef.current?.value
+      !repeatPasswordRef.current?.value
     ) {
       toast.error(t('registerErrorsAllFieldsRequired'));
       return;
-    } else if (!emailRegex.test(emailRef.current?.value)) {
-      toast.error(t('invalidEmail'));
-      return;
-    } else if ( 
+    } else if (
       passwordRef.current?.value !== repeatPasswordRef.current?.value
     ) {
       toast.error(t('registerErrorsPasswordsDontMatch'));
@@ -42,32 +35,29 @@ export default function Register() {
       return;
     }
 
-    fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-      method: "POST",
+    fetch(`${import.meta.env.VITE_API_URL}/auth/reset/${hash}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
       body: JSON.stringify({
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
-        username: usernameRef.current?.value,
+        newPassword: passwordRef.current?.value,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode >= 400) {
-          toast.error(t('registerErrorsDataAlreadyTaken'));
+      .then((res) => {
+        if (res.status >= 400) {
+          toast.error(t('somethingWentWrong'));
           return;
         } else {
-          toast.success(t('registerSuccess'))
+          toast.success(t('resetPasswordSuccess'))
           setTimeout(() => {
             navigate("/login");
           }, 1000);
         }
       })
       .catch((err) => {
-        toast.error(t('registerErrorsSomethingWentWrong'));
+        toast.error(t('somethingWentWrong'));
         console.log(err);
       });
   };
@@ -82,18 +72,7 @@ export default function Register() {
           <TbArrowLeft />
           {t("registerBackToHome")}
         </Link>
-        <h1 className="text-7xl mb-16 roboto">{t('registerTitle')}</h1>
-        <Input
-          placeholder={t("registerUsername")}
-          ref={usernameRef}
-          containerClassName="sm:w-96 w-72"
-        />
-        <Input
-          placeholder={t("registerEmail")}
-          type="email"
-          ref={emailRef}
-          containerClassName="sm:w-96 w-72"
-        />
+        <h1 className="text-7xl mb-16 roboto">{t('resetPasswordTitle')}</h1>
         <Input
           placeholder={t("registerPassword")}
           type="password"
@@ -107,9 +86,8 @@ export default function Register() {
           containerClassName="sm:w-96 w-72"
         />
         <Button type="default" onClick={register}>
-          {t("registerTitle")}
+          {t("changePassword")}
         </Button>
-        <Link to="/login">{t("registerLoginLink")}</Link>
       </div>
       <img
         src={background}

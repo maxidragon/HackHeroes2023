@@ -95,6 +95,14 @@
   "youKnowThis": "You know this",
   "nextRound": "Next round",
   "youShouldRepeatThis": "You should repeat this",
-  "notFlashCards": "You do not have any flashcards!"
-
+  "notFlashCards": "You do not have any flashcards!",
+  "sendResetEmail": "Send reset email",
+  "forgotPasswordLink": "Forgot password?",
+  "forgotPasswordTitle": "Forgot password",
+  "resetEmailSent": "Reset email sent!",
+  "wrongEmail": "User with this email does not exist!",
+  "invalidEmail": "Invalid email!",
+  "resetPasswordSuccess": "Succesfully changed password!",
+  "resetPasswordTitle": "Reset password",
+  "changePassword": "Change password"
 }

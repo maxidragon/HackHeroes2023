@@ -101,13 +101,14 @@ export class AuthService {
         id: true,
       },
     });
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL');
     const emailContent = `
       <html lang="en">
         <body>
           <h1>Click the link below to reset your password</h1> 
-          <a href="http://localhost:3000/auth/reset/${sha512(
-            String(user.id),
-          )}">Reset password</a>
+          <a href="${frontendUrl}/password/reset/${sha512(
+      String(user.id),
+    )}">Reset password</a>
         </body>
       </html>
     `;

@@ -1,27 +1,21 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion, useIsPresent } from "framer-motion";
 import background from "../../graphics/loginBackground.jpg";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import toast from "react-hot-toast";
 import { useRef } from "react";
-import { useAtom } from "jotai";
-import { userAtom } from "../../Atoms";
-import getUserObject from "../../lib/getUser";
 import { TbArrowLeft } from "react-icons/tb";
 import { t } from "i18next";
 
-export default function Login() {
+export default function ForgotPassword() {
   const isPresent = useIsPresent();
   const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-  const [, setUser] = useAtom(userAtom);
 
   const login = () => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
-    if (!emailRef.current?.value || !passwordRef.current?.value) {
+    if (!emailRef.current?.value) {
       toast.error(t('loginErrorsAllFieldsRequired'));
       return;
     } else if (!emailRegex.test(emailRef.current?.value)) {
@@ -29,7 +23,7 @@ export default function Login() {
       return;
     }
 
-    fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+    fetch(`${import.meta.env.VITE_API_URL}/auth/reset/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,20 +31,15 @@ export default function Login() {
       credentials: "include",
       body: JSON.stringify({
         email: emailRef.current?.value,
-        password: passwordRef.current?.value,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode >= 400) {
-          toast.error(t('loginErrorsInvalidCredentials'));
-          return;
+      .then((res) => {
+        if (res.status === 204) {
+          toast.success(t('resetEmailSent'));
+        } else if (res.status === 404) {
+          toast.error(t('wrongEmail'));
         } else {
-          toast.success(t('loginSuccess'));
-          setUser(() => getUserObject());
-          setTimeout(() => {
-            navigate("/");
-          }, 750);
+          toast.error(t('somethingWentWrong'));
         }
       })
       .catch((err) => {
@@ -74,24 +63,16 @@ export default function Login() {
           <TbArrowLeft />
           {t("loginBackToHome")}
         </Link>
-        <h1 className="text-7xl mb-16 roboto">Login</h1>
+        <h1 className="text-6xl mb-16 roboto">{t('forgotPasswordTitle')}</h1>
         <Input
           placeholder={t("loginEmail")}
           ref={emailRef}
           type="email"
           containerClassName="sm:w-96 w-72"
         />
-        <Input
-          containerClassName="sm:w-96 w-72"
-          placeholder={t("loginPassword")}
-          type="password"
-          ref={passwordRef}
-        />
         <Button type="default" onClick={login}>
-          {t("loginTitle")}
+          {t("sendResetEmail")}
         </Button>
-        <Link to="/register">{t("loginRegisterLink")}</Link>
-        <Link to="/password/forgot">{t("forgotPasswordLink")}</Link>
       </div>
       <motion.div
         initial={{ scaleX: 1 }}

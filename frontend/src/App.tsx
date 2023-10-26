@@ -16,6 +16,8 @@ import CreateFlashcards from "./Pages/Flashcards/CreateFlashcards.tsx";
 import Grades from "./Pages/ClassRegister/Pages/Grades.tsx";
 import FlashcardsDetails from "./Pages/Flashcards/FlashcardsDetails.tsx";
 import FlashcardsLearn from "./Pages/Flashcards/FlashcardsLearn.tsx";
+import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword.tsx";
+import ResetPassword from "./Pages/ResetPassword/ResetPassword.tsx";
 
 function App() {
   const element = useRoutes([
@@ -90,6 +92,14 @@ function App() {
     {
       path: "/register",
       element: <Register />
+    },
+    {
+      path: "/password/forgot",
+      element: <ForgotPassword />
+    },
+    {
+      path: "/password/reset/:hash",
+      element: <ResetPassword />
     }
   ]);
 
