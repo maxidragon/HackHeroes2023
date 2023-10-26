@@ -95,5 +95,14 @@
   "youKnowThis": "Wiesz to",
   "nextRound": "Następna runda",
   "youShouldRepeatThis": "Powinieneś to powtórzyć",
-  "notFlashCards": "Nie masz jeszcze żadnych fiszek!"
+  "notFlashCards": "Nie masz jeszcze żadnych fiszek!",
+  "sendResetEmail": "Wyślij email resetujący hasło",
+  "forgotPasswordLink": "Zapomniałeś hasła?",
+  "forgotPasswordTitle": "Zapomniałeś hasła",
+  "resetEmailSent": "Wysłano email resetujący hasło!",
+  "wrongEmail": "Użytkownik o tym adresie email nie istnieje!",
+  "invalidEmail": "Nieprawidłowy adres email!",
+  "resetPasswordSuccess": "Pomyślnie zmieniono hasło!",
+  "resetPasswordTitle": "Zresetuj hasło",
+  "changePassword": "Zmień hasło"
 }
