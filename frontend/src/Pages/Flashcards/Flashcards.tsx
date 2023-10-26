@@ -1,4 +1,5 @@
 import { motion, useIsPresent } from "framer-motion";
+import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -47,12 +48,10 @@ export default function Flashcards() {
   useEffect(() => {
 
     getMyFlashcards().then(data => {
-      console.log(data);
       setMyFlashcards(data);
     });
 
     getClassFlashcards().then(data => {
-      console.log(data);
       setClassFlashcards(data);
     });
 
@@ -60,17 +59,16 @@ export default function Flashcards() {
 
   return (
     <div className="flex w-[80%] mx-auto max-w-[1300px] flex-col items-center gap-5 py-6">
-      <Link to="/flashcards/create" className="py-4 hover:text-purple-500 transition text-xl">Create new flashcard
-        set</Link>
+      <Link to="/flashcards/create" className="py-4 hover:text-purple-500 transition text-xl">{t('createNewFlashCardSet')}</Link>
       <div className="w-full py-6">
-        <h2 className="py-4 text-2xl">Your personal flashcards sets:</h2>
-        {myFlashcards.length ? "" : <p className="text-2xl text-red-400 py-4">You do not have any flashcards!</p>}
+        <h2 className="py-4 text-2xl">{t('personalSets')}</h2>
+        {myFlashcards.length ? "" : <p className="text-2xl text-red-400 py-4">{t('notFlashCards')}</p>}
         <div className="grid grid-cols-4 gap-4 w-full">
           {myFlashcards.map((flashcard: flashcard) => {
             return (
               <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg"
-                    key={flashcard.id}
-                    to={`/flashcards/details/${flashcard.id}`}>
+                key={flashcard.id}
+                to={`/flashcards/details/${flashcard.id}`}>
                 <h3>{flashcard.title}</h3>
               </Link>
             );
@@ -78,15 +76,15 @@ export default function Flashcards() {
         </div>
       </div>
       <div className="w-full py-6">
-        <h2 className="py-4 text-2xl">Your class flashcards sets:</h2>
+        <h2 className="py-4 text-2xl">{t('classSets')}</h2>
         {classFlashcards.length ? "" :
-          <p className="text-xl text-red-400 py-4">You do not have any class flashcards!</p>}
+          <p className="text-xl text-red-400 py-4">{t('notFlashCards')}</p>}
         <div className="grid grid-cols-4 gap-4 w-full">
           {classFlashcards.map((flashcard: flashcard) => {
             return (
               <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg"
-                    key={flashcard.id}
-                    to={`/flashcards/details/${flashcard.id}`}>
+                key={flashcard.id}
+                to={`/flashcards/details/${flashcard.id}`}>
                 <h3>{flashcard.title}</h3>
               </Link>
             );

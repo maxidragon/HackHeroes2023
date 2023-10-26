@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useIsPresent } from "framer-motion";
 import { t } from "i18next";
 import { Todo as TodoInterface } from "../../lib/interfaces";
@@ -6,14 +6,16 @@ import TodoCard from "./Components/TodoCard";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Todo() {
   const isPresent = useIsPresent();
+  const navigate = useNavigate();
   const todoRef: any = useRef();
 
-  const [todos, setTodos] = useState<TodoInterface[]>([]);
+  const [todos, setTodos] = useState<TodoInterface[]>();
 
-  const getMyTodos = async () => {
+  const getMyTodos = useCallback(async () => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/todo`, {
       method: "GET",
       headers: {
@@ -21,13 +23,14 @@ export default function Todo() {
       },
       credentials: "include",
     });
+    if (response.status === 401) return navigate("/login");
     const data = await response.json();
     setTodos(data);
-  };
+  }, [navigate]);
 
   useEffect(() => {
     getMyTodos();
-  }, []);
+  }, [getMyTodos]);
 
   const createTodo = async () => {
     if (!todoRef.current.value || todoRef.current.value === "") return toast.error(t('todoEmpty'));
@@ -58,8 +61,8 @@ export default function Todo() {
           </div>
         </div>
         <div className="flex flex-row flex-wrap justify-center gap-4 mt-5">
-          {todos.length ? "" : <p className="text-2xl text-white py-4">{t('todo.notTodos')}</p>}
-          {todos.map((todo: TodoInterface) => (
+          {todos && todos.length ? "" : <p className="text-2xl text-white py-4">{t('todo.notTodos')}</p>}
+          {todos && todos.map((todo: TodoInterface) => (
             <TodoCard key={todo.id} todo={todo} fetchTodos={getMyTodos} />
           ))}
         </div>

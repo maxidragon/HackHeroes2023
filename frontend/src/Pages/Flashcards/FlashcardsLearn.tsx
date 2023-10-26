@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import getFlashcardSet from "../../lib/flashcards/getFlashcardSet.ts";
 import { useEffect, useState } from "react";
 import Button from "../../Components/Button.tsx";
+import { t } from "i18next";
 // import { useAtom } from "jotai";
 // import { atomWithStorage } from "jotai/utils";
 
@@ -93,16 +94,16 @@ export default function FlashcardsLearn() {
               <p className="text-center text-2xl">{flashCards[actualIndex].question}</p>}
           </div>
           <div className="flex gap-4 mt-10">
-            <Button onClick={wrong} type={"default"}>I do not know</Button>
-            <Button onClick={correct} type={"default"}>I do know</Button>
+            <Button onClick={wrong} type={"default"}>{t('iDoNotKnow')}</Button>
+            <Button onClick={correct} type={"default"}>{t('iKnow')}</Button>
           </div>
         </div>}
 
       {flashCards.length && flashCards.length <= actualIndex && <div className="py-8 flex flex-col gap-8">
         <div className="w-full">
           <div className="flex justify-between items-center">
-            <h3 className="text-2xl py-4">You know this:</h3>
-            <Button onClick={playAgain} width="w-42" className="text-lg py-1.5 px-3" type="default">Next round</Button>
+            <h3 className="text-2xl py-4">{t('youKnowThis')}:</h3>
+            <Button onClick={playAgain} width="w-42" className="text-lg py-1.5 px-3" type="default">{t('nextRound')}</Button>
           </div>
           <div className="flex flex-col gap-2">
             {correctAnswers.map(flashcard => {
@@ -111,7 +112,7 @@ export default function FlashcardsLearn() {
           </div>
         </div>
         <div>
-          <h3 className="text-2xl py-4">You should repeat this:</h3>
+          <h3 className="text-2xl py-4">{t('youShouldRepeatThis')}:</h3>
           <div className="flex flex-col gap-2">
             {wrongAnswers.map(flashcard => {
               return <p className="text-red-500" key={flashcard.id}>{flashcard.question} - {flashcard.answer}</p>;

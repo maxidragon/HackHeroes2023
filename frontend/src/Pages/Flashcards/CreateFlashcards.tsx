@@ -4,6 +4,8 @@ import { useRef } from "react";
 import Button from "../../Components/Button.tsx";
 import { useState } from "react";
 import Select from "../../Components/Select.tsx";
+import { t } from "i18next";
+import toast from "react-hot-toast";
 
 interface flashcard {
   concept: string,
@@ -27,7 +29,6 @@ export default function CreateFlashcards() {
 
 
   const addFlashcard = () => {
-
     setFlashcards(prev => {
       return [...prev, {
         concept: "",
@@ -58,7 +59,9 @@ export default function CreateFlashcards() {
       });
     });
 
-    if (titleRef.current?.value.length === 0) throw Error("Title must be filled!");
+    if (titleRef.current?.value.length === 0) {
+      toast.error(t('flashCardsTitleEmpty'));
+    }
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set`, {
       method: "POST",
@@ -74,7 +77,10 @@ export default function CreateFlashcards() {
       })
     });
 
-    if (!response.ok) throw Error("Something went wrong!");
+    if (!response.ok) {
+      toast.error(t('somethingWentWrong'));
+      return;
+    }
 
     const data = await response.json();
 
@@ -84,22 +90,22 @@ export default function CreateFlashcards() {
   return (
     <div className="py-10 flex flex-col items-center gap-8 w-[80%] mx-auto max-w-[1300px]">
       <div className="flex justify-between items-center w-full sticky top-3 p-4 bg-violet-950 rounded-2xl z-20">
-        <h2 className="text-3xl">Create new flashcards set!</h2>
-        <Button type="default" onClick={createSet}>Create</Button>
+        <h2 className="text-3xl">{t('createNewFlashCardSet')}</h2>
+        <Button type="default" onClick={createSet}>{t('createBtn')}</Button>
       </div>
       <div className="w-full flex gap-4">
-        <Input containerClassName="w-full" className="sm:w-full" placeholder="Title" ref={titleRef} type="text" />
+        <Input containerClassName="w-full" className="sm:w-full" placeholder={t('title')} ref={titleRef} type="text" />
         <Select ref={publicityRef} defaultValue={"PRIVATE"}>
-          <option value="PRIVATE">Private</option>
-          <option value="PUBLIC">Public</option>
-          <option value="CLASS">Class</option>
+          <option value="PRIVATE">{t('private')}</option>
+          <option value="PUBLIC">{t('public')}</option>
+          <option value="CLASS">{t('class')}</option>
         </Select>
       </div>
       <div className="w-full flex flex-col gap-4">
-        <label htmlFor="flashcards-desc" className="text-white text-xl">Description</label>
+        <label htmlFor="flashcards-desc" className="text-white text-xl">{t('description')}</label>
         <textarea
           ref={descriptionRef}
-          placeholder="Here goes your description for this awesome flashcards set ..."
+          placeholder={t('flashCardsDescriptionPlaceHolder')}
           id="flashcards-desc"
           className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
         >
@@ -109,15 +115,15 @@ export default function CreateFlashcards() {
         return (
           <div key={index} className="w-full p-5 flex flex-col gap-4 border-4 border-violet-900 rounded-lg">
             <p className="text-white">Flashcard nr. {index + 1}</p>
-            <Input className="sm:w-full" id={`concept-${index}`} placeholder="Concept" />
-            <Input className="sm:w-full" id={`definition-${index}`} placeholder="Definition" />
+            <Input className="sm:w-full" id={`concept-${index}`} placeholder={t('concept')} />
+            <Input className="sm:w-full" id={`definition-${index}`} placeholder={t('definition')} />
           </div>
         );
       })}
       <div className="flex gap-4 w-full justify-center">
         {flashcards.length > 1 ?
-          <Button type="alt" className="w-fit" onClick={removeLastFlashcard}>Delete</Button> : ""}
-        <Button type="alt" className="w-fit" onClick={addFlashcard}>Add</Button>
+          <Button type="alt" className="w-fit" onClick={removeLastFlashcard}>{t('delete')}</Button> : ""}
+        <Button type="alt" className="w-fit" onClick={addFlashcard}>{t('add')}</Button>
       </div>
 
       <motion.div
