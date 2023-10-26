@@ -24,6 +24,12 @@ export class VulcanController {
   constructor(private readonly vulcanService: VulcanService) {}
 
   @UseGuards(VulcanGuard)
+  @Get()
+  async index(@GetUser() user: JwtAuthDto): Promise<object> {
+    return this.vulcanService.indexPage(user.userId);
+  }
+
+  @UseGuards(VulcanGuard)
   @Get('grades')
   async getGrades(
     @Query() query: GradesQueryDto,

@@ -126,6 +126,34 @@ export class VulcanService {
       },
     });
   }
+
+  async indexPage(userId: number) {
+    const luckyNumber = await this.getLuckyNumber(userId);
+    const lastGrades = await this.getLastGrades(userId);
+    return {
+      luckyNumber,
+      lastGrades,
+    };
+  }
+
+  async getLastGrades(userId: number) {
+    const client = await this.getClient(userId);
+    const grades = (await client.getGrades(new Date('1970'))).slice(-5);
+    const returnObject = grades.map((grade) => {
+      return {
+        id: grade.id,
+        subject: grade.column.subject.name,
+        grade: grade.content,
+        teacher: grade.creator.displayName,
+        dateCreated: grade.dateCreated.dateDisplay,
+        weight: grade.column.weight,
+        name: grade.column.name,
+        type: grade.column.category?.name,
+      };
+    });
+    return returnObject;
+  }
+
   async getSemester(client: VulcanHebe, semesterNumber: number) {
     if (semesterNumber !== 1 && semesterNumber !== 2)
       throw Error('Semester number must be 1 or 2');
