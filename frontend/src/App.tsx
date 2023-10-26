@@ -15,6 +15,7 @@ import Settings from "./Pages/Profile/Settings/Settings";
 import CreateFlashcards from "./Pages/Flashcards/CreateFlashcards.tsx";
 import Grades from "./Pages/ClassRegister/Pages/Grades.tsx";
 import FlashcardsDetails from "./Pages/Flashcards/FlashcardsDetails.tsx";
+import FlashcardsLearn from "./Pages/Flashcards/FlashcardsLearn.tsx";
 
 function App() {
   const element = useRoutes([
@@ -37,6 +38,10 @@ function App() {
         {
           path: "/flashcards/details/:id",
           element: <FlashcardsDetails />
+        },
+        {
+          path: "/flashcards/learn/:id",
+          element: <FlashcardsLearn />
         },
         {
           path: "/notes",

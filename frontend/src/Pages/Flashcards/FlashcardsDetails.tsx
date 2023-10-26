@@ -2,6 +2,7 @@ import { motion, useIsPresent } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Button from "../../Components/Button.tsx";
+import getFlashcardSet from "../../lib/flashcards/getFlashcardSet.ts";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 interface user {
@@ -55,38 +56,26 @@ export default function FlashcardsDetails() {
 
   const { id } = useParams();
 
-  const getFlashcardSet = async () => {
-
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include"
-    });
-
-    if (!response.ok) throw Error("Something went wrong!");
-
-    return await response.json();
-  };
-
   useEffect(() => {
-
-    getFlashcardSet().then(data => {
-      setFlashcardSet(data);
-    });
-  }, []);
+    if (id) {
+      getFlashcardSet(id).then(data => {
+        setFlashcardSet(data);
+      });
+    }
+  }, [id]);
 
   return (
     <div className="flex-1 text-white py-6 w-[80%] max-w-[1300px] mx-auto">
       <div className="flex justify-between items-center w-full">
         <h2 className="text-3xl py-4">{title}</h2>
-        <Button isLink={true} to={`/flashcards/learn/${id}`} className="text-lg px-4 py-2 mt-8" width="w-42" type="default">Start learning</Button>
+        <Button isLink={true} to={`/flashcards/learn/${id}`} className="text-lg px-4 py-2 mt-8" width="w-42"
+                type="default">Start learning</Button>
       </div>
       <p>Author: <Link to={`/profile/${user.id}`}>{user.username}</Link></p>
       {forkedFrom && <p>Forked from: <Link to={`/profile/${forkedFrom.id}`}>{forkedFrom.username}</Link></p>}
       <p>Created at: {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), { addSuffix: true }) || ""}</p>
-      <p>Last modified: {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), { addSuffix: true }) || ""}</p>
+      <p>Last
+        modified: {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), { addSuffix: true }) || ""}</p>
       <p>Description: {description}</p>
       <p className="text-gray-400">Publicity: {publicity}</p>
       <div className="flex flex-col gap-4 mt-8">
