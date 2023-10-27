@@ -167,7 +167,10 @@ export default function Settings() {
     }
 
     const userDataCopy: any = { ...userData };
-    userDataCopy.banner = banner;
+    
+    if (banner && banner.size > 0) {
+      userDataCopy.banner = banner;
+    }
     userDataCopy.avatar = avatarFile;
 
     const correctFormdata = new FormData();
@@ -193,6 +196,23 @@ export default function Settings() {
         toast.error(t("somethingWentWrong"));
         console.log(err);
       });
+
+      fetch(`${import.meta.env.VITE_API_URL}/vulcan/register`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          },
+          body: JSON.stringify(vulcanTokens),
+        }).then((res) => {
+          if (res.status >= 400) {
+            toast.error(t("somethingWentWrong"));
+            return;
+          } else {
+            toast.success(t("vulcanAdded"));
+            setActivatedVulcan(true);
+          }
+        });
   }
 
   const removeVulcan = async () => {

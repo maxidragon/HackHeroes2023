@@ -25,13 +25,16 @@ export class FlashcardService {
       where: { id: userId },
       select: {
         schoolClass: true,
+        schoolName: true,
       },
     });
     return this.prisma.flashCardSet.findMany({
       where: {
         user: {
           schoolClass: user.schoolClass,
+          schoolName: user.schoolName,
         },
+        publicity: 'CLASS',
       },
     });
   }

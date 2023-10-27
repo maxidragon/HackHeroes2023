@@ -104,5 +104,7 @@
   "invalidEmail": "Nieprawidłowy adres email!",
   "resetPasswordSuccess": "Pomyślnie zmieniono hasło!",
   "resetPasswordTitle": "Zresetuj hasło",
-  "changePassword": "Zmień hasło"
+  "changePassword": "Zmień hasło",
+  "vulcanAdded": "Poprawnie połączono konto Vulcan",
+  "flashCardsCreated": "Pomyślnie utworzono zestaw fiszek!"
 }

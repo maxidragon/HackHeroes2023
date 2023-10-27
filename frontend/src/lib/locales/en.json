@@ -104,5 +104,7 @@
   "invalidEmail": "Invalid email!",
   "resetPasswordSuccess": "Succesfully changed password!",
   "resetPasswordTitle": "Reset password",
-  "changePassword": "Change password"
+  "changePassword": "Change password",
+  "vulcanAdded": "Succesfully added vulcan to your account!",
+  "flashCardsCreated": "Succesfully created flashcards set!"
 }

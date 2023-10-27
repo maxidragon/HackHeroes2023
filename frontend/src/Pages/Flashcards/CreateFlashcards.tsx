@@ -81,10 +81,7 @@ export default function CreateFlashcards() {
       toast.error(t('somethingWentWrong'));
       return;
     }
-
-    const data = await response.json();
-
-    console.log(data);
+    toast.success(t('flashCardsCreated'));
   };
 
   return (
