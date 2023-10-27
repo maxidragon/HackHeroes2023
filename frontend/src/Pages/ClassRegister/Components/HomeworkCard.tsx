@@ -14,14 +14,14 @@ export default function HomeworkCard({ homework }: any) {
       <ReactCardFlip
         isFlipped={isFlipped}
         flipDirection="horizontal"
-        containerClassName="w-full h-full roboto shadow-lg"
+        containerClassName="w-full h-full roboto"
       >
-        <div className="w-full h-full px-8 grad rounded-lg flex flex-col justify-around items-center p-2">
+        <div className="w-full h-full px-8 rounded-lg flex flex-col justify-around items-center grad shadow-lg">
           <TbClick className="text-2xl absolute top-2 left-2"/>
           <p className="text-xl text-center">{homework.subject}</p>
           <p className="text-sm">{"Deadline: " + homework.deadline}</p>
         </div>
-        <div className="w-full h-full px-8 grad rounded-lg flex flex-col justify-around items-center p-2">
+        <div className="w-full h-full px-8 rounded-lg flex flex-col justify-around items-center grad shadow-lg">
         <TbClick className="text-2xl absolute top-2 left-2"/>
           <p className="text-lg">{homework.teacher}</p>
           <p className="text-lg text-center">{homework.content}</p>

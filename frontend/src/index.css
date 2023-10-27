@@ -42,5 +42,5 @@ h1, h2, a {
 }
 
 .grad {
-  background: linear-gradient(45deg, #7100db 0%, #ba64cf 60%);
+  background: linear-gradient(45deg, #7100db 0%, #ba64cf 60%) border-box;
 }
