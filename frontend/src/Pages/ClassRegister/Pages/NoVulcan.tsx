@@ -2,13 +2,16 @@ import { t } from "i18next";
 
 export default function NoVulcan() {
   return (
-    <div className="w-full h-full flex items-center flex-col justify-center gap-16">
+    <div className="w-full h-full flex items-center flex-col justify-center gap-8">
       <h1 className="text-center text-gray-400 text-3xl roboto">
         {t("noVulcan")}
       </h1>
-      <h2 className="text-center text-gray-400 text-3xl roboto">
+      <h2 className="text-center text-gray-400 text-2xl roboto">
         {t("noVulcanWhereInputs")}
       </h2>
+      <h3 className="text-center text-gray-400 text-2xl roboto">
+        {t("relogAgain")}
+      </h3>
       <iframe
         width="560"
         height="315"

@@ -96,6 +96,7 @@ export default function Settings() {
             navigate(`/profile/${user.id}`);
           } else {
             res.blob().then((data) => {
+              if (data.size === 0) return;
               setBanner(data);
             });
           }
@@ -108,16 +109,13 @@ export default function Settings() {
     };
 
     const fetchVulcan = async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/vulcan/active`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/vulcan/active`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const data = await res.json();
 
       setActivatedVulcan(data.isActivated);
@@ -215,7 +213,6 @@ export default function Settings() {
       });
   };
 
-
   return (
     <div className="flex-1 flex justify-center overflow-x-auto py-8">
       {isUserEditingAvatar && (
@@ -234,15 +231,16 @@ export default function Settings() {
         <div className="flex gap-4 2xl:flex-row flex-col">
           <div className="flex flex-col 2xl:w-2/3 w-full gap-2">
             <div
-              className={`flex items-center justify-center relative p-4 rounded-xl ${!banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
-                }`}
+              className={`flex items-center justify-center relative p-4 rounded-xl ${
+                !banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
+              }`}
               style={
                 banner
                   ? {
-                    background: `url('${URL.createObjectURL(
-                      banner
-                    )}') no-repeat center center`,
-                  }
+                      background: `url('${URL.createObjectURL(
+                        banner
+                      )}') no-repeat center center`,
+                    }
                   : {}
               }
             >
@@ -303,14 +301,21 @@ export default function Settings() {
               <div className="w-full flex flex-col md:justify-between gap-4">
                 {activatedVulcan ? (
                   <>
-                    <p className="text-sm text-gray-400 roboto">
-                      {t('youHaveVulcanAdded')}
+                    <p className="text-lg text-center text-gray-400 roboto mt-8">
+                      {t("youHaveVulcanAdded")}
                     </p>
+                    <Button
+                      type="alt"
+                      width="2xl:flex hiddden w-full wb-8"
+                      onClick={removeVulcan}
+                    >
+                      {t("removeVulcanButton")}
+                    </Button>
                   </>
                 ) : (
                   <>
                     <p className="text-sm text-gray-400 roboto">
-                      {t('addYourVulcanData')}
+                      {t("addYourVulcanData")}
                     </p>
                     <Input
                       placeholder="Token"
@@ -345,13 +350,12 @@ export default function Settings() {
                         });
                       }}
                     />
-
                   </>
                 )}
               </div>
               <div className="2xl:hidden w-full flex flex-col gap-4">
                 <Input
-                  placeholder={t('settingsUsername')}
+                  placeholder={t("settingsUsername")}
                   value={userData?.username}
                   onChange={(e) => {
                     setUserData({ ...userData, username: e.target.value });
@@ -359,7 +363,7 @@ export default function Settings() {
                   className="w-full"
                 />
                 <Input
-                  placeholder={t('settingsEmail')}
+                  placeholder={t("settingsEmail")}
                   value={userData?.email}
                   type="email"
                   onChange={(e) => {
@@ -368,7 +372,7 @@ export default function Settings() {
                   className="w-full"
                 />
                 <textarea
-                  placeholder={t('settingsDescription')}
+                  placeholder={t("settingsDescription")}
                   defaultValue={userData?.description}
                   maxLength={300}
                   className="h-full max-h-72 block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
@@ -381,7 +385,7 @@ export default function Settings() {
           </div>
           <div className="2xl:flex w-1/2 hidden flex-col gap-4">
             <Input
-              placeholder={t('settingsUsername')}
+              placeholder={t("settingsUsername")}
               value={userData?.username}
               onChange={(e) => {
                 setUserData({ ...userData, username: e.target.value });
@@ -389,7 +393,7 @@ export default function Settings() {
               className="w-full"
             />
             <Input
-              placeholder={t('settingsEmail')}
+              placeholder={t("settingsEmail")}
               value={userData?.email}
               type="email"
               onChange={(e) => {
@@ -398,7 +402,7 @@ export default function Settings() {
               className="w-full"
             />
             <textarea
-              placeholder={t('settingsDescription')}
+              placeholder={t("settingsDescription")}
               defaultValue={userData?.description}
               className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
               onChange={(e) => {
@@ -412,22 +416,17 @@ export default function Settings() {
             onClick={saveData}
           >
             <TbDeviceFloppy />
-            {t('save')}
+            {t("save")}
           </Button>
         </div>
         <div className="flex gap-4 flex-row">
-          {activatedVulcan && (
-            <Button type="default" width="2xl:flex hiddden w-1/4 wb-8" onClick={removeVulcan}>
-              {t('removeVulcanButton')}
-            </Button>
-          )}
           <Button
             type="default"
             width="2xl:flex hidden w-1/4 mb-8"
             onClick={saveData}
           >
             <TbDeviceFloppy />
-            {t('save')}
+            {t("save")}
           </Button>
         </div>
       </div>
