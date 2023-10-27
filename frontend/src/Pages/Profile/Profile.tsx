@@ -40,6 +40,7 @@ export default function Profile() {
             navigate(`/profile/${userId}`);
           } else {
             res.blob().then((data) => {
+              if (data.size === 0) return;
               setBanner(URL.createObjectURL(data));
             });
           }
@@ -51,16 +52,13 @@ export default function Profile() {
     };
 
     const fetchData = async () => {
-      await fetch(
-        `${import.meta.env.VITE_API_URL}/user/${userId}`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      await fetch(`${import.meta.env.VITE_API_URL}/user/${userId}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
         .then((res) => {
           if (res.status >= 400) {
             toast.error("Something went wrong!");
@@ -85,16 +83,10 @@ export default function Profile() {
   return (
     <div className="flex-1">
       <div
-        className={`flex items-center justify-center relative p-4 h-2/5 ${
-          !banner && "bg-gradient-to-r from-violet-500 to-fuchsia-500"
-        }`}
-        style={
-          banner
-            ? {
-                background: `url('${banner}') no-repeat center center`,
-              }
-            : {}
-        }
+        className={`flex items-center justify-center relative p-4 h-2/5`}
+        style={{
+          background: banner ? `url('${banner}') no-repeat center center, linear-gradient(45deg, #7100db 0%, #ba64cf 60%)` : "linear-gradient(45deg, #7100db 0%, #ba64cf 60%)",
+        }}
       >
         <div className="flex items-center flex-col gap-4 text-4xl roboto text-gray-200 drop-shadow-[0px_0px_8px_rgba(0,0,0,1)]">
           <AvatarComponent
@@ -115,7 +107,7 @@ export default function Profile() {
           <p className="text-4xl capitalize text-gray-100">
             {userData?.firstName} {userData?.lastName}
           </p>
-          <p className="mt-8">
+          <p className="mt-4">
             {userData?.description || "This user has no description yet!"}
           </p>
         </div>

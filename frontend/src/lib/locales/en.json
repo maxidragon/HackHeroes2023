@@ -59,6 +59,7 @@
   "save": "Save",
   "noVulcan": "Connect your vulcan account!",
   "noVulcanWhereInputs": "You can find inputs for these codes in the settings!",
+  "relogAgain": "If you added vulcan account and still see this, please relog!",
   "registerGrades": "Grades",
   "registerAttendance": "Attenndence",
   "registerHomework": "Homework",
