@@ -297,13 +297,26 @@ export class VulcanService {
 
   async getAttendance(userId: number, day: Date) {
     const client = await this.getClient(userId);
-    const data = await client.getAttendance(day, day);
+    const dayMinusOne = new Date(day);
+    dayMinusOne.setDate(dayMinusOne.getDate() - 1);
+    const data = await client.getAttendance(dayMinusOne, dayMinusOne);
     const newData = data.map((item) => {
       const group = item.group
         ? {
             id: item.group.id,
             shortcut: item.group.shortcut,
             name: item.group.name,
+          }
+        : null;
+      const presenceType = item.presenceType
+        ? {
+            symbol: item.presenceType.symbol,
+            presence: item.presenceType.presence,
+            absence: item.presenceType.absence,
+            exemption: item.presenceType.exemption,
+            late: item.presenceType.late,
+            justified: item.presenceType.justified,
+            deleted: item.presenceType.deleted,
           }
         : null;
       return {
@@ -322,15 +335,7 @@ export class VulcanService {
         date: item.date.dateDisplay,
         position: item.time.position,
         time: item.time.display,
-        presenceType: {
-          symbol: item.presenceType.symbol,
-          presence: item.presenceType.presence,
-          absence: item.presenceType.absence,
-          exemption: item.presenceType.exemption,
-          late: item.presenceType.late,
-          justified: item.presenceType.justified,
-          deleted: item.presenceType.deleted,
-        },
+        presenceType: presenceType,
         group: group,
       };
     });
