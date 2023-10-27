@@ -38,7 +38,7 @@ export default function Grades() {
 
   return (
     <div className="w-4/5 flex flex-col gap-8 items-center">
-      {isFetching && <Loader width="300"/>}
+      {isFetching && <Loader width="300" />}
       {!isFetching && grades && (
         <div className="w-full relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -61,31 +61,33 @@ export default function Grades() {
             <tbody>
               {Object.keys(grades).map((key) => {
                 return (
-                  <tr className="border-b border-gray-200 dark:border-gray-700" key={key}>
+                  <tr
+                    className="border-b border-gray-200 dark:border-gray-700"
+                    key={key}
+                  >
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium whitespace-nowraptext-white text-white bg-purple-500"
                     >
                       {key}
                     </th>
-                    <td className="px-6 py-4 text-white bg-purple-700">
+                    <td className="px-6 py-4 text-white flex items-center gap-2 bg-purple-700">
                       {grades[key].map((grade) => {
                         return (
-                          <div className="flex items-center gap-2" key={grade.id}>
-                            <span
-                              title={
-                                grade.grade + " " + grade.weight &&
-                                "Waga: " + grade.weight +
-                                  " " +
-                                  grade.teacher +
-                                  " " +
-                                  grade.dateCreated
-                              }
-                              className="text-white"
-                            >
-                              {grade.grade}
-                            </span>
-                          </div>
+                          <span
+                            title={
+                              grade.grade + " " + grade.weight &&
+                              "Waga: " +
+                                grade.weight +
+                                " " +
+                                grade.teacher +
+                                " " +
+                                grade.dateCreated
+                            }
+                            className="text-white"
+                          >
+                            {grade.grade}
+                          </span>
                         );
                       })}
                     </td>

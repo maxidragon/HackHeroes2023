@@ -40,3 +40,7 @@ h1, h2, a {
   background: linear-gradient(90deg, #7100db 0%, #ba64cf 25%, #393a3a 50%);
   background-size: 400% 400%;
 }
+
+.grad {
+  background: linear-gradient(45deg, #7100db 0%, #ba64cf 60%);
+}

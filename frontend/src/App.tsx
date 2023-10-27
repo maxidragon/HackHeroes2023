@@ -20,6 +20,7 @@ import Homework from "./Pages/ClassRegister/Pages/Homework.tsx";
 import FlashcardsLearn from "./Pages/Flashcards/FlashcardsLearn.tsx";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword.tsx";
+import Exams from "./Pages/ClassRegister/Pages/Exams.tsx";
 
 function App() {
   const element = useRoutes([
@@ -69,7 +70,7 @@ function App() {
             },
             {
               path: "/class-register/exams",
-              element: <div>Exams</div>
+              element: <Exams />
             }
           ]
         },
