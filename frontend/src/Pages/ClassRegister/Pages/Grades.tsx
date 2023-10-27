@@ -32,6 +32,7 @@ export default function Grades() {
         else {
           setGrades(data);
           setIsFetching(false);
+          setIsFetching(false);
         }
       });
   }, []);
@@ -61,28 +62,24 @@ export default function Grades() {
             <tbody>
               {Object.keys(grades).map((key) => {
                 return (
-                  <tr
-                    className="border-b border-gray-200 dark:border-gray-700"
-                    key={key}
-                  >
+                  <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium whitespace-nowraptext-white text-white bg-purple-500"
                     >
                       {key}
                     </th>
-                    <td className="px-6 py-4 text-white flex items-center gap-2 bg-purple-700">
+                    <td className="px-6 py-4 bg-purple-700 flex items-center gap-2">
                       {grades[key].map((grade) => {
                         return (
                           <span
+                            key={grade.id}
                             title={
-                              grade.grade + " " + grade.weight &&
-                              "Waga: " +
-                                grade.weight +
-                                " " +
-                                grade.teacher +
-                                " " +
-                                grade.dateCreated
+                              grade.grade +
+                              " " +
+                              grade.teacher +
+                              " " +
+                              grade.dateCreated
                             }
                             className="text-white"
                           >

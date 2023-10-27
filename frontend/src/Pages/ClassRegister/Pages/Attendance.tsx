@@ -47,7 +47,14 @@ export default function Attendance() {
         if (data.statusCode >= 400)
           toast.error("An error occured while fetching attendance!");
         else {
-          setAttendence(data);
+          let filteredData: Array<Attendance> = [];
+
+          data.forEach((item: Attendance) => {
+            if (!filteredData.find((el) => el.position === item.position))
+              filteredData.push(item);
+          });
+
+          setAttendence(filteredData);
           setIsFetching(false);
         }
       });
