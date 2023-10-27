@@ -32,29 +32,37 @@ export default function Grades() {
         else {
           setGrades(data);
           setIsFetching(false);
-          setIsFetching(false);
         }
       });
   }, []);
 
   return (
-    <div className="w-4/5 flex flex-col gap-8 items-center">
-      {isFetching && <Loader width="300" />}
+    <div className="w-4/5 flex flex-col gap-8 items-center mb-8">
+      {isFetching && <Loader width="200" />}
       {!isFetching && grades && (
-        <div className="w-full relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <div className="w-full relative overflow-x-auto shadow-md rounded-lg">
+          <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-white uppercase">
               <tr>
-                <th scope="col" className="px-6 py-3 bg-purple-500 w-1/4">
+                <th
+                  scope="col"
+                  className="lg:px-6 px-2 py-3 bg-purple-500 w-1/3 md:w-1/4"
+                >
                   Przedmiot
                 </th>
-                <th scope="col" className="px-6 py-3 bg-purple-700">
+                <th scope="col" className="lg:px-6 px-2 py-3 bg-purple-700">
                   Oceny
                 </th>
-                <th scope="col" className="px-6 py-3 bg-purple-500 w-1/6">
+                <th
+                  scope="col"
+                  className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-500 w-1/6"
+                >
                   Przewidywana końcowa
                 </th>
-                <th scope="col" className="px-6 py-3 w-1/6 bg-purple-700">
+                <th
+                  scope="col"
+                  className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-700 w-1/6"
+                >
                   Końcowa
                 </th>
               </tr>
@@ -62,15 +70,15 @@ export default function Grades() {
             <tbody>
               {Object.keys(grades).map((key) => {
                 return (
-                  <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
+                  <tr key={key} className="border-b border-gray-700">
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium whitespace-nowraptext-white text-white bg-purple-500"
+                      className="lg:px-6 px-2  py-4 font-medium whitespace-nowraptext-white text-white bg-purple-500"
                     >
                       {key}
                     </th>
-                    <td className="px-6 py-4 bg-purple-700 flex items-center gap-2">
-                      {grades[key].map((grade) => {
+                    <td className="lg:px-6 px-2  py-4 bg-purple-700 gap-2">
+                      {grades[key].map((grade, i) => {
                         return (
                           <span
                             key={grade.id}
@@ -81,15 +89,20 @@ export default function Grades() {
                               " " +
                               grade.dateCreated
                             }
-                            className="text-white"
+                            className="text-white h-full"
                           >
                             {grade.grade}
+                            {i !== grades[key].length - 1 && ", "}
                           </span>
                         );
                       })}
                     </td>
-                    <td className="px-6 py-4 text-white bg-purple-500">Brak</td>
-                    <td className="px-6 py-4 text-white bg-purple-700">Brak</td>
+                    <td className="md:table-cell hidden md:px-6 px-2 py-4 text-white bg-purple-500">
+                      Brak
+                    </td>
+                    <td className="md:table-cell hidden md:px-6 px-2 py-4 text-white bg-purple-700">
+                      Brak
+                    </td>
                   </tr>
                 );
               })}

@@ -61,8 +61,8 @@ export default function Attendance() {
   }, [setAttendence, setIsFetching, date]);
 
   return (
-    <div className="w-4/5 flex flex-col gap-8 items-center mb-8">
-      <div className="rounded-full overflow-hidden text-xl text-white w-3/5 bg-purple-500 flex justify-between items-center">
+    <div className="w-full flex flex-col gap-8 items-center mb-8 px-4 md:w-4/5">
+      <div className="rounded-full overflow-hidden text-xl text-white md:w-4/5 lg:w-3/5 w-full bg-purple-500 flex justify-between items-center">
         <TbArrowNarrowLeft
           className="cursor-pointer w-1/12 h-8 hover:bg-purple-700"
           onClick={() => {
@@ -87,22 +87,22 @@ export default function Attendance() {
         />
       </div>
       {isFetching && <Loader width="200" />}
-      <div className="w-full relative overflow-x-auto sm:rounded-lg">
+      <div className="w-full relative overflow-x-auto rounded-lg">
         {!isFetching &&
           (attendence?.length ? (
             <table className="w-full text-sm text-left text-gray-500 ">
               <thead className="text-xs text-white uppercase">
                 <tr>
-                  <th scope="col" className="w-1/6 px-6 py-3 bg-purple-500">
+                  <th scope="col" className="w-1/6 lg:px-6 px-2 py-3 bg-purple-500">
                     Godzina
                   </th>
-                  <th scope="col" className="px-6 py-3 bg-purple-700 w-1/3">
+                  <th scope="col" className="lg:px-6 px-2 py-3 bg-purple-700 w-1/3">
                     Przedmiot
                   </th>
-                  <th scope="col" className="px-6 py-3 bg-purple-500 w-1/4">
+                  <th scope="col" className="lg:table-cell hidden lg:px-6 px-2 py-3 bg-purple-500">
                     Nauczyciel
                   </th>
-                  <th scope="col" className="px-6 py-3 w-1/6 bg-purple-700">
+                  <th scope="col" className="lg:px-6 px-2 py-3 w-1/6 bg-purple-500 lg:bg-purple-700">
                     Status obecności
                   </th>
                 </tr>
@@ -111,33 +111,33 @@ export default function Attendance() {
                 {attendence.map((item: Attendance) => {
                   return (
                     <tr
-                      className="border-b border-gray-200 dark:border-gray-700"
+                      className="border-b border-gray-700"
                       key={item.id}
                     >
-                      <td className="px-6 py-4 whitespace-nowrap bg-purple-500 text-white">
+                      <td className="lg:px-6 px-2 py-4 whitespace-nowrap bg-purple-500 text-white">
                         {item.position + " " + item.time}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap bg-purple-700">
+                      <td className="lg:px-6 px-2 py-4 whitespace-nowrap bg-purple-700">
                         <div className="flex items-center">
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-white">
+                          <div className="lg:ml-4 w-full max-[500px]:w-28">
+                            <div className="text-sm font-medium text-white truncate">
                               {item.subject.name}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="bg-purple-500">
-                        <div className="px-6 py-4 whitespace-nowrap">
+                      <td className="bg-purple-500 lg:table-cell hidden">
+                        <div className="lg:px-6 px-2 py-4 whitespace-nowrap">
                           <div className="text-sm text-white">
                             {item.teacher.name}
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white bg-purple-700">
+                      <td className="lg:px-6 px-2 py-4 whitespace-nowrap text-sm text-white bg-purple-500 lg:bg-purple-700">
                         {item.presenceType?.symbol}
                         {item.presenceType?.presence
-                          ? "Obecny"
-                          : item.presenceType?.absence && "Nieobecny"}
+                          ? " (Obecny)"
+                          : item.presenceType?.absence && " (Nieobecny)"}
                       </td>
                     </tr>
                   );

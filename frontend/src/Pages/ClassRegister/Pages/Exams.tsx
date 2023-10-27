@@ -33,9 +33,9 @@ export default function Exams() {
   }, []);
 
   return isFetching ? (
-    <Loader width="300" />
+    <Loader width="200" />
   ) : (
-    <div className="w-4/5 flex gap-8 flex-wrap justify-center text-white mb-10">
+    <div className="lg:w-4/5 md:w-full px-8 flex gap-8 flex-wrap justify-center text-white mb-10">
       {exams ? (
         exams.map((item: Exam) => <ExamCard exam={item} key={item.id}/>)
       ) : (

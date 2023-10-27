@@ -35,7 +35,7 @@ export default function Homework() {
   return isFetching ? (
     <Loader width="200" />
   ) : (
-    <div className="w-4/5 flex gap-8 flex-wrap justify-center text-white mb-10">
+    <div className="lg:w-4/5 md:w-full px-8 flex gap-8 flex-wrap justify-center text-white mb-10">
       {homework ? (
         homework.map((item: Homework) => (
           <HomeworkCard homework={item} key={item.id}/>
