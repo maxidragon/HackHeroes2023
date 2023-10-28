@@ -99,6 +99,7 @@ export default function Todo() {
                   type="text"
                   placeholder={t('searchTodo')}
                   onChange={handleSearch}
+                  value={search}
                   className="w-96"
                 />
               </div>
