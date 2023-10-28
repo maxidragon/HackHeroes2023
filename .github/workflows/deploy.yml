@@ -5,8 +5,37 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: self-hosted
+  deploy_backend:
+    runs-on: [self-hosted, backend]
+    strategy:
+      matrix:
+        node-version: [20.x] 
+        
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install backend dependencies
+      run: npm install
+      working-directory: ./backend 
+    - name: Create .env
+      run: echo "${{ secrets.ENV_PRODUCTION }}" > .env
+      working-directory: ./backend
+    - name: Generate prisma
+      run: npx prisma generate
+      working-directory: ./backend
+    - name: Build project
+      run: npm run build
+      working-directory: ./backend
+    - name: Restart service
+      run: pm2 restart HackHeroes2023-backend
+      working-directory: ./backend
+  
+  deploy_frontend:
+    runs-on: [self-hosted, frontend]
     strategy:
       matrix:
         node-version: [19.x] 
@@ -30,19 +59,6 @@ jobs:
     - name: Copy files to /var/www
       run: cp -r ~/hackheroes/_work/HackHeroes2023/HackHeroes2023/frontend/dist /var/www/hackheroes.maksymiliangala.com/      
     - name: Cleanup
-      run: rm -rf frontend/
-    - name: Install backend dependencies
-      run: npm install
-      working-directory: ./backend 
-    - name: Create .env
-      run: echo "${{ secrets.ENV_PRODUCTION }}" > .env
-      working-directory: ./backend
-    - name: Generate prisma
-      run: npx prisma generate
-      working-directory: ./backend      
-    - name: Build project
-      run: npm run build
-      working-directory: ./backend
-    - name: Restart service
-      run: pm2 restart HackHeroes2023-backend
-      working-directory: ./backend
+      run: |
+        rm -rf frontend/
+        rm -rf backend/
