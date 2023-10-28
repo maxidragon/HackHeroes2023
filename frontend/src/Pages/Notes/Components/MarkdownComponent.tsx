@@ -35,6 +35,11 @@ export default function MarkdownComponent({
               className: "text-blue-500",
             },
           },
+          span: {
+            props: {
+              className: "text-lg text-white break-words",
+            },
+          },
           p: {
             props: {
               className: "text-lg text-gray-200",
