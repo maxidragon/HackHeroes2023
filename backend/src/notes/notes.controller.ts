@@ -47,11 +47,13 @@ export class NotesController {
     return await this.notesService.getUserNotes(category, user.userId, search);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async createNote(@GetUser() user: JwtAuthDto, @Body() data: NoteDto) {
     return await this.notesService.createNote(data, user.userId);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   async updateNote(
     @GetUser() user: JwtAuthDto,
@@ -61,6 +63,7 @@ export class NotesController {
     return await this.notesService.updateNote(id, data, user.userId);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async deleteNote(@GetUser() user: JwtAuthDto, @Param('id') id: number) {
     return await this.notesService.deleteNote(id, user.userId);

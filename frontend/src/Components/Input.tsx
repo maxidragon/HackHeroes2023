@@ -6,6 +6,7 @@ interface InputProps {
   placeholder: string;
   className?: string;
   containerClassName?: string;
+  max?: number;
   name?: string;
   value?: string;
   readonly?: boolean;
@@ -23,6 +24,7 @@ export default forwardRef(function Input(
     onChange,
     readonly,
     name,
+    max,
   }: InputProps,
   ref: any
 ) {
@@ -38,6 +40,7 @@ export default forwardRef(function Input(
         id={id || placeholder}
         placeholder=" "
         ref={ref || null}
+        maxLength={max}
       />
       <label
         htmlFor={id || placeholder}

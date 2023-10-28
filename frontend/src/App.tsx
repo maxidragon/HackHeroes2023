@@ -21,6 +21,7 @@ import FlashcardsLearn from "./Pages/Flashcards/FlashcardsLearn.tsx";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword.tsx";
 import Exams from "./Pages/ClassRegister/Pages/Exams.tsx";
+import AddNote from "./Pages/Notes/AddNote.tsx";
 
 function App() {
   const element = useRoutes([
@@ -51,6 +52,10 @@ function App() {
         {
           path: "/notes",
           element: <Notes />
+        },
+        {
+          path: "/notes/add",
+          element: <AddNote />
         },
         {
           path: "/class-register",
