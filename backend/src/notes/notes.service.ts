@@ -17,15 +17,35 @@ export class NotesService {
             { content: { contains: search } },
           ],
         },
-        select: { id: true, title: true, content: true, isMd: true },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          category: true,
+          createdAt: true,
+          user: {
+            select: { id: true, username: true },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
       });
     }
+
     return this.prisma.note.findMany({
       where: {
         publicity: 'PUBLIC',
         category: category as any,
       },
-      select: { id: true, title: true, content: true },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        isMd: true,
+        user: {
+          select: { id: true, username: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
     });
   }
 

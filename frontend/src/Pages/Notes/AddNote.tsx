@@ -1,18 +1,17 @@
 import { motion, useIsPresent } from "framer-motion";
 import Input from "../../Components/Input";
 import { useRef, useState } from "react";
-import Markdown from "markdown-to-jsx";
-import remarkGfm from "remark-gfm";
 import Button from "../../Components/Button";
 import { TbDeviceFloppy } from "react-icons/tb";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import MarkdownComponent from "./Components/MarkdownComponent";
 
 export default function AddNote() {
   const isPresent = useIsPresent();
   const [isMd, setIsMd] = useState(false);
   const [md, setMd] = useState("# Preview");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("MATH");
   const [publicity, setPublicity] = useState("PUBLIC");
   const categories = [
     "MATH",
@@ -121,64 +120,10 @@ export default function AddNote() {
           className="h-full min-h-[400px] w-full block px-2.5 py-2.5 text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
         />
         {isMd && (
-          <Markdown
+          <MarkdownComponent
             className="h-full min-h-[400px] w-full overflow-y-auto text-left p-2 border-2 rounded-xl border-gray-500"
-            remarkPlugins={[remarkGfm]}
-            options={{
-              overrides: {
-                h1: {
-                  props: {
-                    className:
-                      "text-4xl roboto text-white mb-4 border-b-2 border-gray-500",
-                  },
-                },
-                h2: {
-                  props: {
-                    className:
-                      "text-3xl roboto text-white mb-4 border-b-2 border-gray-500",
-                  },
-                },
-                h3: {
-                  props: {
-                    className:
-                      "text-2xl roboto text-white mb-4 border-b-2 border-gray-500",
-                  },
-                },
-                a: {
-                  props: {
-                    className: "text-blue-500",
-                  },
-                },
-                p: {
-                  props: {
-                    className: "text-lg text-white",
-                  },
-                },
-                code: {
-                  props: {
-                    className: "text-lg text-white bg-gray-500 p-1 rounded-lg",
-                  },
-                },
-                ol: {
-                  props: {
-                    className: "list-decimal list-inside",
-                  },
-                },
-                ul: {
-                  props: {
-                    className: "list-disc list-inside",
-                  },
-                },
-                li: {
-                  props: {
-                    className: "text-lg text-white",
-                  },
-                },
-              },
-            }}
-          >
-            {md}
-          </Markdown>
+            value={md}
+          />
         )}
       </div>
       {isMd && (
@@ -189,15 +134,15 @@ export default function AddNote() {
           How to use markdown?
         </a>
       )}
-      <div className="flex items-center flex-col gap-4">
-        <p>Select category & publicity</p>
-        <div className="flex items-center gap-4">
+      <div className="w-1/3 flex items-center flex-col gap-4">
+        <p className="text-2xl text-gray-400">Select category & publicity</p>
+        <div className="flex w-full items-center gap-4">
           <select
             onChange={(e) => {
               setCategory(e.target.value);
             }}
-            defaultValue={category}
-            className="w-56 capitalize text-center border-2 border-purple-500 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
+            placeholder="Select category"
+            className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
             {categories.map((category) => (
               <option key={category} value={category}>
@@ -207,11 +152,11 @@ export default function AddNote() {
             ))}
           </select>
           <select
-            defaultValue={publicity}
             onChange={(e) => {
               setPublicity(e.target.value);
             }}
-            className="w-56 text-center border-2 border-purple-500 bg-bgClr rounded-xl text-lg text-white roboto overflow-hidden cursor-pointer"
+            placeholder="Select publicity"
+            className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
             <option value="PUBLIC">Public</option>
             <option value="PRIVATE">Private</option>

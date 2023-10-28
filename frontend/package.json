@@ -27,8 +27,7 @@
     "react-i18next": "^13.3.1",
     "react-icons": "^4.11.0",
     "react-loader-spinner": "^5.4.5",
-    "react-router-dom": "^6.17.0",
-    "remark-gfm": "^4.0.0"
+    "react-router-dom": "^6.17.0"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.5",
