@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Post,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -17,11 +18,18 @@ import { VulcanService } from './vulcan.service';
 import { GradesQueryDto } from './dto/gradesQuery.dto';
 import { VulcanDto } from './dto/vulcan.dto';
 import { LessonsQueryDto } from './dto/lessonsQuery.dto';
+import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
+import { AuthService } from 'src/auth/auth.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('vulcan')
 export class VulcanController {
-  constructor(private readonly vulcanService: VulcanService) {}
+  constructor(
+    private readonly vulcanService: VulcanService,
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
+  ) {}
 
   @UseGuards(VulcanGuard)
   @Get()
@@ -86,15 +94,42 @@ export class VulcanController {
   @UseGuards(VulcanGuard)
   @Delete('remove')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async removeVulcanAccount(@GetUser() user: JwtAuthDto): Promise<void> {
-    return this.vulcanService.deleteVulcanAccount(user.userId);
+  async removeVulcanAccount(@GetUser() user: JwtAuthDto, @Res() res: Response) {
+    await this.vulcanService.deleteVulcanAccount(user.userId);
+    res.cookie(
+      'user_info',
+      JSON.stringify(await this.authService.getUserPublicInfoById(user.userId)),
+      {
+        domain: this.configService.get<string>(
+          'COOKIE_DOMAIN',
+          this.configService.get<string>('DOMAIN'),
+        ),
+        secure: true,
+        sameSite: 'lax',
+      },
+    );
+    res.send({ statusCode: 200, message: 'Succesfully removed vulcan' });
   }
   @Post('register')
   async register(
     @GetUser() user: JwtAuthDto,
     @Body() data: VulcanDto,
-  ): Promise<object> {
-    return this.vulcanService.register(data, user);
+    @Res() res: Response,
+  ) {
+    await this.vulcanService.register(data, user);
+    res.cookie(
+      'user_info',
+      JSON.stringify(await this.authService.getUserPublicInfoById(user.userId)),
+      {
+        domain: this.configService.get<string>(
+          'COOKIE_DOMAIN',
+          this.configService.get<string>('DOMAIN'),
+        ),
+        secure: true,
+        sameSite: 'lax',
+      },
+    );
+    res.send({ statusCode: 200, message: 'Succesfully added vulcan' });
   }
 
   @Get('active')

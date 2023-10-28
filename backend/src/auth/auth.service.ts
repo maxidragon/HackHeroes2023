@@ -92,6 +92,26 @@ export class AuthService {
     };
     return data;
   }
+  async getUserPublicInfoById(id: number): Promise<object> {
+    const { prisma } = this;
+    const userPublicInfo: any = await prisma.user.findUniqueOrThrow({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        username: true,
+        loginID: true,
+      },
+    });
+    const data = {
+      id: userPublicInfo.id,
+      username: userPublicInfo.username,
+      isVulcanEnabled: userPublicInfo.loginID ? true : false,
+    };
+    return data;
+  }
+
   async sendResetEmail(email: string): Promise<void> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: {
