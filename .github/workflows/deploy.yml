@@ -31,7 +31,7 @@ jobs:
       run: npm run build
       working-directory: ./backend
     - name: Restart service
-      run: pm2 restart HackHeroes2023-backend
+      run: npx pm2 restart HackHeroes2023-backend
       working-directory: ./backend
   
   deploy_frontend:

@@ -121,7 +121,7 @@ export default function AddNote() {
         />
         {isMd && (
           <MarkdownComponent
-            className="h-full min-h-[400px] w-full overflow-y-auto text-left p-2 border-2 rounded-xl border-gray-500"
+            className="h-full min-h-[400px] w-full overflow-y-auto text-left p-2 border-2 rounded-xl border-gray-500 break-words"
             value={md}
           />
         )}

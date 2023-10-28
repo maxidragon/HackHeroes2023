@@ -40,7 +40,8 @@ export class NotesService {
         id: true,
         title: true,
         content: true,
-        isMd: true,
+        category: true,
+        createdAt: true,
         user: {
           select: { id: true, username: true },
         },
