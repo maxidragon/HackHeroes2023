@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { TbCalendarEvent, TbFileSpreadsheet, TbSquare5Filled, TbUserCheck } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
-
+import { FaCalendarAlt } from "react-icons/fa";
 export default function FancyNavbar() {
   const menuLinkClass = (isActive: boolean) => {
     return `rounded-full px-4 w-fit text-2xl roboto uppercase link flex items-center justify-center gap-2 ${
@@ -15,6 +15,11 @@ export default function FancyNavbar() {
       <NavLink to="grades" className={({ isActive }) => menuLinkClass(isActive)}>
         <TbSquare5Filled />
         {t("registerGrades")}
+      </NavLink>
+      <div className="xl:block hidden w-1 rounded-xl h-8 bg-bgLght" />
+      <NavLink to="timetable" className={({ isActive }) => menuLinkClass(isActive)}>
+        <FaCalendarAlt />
+        {t("registerTimetable")}
       </NavLink>
       <div className="xl:block hidden w-1 rounded-xl h-8 bg-bgLght" />
       <NavLink to="attendance" className={({ isActive }) => menuLinkClass(isActive)}>

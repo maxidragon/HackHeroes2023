@@ -2,15 +2,9 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "../../../Components/Loader";
 import ExamCard from "../Components/ExamCard";
+import { t } from "i18next";
+import { Exam } from "../../../lib/interfaces";
 
-interface Exam {
-  id: number;
-  subject: string;
-  deadline: string;
-  description: string;
-  teacherName: string;
-  type: string;
-}
 
 export default function Exams() {
   const [exams, setExams] = useState<Array<Exam>>();
@@ -24,7 +18,7 @@ export default function Exams() {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode >= 400)
-          toast.error("An error occured while fetching homework!");
+          toast.error(t('errorExams'));
         else {
           setExams(data);
           setIsFetching(false);
@@ -39,7 +33,7 @@ export default function Exams() {
       {exams ? (
         exams.map((item: Exam) => <ExamCard exam={item} key={item.id}/>)
       ) : (
-        <p>No Exams :D!</p>
+        <p>{t('noExams')}</p>
       )}
     </div>
   );

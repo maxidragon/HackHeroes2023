@@ -2,18 +2,11 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "../../../Components/Loader";
 import HomeworkCard from "../Components/HomeworkCard";
-
-interface Homework {
-  id: number;
-  content: string;
-  createdAt: string;
-  teacher: string;
-  deadline: string;
-  subject: string;
-}
+import { t } from "i18next";
+import { Homework as HomeworkInterface } from "../../../lib/interfaces";
 
 export default function Homework() {
-  const [homework, setHomework] = useState<Array<Homework>>();
+  const [homework, setHomework] = useState<Array<HomeworkInterface>>();
   const [isFetching, setIsFetching] = useState<boolean>(true);
 
   useEffect(() => {
@@ -24,7 +17,7 @@ export default function Homework() {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode >= 400)
-          toast.error("An error occured while fetching homework!");
+          toast.error(t('noHomework'));
         else {
           setHomework(data);
           setIsFetching(false);
@@ -37,11 +30,11 @@ export default function Homework() {
   ) : (
     <div className="lg:w-4/5 md:w-full px-8 flex gap-8 flex-wrap justify-center text-white mb-10">
       {homework ? (
-        homework.map((item: Homework) => (
+        homework.map((item: HomeworkInterface) => (
           <HomeworkCard homework={item} key={item.id}/>
         ))
       ) : (
-        <p>No homework :D!</p>
+        <p>{t('noHomework')}</p>
       )}
     </div>
   );

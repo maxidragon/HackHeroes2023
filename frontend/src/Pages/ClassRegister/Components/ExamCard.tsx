@@ -1,8 +1,9 @@
 import { useState } from "react";
 import ReactCardFlip from "react-card-flip";
 import { TbClick } from "react-icons/tb";
+import { Exam } from "../../../lib/interfaces";
 
-export default function ExamCard({ exam }: any) {
+export default function ExamCard({ exam }: { exam: Exam }) {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
   function handleClick() {

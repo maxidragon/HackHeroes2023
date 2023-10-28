@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "../../../Components/Loader";
+import { t } from "i18next";
+import { Grades as GradesInterface } from "../../../lib/interfaces";
 
-interface Grade {
-  id: number;
-  grade: string;
-  teacher: string;
-  dateCreated: string;
-  weight: number;
-  name: string;
-  type: string;
-}
-
-interface Grades {
-  [key: string]: Grade[];
-}
 
 export default function Grades() {
-  const [grades, setGrades] = useState<Grades>();
+  const [grades, setGrades] = useState<GradesInterface>();
   const [isFetching, setIsFetching] = useState<boolean>(true);
 
   useEffect(() => {
@@ -28,7 +17,7 @@ export default function Grades() {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode >= 400)
-          toast.error("An error occured while fetching grades!");
+          toast.error(t('gradesError'));
         else {
           setGrades(data);
           setIsFetching(false);
@@ -48,22 +37,22 @@ export default function Grades() {
                   scope="col"
                   className="lg:px-6 px-2 py-3 bg-purple-500 w-1/3 md:w-1/4"
                 >
-                  Przedmiot
+                  {t('subject')}
                 </th>
                 <th scope="col" className="lg:px-6 px-2 py-3 bg-purple-700">
-                  Oceny
+                  {t('grades')}
                 </th>
                 <th
                   scope="col"
                   className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-500 w-1/6"
                 >
-                  Przewidywana końcowa
+                  {t('predictedFinalGrade')}
                 </th>
                 <th
                   scope="col"
                   className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-700 w-1/6"
                 >
-                  Końcowa
+                  {t('finalGrade')}
                 </th>
               </tr>
             </thead>
@@ -98,10 +87,10 @@ export default function Grades() {
                       })}
                     </td>
                     <td className="md:table-cell hidden md:px-6 px-2 py-4 text-white bg-purple-500">
-                      Brak
+                      {t('none')}
                     </td>
                     <td className="md:table-cell hidden md:px-6 px-2 py-4 text-white bg-purple-700">
-                      Brak
+                      {t('none')}
                     </td>
                   </tr>
                 );
