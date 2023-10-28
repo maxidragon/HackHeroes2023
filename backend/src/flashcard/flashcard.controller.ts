@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { FlashcardService } from './flashcard.service';
@@ -16,21 +17,39 @@ import { CreateFlashCardDto } from './dto/createFlashCard.dto';
 import { CreateFlashCardSetDto } from './dto/createFlashCardSet.dto';
 import { ForkFlashCardSetDto } from './dto/forkFlashCardSet.dto';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('flashcard')
 export class FlashcardController {
   constructor(private readonly flashcardService: FlashcardService) {}
-  @Get('/my')
-  async getMyFlashCardsSets(@GetUser() user: JwtAuthDto): Promise<object> {
-    return await this.flashcardService.getMyFlashCardsSets(user.userId);
+
+  @Get('public')
+  async getPublicFlashCardsSets(
+    @Query('search') search: string,
+  ): Promise<object> {
+    return await this.flashcardService.getPublicFlashCardsSets(search);
   }
 
-  @Get('/class')
-  async getMyClassFlashCardsSets(@GetUser() user: JwtAuthDto): Promise<object> {
-    return await this.flashcardService.getMyClassFlashCardsSets(user.userId);
+  @UseGuards(AuthGuard('jwt'))
+  @Get('my')
+  async getMyFlashCardsSets(
+    @GetUser() user: JwtAuthDto,
+    @Query('search') search: string,
+  ): Promise<object> {
+    return await this.flashcardService.getMyFlashCardsSets(user.userId, search);
   }
 
-  @Get('/set/:id')
+  @UseGuards(AuthGuard('jwt'))
+  @Get('class')
+  async getMyClassFlashCardsSets(
+    @GetUser() user: JwtAuthDto,
+    @Query('search') search: string,
+  ): Promise<object> {
+    return await this.flashcardService.getMyClassFlashCardsSets(
+      user.userId,
+      search,
+    );
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('set/:id')
   async getFlashCardSet(
     @GetUser() user: JwtAuthDto,
     @Param('id') setId: number,
@@ -38,15 +57,8 @@ export class FlashcardController {
     return await this.flashcardService.getFlashCardSet(setId, user.userId);
   }
 
-  @Get('search')
-  async searchFlashCardSets(
-    @GetUser() user: JwtAuthDto,
-    @Body('search') search: string,
-  ): Promise<object> {
-    return await this.flashcardService.searchFlashCards(search, user.userId);
-  }
-
-  @Post('/set')
+  @UseGuards(AuthGuard('jwt'))
+  @Post('set')
   async createFlashCardSet(
     @Body() dto: CreateFlashCardSetDto,
     @GetUser() user: JwtAuthDto,
@@ -54,7 +66,8 @@ export class FlashcardController {
     return await this.flashcardService.createFlashCardSet(dto, user.userId);
   }
 
-  @Put('/set/:id')
+  @UseGuards(AuthGuard('jwt'))
+  @Put('set/:id')
   async updateFlashCardSet(
     @Body() dto: CreateFlashCardSetDto,
     @GetUser() user: JwtAuthDto,
@@ -63,7 +76,8 @@ export class FlashcardController {
     return await this.flashcardService.updateFlashCardSet(dto, id, user.userId);
   }
 
-  @Delete('/set/:id')
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('set/:id')
   async deleteFlashCardSet(
     @GetUser() user: JwtAuthDto,
     @Param('id') id: number,
@@ -71,7 +85,8 @@ export class FlashcardController {
     return await this.flashcardService.deleteFlashCardSet(id, user.userId);
   }
 
-  @Post('/set/fork/')
+  @UseGuards(AuthGuard('jwt'))
+  @Post('set/fork')
   async forkFlashCardSet(
     @GetUser() user: JwtAuthDto,
     @Body() dto: ForkFlashCardSetDto,
@@ -79,6 +94,7 @@ export class FlashcardController {
     return await this.flashcardService.forkFlashCardSet(dto, user.userId);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/card')
   async createFlashCard(
     @Body() dto: CreateFlashCardDto,
@@ -87,7 +103,8 @@ export class FlashcardController {
     return await this.flashcardService.createFlashCard(dto, user.userId);
   }
 
-  @Post('/card/many')
+  @UseGuards(AuthGuard('jwt'))
+  @Post('card/many')
   async createFlashCards(
     @Body() dto: CreateFlashCardDto[],
     @GetUser() user: JwtAuthDto,
@@ -95,7 +112,8 @@ export class FlashcardController {
     return await this.flashcardService.createManyFlashCards(dto, user.userId);
   }
 
-  @Put('/card/:id')
+  @UseGuards(AuthGuard('jwt'))
+  @Put('card/:id')
   async updateFlashCard(
     @Body() dto: CreateFlashCardDto,
     @GetUser() user: JwtAuthDto,
@@ -104,7 +122,8 @@ export class FlashcardController {
     return await this.flashcardService.updateFlashCard(dto, id, user.userId);
   }
 
-  @Delete('/card/:id')
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('card/:id')
   async deleteFlashCard(
     @GetUser() user: JwtAuthDto,
     @Param('id') id: number,

@@ -1,43 +1,92 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { NoteDto } from './dto/note.dto';
-import { NoteCategoryDto } from './dto/noteCategory.dto';
 
 @Injectable()
 export class NotesService {
   constructor(private readonly prisma: DbService) {}
 
-  async getAllUserCategories(userId: number): Promise<object[]> {
-    return this.prisma.noteCategory.findMany({
-      where: { userId },
-      select: { id: true, name: true },
-    });
-  }
-
-  async getAllNotes(userId: number): Promise<object[]> {
-    return this.prisma.note.findMany({
-      where: { userId },
-      select: { id: true, title: true, content: true },
-    });
-  }
-  async getAllNotesFromCategory(
-    userId: number,
-    categoryId: number,
-  ): Promise<object[]> {
-    return this.prisma.note.findMany({
-      where: { userId, categoryId },
-      select: { id: true, title: true, content: true },
-    });
-  }
-
-  async searchNotes(userId: number, search: string): Promise<object[]> {
+  async getPublicNotes(category: string, search: string): Promise<object[]> {
+    if (search) {
+      return this.prisma.note.findMany({
+        where: {
+          publicity: 'PUBLIC',
+          category: category as any,
+          OR: [
+            { title: { contains: search } },
+            { content: { contains: search } },
+          ],
+        },
+        select: { id: true, title: true, content: true, isMd: true },
+      });
+    }
     return this.prisma.note.findMany({
       where: {
+        publicity: 'PUBLIC',
+        category: category as any,
+      },
+      select: { id: true, title: true, content: true },
+    });
+  }
+
+  async getClassNotes(
+    userId: number,
+    category: string,
+    search: string,
+  ): Promise<object[]> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, schoolClass: true, schoolName: true },
+    });
+    if (search) {
+      return this.prisma.note.findMany({
+        where: {
+          publicity: 'CLASS',
+          category: category as any,
+          user: {
+            schoolName: user.schoolName,
+            schoolClass: user.schoolClass,
+          },
+          OR: [
+            { title: { contains: search } },
+            { content: { contains: search } },
+          ],
+        },
+        select: { id: true, title: true, content: true, isMd: true },
+      });
+    }
+
+    return this.prisma.note.findMany({
+      where: {
+        publicity: 'CLASS',
+        category: category as any,
+        user: {
+          schoolName: user.schoolName,
+          schoolClass: user.schoolClass,
+        },
+      },
+      select: { id: true, title: true, content: true },
+    });
+  }
+
+  async getUserNotes(category: string, userId: number, search: string) {
+    if (search) {
+      return this.prisma.note.findMany({
+        where: {
+          category: category as any,
+          userId,
+          OR: [
+            { title: { contains: search } },
+            { content: { contains: search } },
+          ],
+        },
+        select: { id: true, title: true, content: true, isMd: true },
+      });
+    }
+    return this.prisma.note.findMany({
+      where: {
+        category: category as any,
         userId,
-        OR: [
-          { title: { contains: search } },
-          { content: { contains: search } },
-        ],
       },
       select: { id: true, title: true, content: true },
     });
@@ -63,33 +112,6 @@ export class NotesService {
 
   async deleteNote(id: number, userId: number): Promise<object | null> {
     return this.prisma.note.deleteMany({
-      where: { id, userId },
-    });
-  }
-
-  async createNoteCategory(
-    data: NoteCategoryDto,
-    userId: number,
-  ): Promise<object | null> {
-    return this.prisma.noteCategory.create({
-      data: { ...data, userId },
-      select: { id: true, name: true },
-    });
-  }
-
-  async updateNoteCategory(
-    id: number,
-    data: NoteCategoryDto,
-    userId: number,
-  ): Promise<object | null> {
-    return this.prisma.noteCategory.updateMany({
-      where: { id, userId },
-      data,
-    });
-  }
-
-  async deleteNoteCategory(id: number, userId: number): Promise<object | null> {
-    return this.prisma.noteCategory.deleteMany({
       where: { id, userId },
     });
   }

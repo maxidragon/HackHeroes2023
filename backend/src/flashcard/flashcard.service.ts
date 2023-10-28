@@ -8,7 +8,70 @@ import { ForkFlashCardSetDto } from './dto/forkFlashCardSet.dto';
 export class FlashcardService {
   constructor(private readonly prisma: DbService) {}
 
-  async getMyFlashCardsSets(userId: number): Promise<object> {
+  async getPublicFlashCardsSets(search: string): Promise<object> {
+    if (search) {
+      return this.prisma.flashCardSet.findMany({
+        where: {
+          publicity: 'PUBLIC',
+          OR: [
+            { title: { contains: search } },
+            { description: { contains: search } },
+          ],
+        },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+          user: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      });
+    }
+
+    return this.prisma.flashCardSet.findMany({
+      where: { publicity: 'PUBLIC' },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getMyFlashCardsSets(userId: number, search: string): Promise<object> {
+    if (search) {
+      return this.prisma.flashCardSet.findMany({
+        where: {
+          userId: userId,
+          OR: [
+            { title: { contains: search } },
+            { description: { contains: search } },
+          ],
+        },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    }
+
     return this.prisma.flashCardSet.findMany({
       where: { userId: userId },
       select: {
@@ -20,7 +83,10 @@ export class FlashcardService {
       },
     });
   }
-  async getMyClassFlashCardsSets(userId: number): Promise<object> {
+  async getMyClassFlashCardsSets(
+    userId: number,
+    search: string,
+  ): Promise<object> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -28,6 +94,28 @@ export class FlashcardService {
         schoolName: true,
       },
     });
+    if (search) {
+      return this.prisma.flashCardSet.findMany({
+        where: {
+          user: {
+            schoolClass: user.schoolClass,
+            schoolName: user.schoolName,
+          },
+          OR: [
+            { title: { contains: search } },
+            { description: { contains: search } },
+          ],
+        },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    }
+
     return this.prisma.flashCardSet.findMany({
       where: {
         user: {

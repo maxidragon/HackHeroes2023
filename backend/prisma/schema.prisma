@@ -33,7 +33,6 @@ model User {
   PasswordResetRequest PasswordResetRequest?
   FlashCardSet         FlashCardSet[]
   Note                 Note[]
-  NoteCategory         NoteCategory[]
 }
 
 model RestURL {
@@ -66,7 +65,7 @@ model FlashCardSet {
   cards       FlashCard[]
   user        User?              @relation(fields: [userId], references: [id])
   userId      Int?
-  publicity   FlashCardPublicity
+  publicity   Publicity
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 }
@@ -87,24 +86,37 @@ model Note {
   content    String        @db.Text
   user       User?         @relation(fields: [userId], references: [id])
   userId     Int?
-  categoryId Int?
-  category   NoteCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category   NoteCategory
+  publicity  Publicity     @default(PRIVATE)
+  isMd       Boolean       @default(false)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 }
 
-model NoteCategory {
-  id        Int      @id @default(autoincrement())
-  name      String
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Note      Note[]
-}
 
-enum FlashCardPublicity {
+enum Publicity {
   PUBLIC
   PRIVATE
   CLASS
+}
+
+enum NoteCategory {
+  MATH
+  ENGLISH
+  GERMAN
+  FRENCH
+  BIOLOGY
+  CHEMISTRY
+  PHYSICS
+  HISTORY
+  GEOGRAPHY
+  POLITICS
+  ECONOMICS
+  PHILOSOPHY
+  RELIGION
+  SPORT
+  MUSIC
+  ART
+  COMPUTER_SCIENCE
+  OTHER
 }
