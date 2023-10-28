@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,8 +22,18 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Get()
-  async getAllUserTodos(@GetUser() user: JwtAuthDto) {
-    return await this.todoService.getAllUserTodos(user.userId);
+  async getAllUserTodos(
+    @GetUser() user: JwtAuthDto,
+    @Query('search') search: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
+  ) {
+    return await this.todoService.getAllUserTodos(
+      user.userId,
+      search,
+      skip,
+      take,
+    );
   }
 
   @Get(':id')
