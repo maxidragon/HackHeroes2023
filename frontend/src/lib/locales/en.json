@@ -107,5 +107,9 @@
   "resetPasswordTitle": "Reset password",
   "changePassword": "Change password",
   "vulcanAdded": "Succesfully added vulcan to your account!",
-  "flashCardsCreated": "Succesfully created flashcards set!"
+  "flashCardsCreated": "Succesfully created flashcards set!",
+  "notTodos": "You do not have any todos!",
+  "loadMoreTodos": "Load more todos",
+  "cancel": "Cancel",
+  "searchTodo": "Search todos"
 }

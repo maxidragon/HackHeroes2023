@@ -7,16 +7,27 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Components/Loader";
+import { AiFillPlusCircle } from "react-icons/ai";
 
 export default function Todo() {
   const isPresent = useIsPresent();
   const navigate = useNavigate();
   const todoRef: any = useRef();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showMoreTodosButton, setShowMoreTodosButton] = useState<boolean>(true);
   const [todos, setTodos] = useState<TodoInterface[]>();
+  const [search, setSearch] = useState<string>("");
+  const [openCreate, setOpenCreate] = useState<boolean>(false);
 
-  const getMyTodos = useCallback(async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/todo`, {
+  const getMyTodos = useCallback(async (skip = 0, take = 10, searchParam?: string) => {
+    setIsLoading(true);
+    let url = `${import.meta.env.VITE_API_URL}/todo?skip=${skip}&take=${take}`;
+    console.log(searchParam);
+    if (searchParam && searchParam !== "") {
+      url += `&search=${searchParam}`;
+    }
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -25,7 +36,10 @@ export default function Todo() {
     });
     if (response.status === 401) return navigate("/login");
     const data = await response.json();
-    setTodos(data);
+    setTodos(data.todos);
+    if (data.todos.length < 10 || data.todos.length === 0 || data.todos.length === data.count) setShowMoreTodosButton(false);
+    if (data.todos.length < data.count) setShowMoreTodosButton(true);
+    setIsLoading(false);
   }, [navigate]);
 
   useEffect(() => {
@@ -46,25 +60,78 @@ export default function Todo() {
       await getMyTodos();
       todoRef.current.value = "";
       toast.success(t('todoSuccess'));
+      setOpenCreate(false);
     }
     return 0;
+  };
+
+  const getMoreTodos = async () => {
+    setIsLoading(true);
+    setShowMoreTodosButton(false);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/todo?skip=${todos?.length}&take=10`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (response.status === 401) return navigate("/login");
+    const data = await response.json();
+    setTodos([...todos!, ...data.todos]);
+    if (data.todos.length < 10 || data.todos.length === 0) setShowMoreTodosButton(false);
+    if (todos && todos.length + data.todos.length === data.count) setShowMoreTodosButton(false);
+    if (todos && todos.length + data.todos.length < data.count) setShowMoreTodosButton(true);
+    setIsLoading(false);
+  };
+
+  const handleSearch = async (event: any) => {
+    setSearch(event.target.value);
+    await getMyTodos(0, 10, event.target.value);
   };
   return (
     <>
       <div className="flex-1 mt-3">
         <div className="flex flex-col flex-wrap justify-center gap-4 ml-3">
-          <div className="flex">
-            <Input type="text" placeholder={t('todoText')} ref={todoRef} />
-          </div>
-          <div className="flex">
-            <Button type="default" onClick={createTodo}>{t('todoCreate')}</Button>
+          {!openCreate && (
+            <>
+              <div className="flex flex-row flex-wrap gap-4 justify-center">
+                <Input
+                  type="text"
+                  placeholder={t('searchTodo')}
+                  onChange={handleSearch}
+                  className="w-96"
+                />
+              </div>
+              <div className="flex flex-row flex-wrap justify-center gap-4">
+                <Button type="default" onClick={() => setOpenCreate(!openCreate)} width="5"><AiFillPlusCircle /></Button>
+              </div>
+            </>
+          )}
+          <div className="flex flex-row flex-wrap justify-center gap-4">
+            {openCreate && (
+              <div className="flex flex-col flex-wrap justify-center gap-4">
+                <Input
+                  type="text"
+                  placeholder={t('todoText')}
+                  ref={todoRef}
+                />
+                <Button type="default" onClick={createTodo}>{t('todoCreate')}</Button>
+                <Button type="default" onClick={() => setOpenCreate(false)}>{t('cancel')}</Button>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-row flex-wrap justify-center gap-4 mt-5">
-          {todos && todos.length ? "" : <p className="text-2xl text-white py-4">{t('todo.notTodos')}</p>}
+          {todos && todos.length ? "" : <p className="text-2xl text-white py-4">{t('notTodos')}</p>}
+        </div>
+        <div className="flex flex-row flex-wrap justify-center gap-4 mt-5">
           {todos && todos.map((todo: TodoInterface) => (
             <TodoCard key={todo.id} todo={todo} fetchTodos={getMyTodos} />
           ))}
+          {isLoading && <Loader width="200" />}
+        </div>
+        <div className="flex flex-row flex-wrap justify-center gap-4 mt-5">
+          {showMoreTodosButton && <Button type="default" onClick={getMoreTodos}>{t('loadMoreTodos')}</Button>}
         </div>
         <motion.div
           initial={{ scaleX: 1 }}
