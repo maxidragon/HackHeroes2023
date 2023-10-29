@@ -6,36 +6,24 @@ import { NoteDto } from './dto/note.dto';
 export class NotesService {
   constructor(private readonly prisma: DbService) {}
 
-  async getPublicNotes(category: string, search: string): Promise<object[]> {
-    if (search) {
-      return this.prisma.note.findMany({
-        where: {
-          publicity: 'PUBLIC',
-          category: category as any,
-          OR: [
-            { title: { contains: search } },
-            { content: { contains: search } },
-          ],
-        },
-        select: {
-          id: true,
-          title: true,
-          content: true,
-          category: true,
-          createdAt: true,
-          user: {
-            select: { id: true, username: true },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
+  async getPublicNotes(category: string, search: string, skip = 0, take = 5) {
+    const whereParams = {
+      publicity: 'PUBLIC' as any,
+    };
+
+    if (category && category !== 'ALL')
+      Object.assign(whereParams, { category: category });
+    if (search && search !== '') {
+      Object.assign(whereParams, {
+        OR: [
+          { title: { contains: search } },
+          { content: { contains: search } },
+        ],
       });
     }
 
-    return this.prisma.note.findMany({
-      where: {
-        publicity: 'PUBLIC',
-        category: category as any,
-      },
+    const data = await this.prisma.note.findMany({
+      where: whereParams,
       select: {
         id: true,
         title: true,
@@ -46,105 +34,113 @@ export class NotesService {
           select: { id: true, username: true },
         },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { updatedAt: 'desc' },
     });
+
+    const count = await this.prisma.note.count({
+      where: whereParams,
+    });
+
+    return { data, count };
   }
 
   async getClassNotes(
     userId: number,
     category: string,
     search: string,
-  ): Promise<object[]> {
+    skip = 0,
+    take = 5,
+  ) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { id: true, schoolClass: true, schoolName: true },
     });
-    if (search) {
-      return this.prisma.note.findMany({
-        where: {
-          publicity: 'CLASS',
-          category: category as any,
-          user: {
-            schoolName: user.schoolName,
-            schoolClass: user.schoolClass,
-          },
-          OR: [
-            { title: { contains: search } },
-            { content: { contains: search } },
-          ],
-        },
-        select: {
-          id: true,
-          title: true,
-          content: true,
-          category: true,
-          isMd: true,
-          user: {
-            select: { id: true, username: true },
-          },
-        },
+    const whereParams = {
+      publicity: 'CLASS' as any,
+      user: {
+        schoolName: user.schoolName,
+        schoolClass: user.schoolClass,
+      },
+    };
+    if (category && category !== 'ALL')
+      Object.assign(whereParams, { category: category });
+    if (search && search !== '') {
+      Object.assign(whereParams, {
+        OR: [
+          { title: { contains: search } },
+          { content: { contains: search } },
+        ],
       });
     }
 
-    return this.prisma.note.findMany({
-      where: {
-        publicity: 'CLASS',
-        category: category as any,
-        user: {
-          schoolName: user.schoolName,
-          schoolClass: user.schoolClass,
-        },
-      },
+    const data = await this.prisma.note.findMany({
+      where: whereParams,
       select: {
         id: true,
         title: true,
         content: true,
         category: true,
+        isMd: true,
         user: {
           select: { id: true, username: true },
         },
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      skip: skip ? skip : 0,
+      take: take ? take : 5,
     });
+
+    const count = await this.prisma.note.count({
+      where: whereParams,
+    });
+
+    return { data, count };
   }
 
-  async getUserNotes(category: string, userId: number, search: string) {
-    if (search) {
-      return this.prisma.note.findMany({
-        where: {
-          category: category as any,
-          userId,
-          OR: [
-            { title: { contains: search } },
-            { content: { contains: search } },
-          ],
-        },
-        select: {
-          id: true,
-          title: true,
-          content: true,
-          category: true,
-          isMd: true,
-          user: {
-            select: { id: true, username: true },
-          },
-        },
+  async getUserNotes(
+    category: string,
+    userId: number,
+    search: string,
+    skip = 0,
+    take = 5,
+  ) {
+    const whereParams = {
+      userId: userId,
+    };
+    if (category && category !== 'ALL')
+      Object.assign(whereParams, { category: category });
+    if (search && search !== '') {
+      Object.assign(whereParams, {
+        OR: [
+          { title: { contains: search } },
+          { content: { contains: search } },
+        ],
       });
     }
-    return this.prisma.note.findMany({
-      where: {
-        category: category as any,
-        userId,
-      },
+    const data = await this.prisma.note.findMany({
+      where: whereParams,
       select: {
         id: true,
         title: true,
         content: true,
         category: true,
+        isMd: true,
         user: {
           select: { id: true, username: true },
         },
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      skip: skip ? skip : 0,
+      take: take ? take : 5,
     });
+    const count = await this.prisma.note.count({
+      where: whereParams,
+    });
+    return { data, count };
   }
 
   async getNoteById(id: number, userId: number) {
@@ -161,7 +157,7 @@ export class NotesService {
           select: { id: true, username: true },
         },
       },
-    }); 
+    });
 
     return note.user.id === userId ? note : new HttpException('Forbidden', 403);
   }

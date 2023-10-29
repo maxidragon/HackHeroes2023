@@ -75,3 +75,15 @@ export interface Lesson {
     shortcut: string;
   };
 }
+
+export interface Note {
+  id: number;
+  title: string;
+  content: string;
+  user: {
+    id: number;
+    username: string;
+  };
+  category: string;
+  createdAt: string;
+}

@@ -6,6 +6,7 @@ import { TbDeviceFloppy } from "react-icons/tb";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import MarkdownComponent from "./Components/MarkdownComponent";
+import { t } from "i18next";
 
 export default function AddNote() {
   const isPresent = useIsPresent();
@@ -39,13 +40,13 @@ export default function AddNote() {
 
   function addNote() {
     if (!titleRef.current?.value || !contentRef.current?.value) {
-      toast.error("Please fill all fields");
+      toast.error(t('fillAllFields'));
       return;
     } else if (contentRef.current.value.length < 50) {
-      toast.error("Content of the note is too short!");
+      toast.error(t('contentIsTooShort'));
       return;
     } else if (category === "") {
-      toast.error("Please select category");
+      toast.error(t('pleaseSelectCategory'));
       return;
     }
 
@@ -64,12 +65,12 @@ export default function AddNote() {
       },
     }).then((res) => {
       if (res.status === 201) {
-        toast.success("Note added successfully!");
+        toast.success(t('noteCreated'));
         setTimeout(() => {
           navigate("/notes");
         }, 750);
       } else {
-        toast.error("Something went wrong!");
+        toast.error(t('somethingWentWrong'));
       }
     });
   }
@@ -79,42 +80,39 @@ export default function AddNote() {
       <h1 className="text-center text-4xl roboto text-white mt-4">New Note</h1>
       <Input
         type="text"
-        placeholder="Note title"
+        placeholder={t('title')}
         containerClassName="xl:w-1/3 md:w-1/2 w-4/5"
         ref={titleRef}
         max={50}
       />
       <div className="flex items-center 2xl:w-1/5 lg:w-2/5 md:w-3/5 w-4/5 border-2 border-purple-500 rounded-full text-xl text-white roboto overflow-hidden cursor-pointer">
         <p
-          className={`w-full text-center ${
-            !isMd && "bg-purple-500"
-          } transition-all`}
+          className={`w-full text-center ${!isMd && "bg-purple-500"
+            } transition-all`}
           onClick={() => {
             setIsMd(false);
           }}
         >
-          Plain text
+          {t('plainText')}
         </p>
         <p
-          className={`w-full text-center ${
-            isMd && "bg-purple-500"
-          } transition-all`}
+          className={`w-full text-center ${isMd && "bg-purple-500"
+            } transition-all`}
           onClick={() => {
             setIsMd(true);
           }}
         >
-          Markdown
+          {t('markdown')}
         </p>
       </div>
       <div
-        className={`h-auto ${
-          isMd
+        className={`h-auto ${isMd
             ? "md:w-4/5 w-full px-4 lg:flex-row flex-col"
             : "md:w-3/5 xl:w-2/5 w-full px-4"
-        } flex items-center gap-4`}
+          } flex items-center gap-4`}
       >
         <textarea
-          placeholder="Note content"
+          placeholder={t('content')}
           onChange={(e) => setMd(e.target.value)}
           ref={contentRef}
           className="h-full min-h-[400px] w-full block px-2.5 py-2.5 text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
@@ -131,23 +129,22 @@ export default function AddNote() {
           target="_blank"
           href="https://markdownguide.offshoot.io/basic-syntax/"
         >
-          How to use markdown?
+        {t('howToUseMarkdown')}
         </a>
       )}
       <div className="lg:w-1/3 md:w-1/2 w-full px-4 flex items-center flex-col gap-4">
-        <p className="text-2xl text-gray-400 text-center">Select category & publicity</p>
+        <p className="text-2xl text-gray-400 text-center">{t('selectCategoryAndPublicity')}</p>
         <div className="flex w-full max-[500px]:flex-col items-center gap-4">
           <select
             onChange={(e) => {
               setCategory(e.target.value);
             }}
-            placeholder="Select category"
-            className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
+            placeholder={t('selectCategoryPlaceholder')}
+            className="w-full py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
             {categories.map((category) => (
               <option key={category} value={category}>
-                {category.charAt(0).toUpperCase() +
-                  category.slice(1).toLowerCase()}
+                    {t(category)}
               </option>
             ))}
           </select>
@@ -155,18 +152,18 @@ export default function AddNote() {
             onChange={(e) => {
               setPublicity(e.target.value);
             }}
-            placeholder="Select publicity"
-            className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
+            placeholder={t('selectPublicityPlaceholder')}
+            className="w-full py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
-            <option value="PUBLIC">Public</option>
-            <option value="PRIVATE">Private</option>
-            <option value="CLASS">Class</option>
+            <option value="PUBLIC">{t('public')}</option>
+            <option value="PRIVATE">{t('private')}</option>
+            <option value="CLASS">{t('class')}</option>
           </select>
         </div>
       </div>
       <Button type="default" className="!text-xl !w-48 mb-8" onClick={addNote}>
         <TbDeviceFloppy />
-        Add Note
+        {t('createNote')}
       </Button>
       <motion.div
         initial={{ scaleX: 1 }}

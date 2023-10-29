@@ -6,6 +6,7 @@ import Input from "../../Components/Input";
 import MarkdownComponent from "./Components/MarkdownComponent";
 import { TbDeviceFloppy } from "react-icons/tb";
 import Button from "../../Components/Button";
+import { t } from "i18next";
 
 export default function EditNote() {
   const isPresent = useIsPresent();
@@ -40,13 +41,13 @@ export default function EditNote() {
 
   function saveNote() {
     if (!titleRef.current?.value || !contentRef.current?.value) {
-      toast.error("Please fill all fields");
+      toast.error(t('fillAllFields'));
       return;
     } else if (contentRef.current.value.length < 50) {
-      toast.error("Content of the note is too short!");
+      toast.error(t('contentIsTooShort'));
       return;
     } else if (category === "") {
-      toast.error("Please select category");
+      toast.error(t('pleaseSelectCategory'));
       return;
     }
 
@@ -65,12 +66,12 @@ export default function EditNote() {
       },
     }).then((res) => {
       if (res.status === 200) {
-        toast.success("Note edited successfully!");
+        toast.success(t('noteUpdated'));
         setTimeout(() => {
           navigate("/notes");
         }, 750);
       } else {
-        toast.error("Something went wrong!");
+        toast.error(t('somethingWentWrong'));
       }
     });
   }
@@ -83,10 +84,10 @@ export default function EditNote() {
       .then((res) => res.json())
       .then((data) => {
         if (data.code === 404) {
-          toast.error("Couldn't fetch note");
+          toast.error(t('noteNotFound'));
           navigate("/notes");
         } else if (data.code === 403) {
-          toast.error("You can only edit your own notes");
+          toast.error(t('editNoteForbidden'));
           navigate("/notes");
         } else {
           titleRef.current!.value = data.title;
@@ -98,18 +99,18 @@ export default function EditNote() {
         }
       })
       .catch((err) => {
-        toast.error("Couldn't fetch note");
+        toast.error(t('somethingWentWrong'));
         console.log(err);
         navigate("/notes");
       });
-  }, []);
+  }, [navigate, noteId]);
 
   return (
     <div className="flex-1 flex flex-col items-center gap-4">
-      <h1 className="text-center text-4xl roboto text-white mt-4">Edit Note</h1>
+      <h1 className="text-center text-4xl roboto text-white mt-4">{t('editNote')}</h1>
       <Input
         type="text"
-        placeholder="Note title"
+        placeholder={t('title')}
         containerClassName="xl:w-1/3 md:w-1/2 w-4/5"
         ref={titleRef}
         max={50}
@@ -123,7 +124,7 @@ export default function EditNote() {
             setIsMd(false);
           }}
         >
-          Plain text
+          {t('plainText')}
         </p>
         <p
           className={`w-full text-center ${
@@ -133,7 +134,7 @@ export default function EditNote() {
             setIsMd(true);
           }}
         >
-          Markdown
+          {t('markdown')}
         </p>
       </div>
       <div
@@ -144,7 +145,7 @@ export default function EditNote() {
         } flex items-center gap-4`}
       >
         <textarea
-          placeholder="Note content"
+          placeholder={t('content')}
           onChange={(e) => setMd(e.target.value)}
           ref={contentRef}
           className="h-full min-h-[400px] w-full block px-2.5 py-2.5 text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
@@ -161,12 +162,12 @@ export default function EditNote() {
           target="_blank"
           href="https://markdownguide.offshoot.io/basic-syntax/"
         >
-          How to use markdown?
+          {t('howToUseMarkdown')}
         </a>
       )}
       <div className="lg:w-1/3 md:w-1/2 w-full px-4 flex items-center flex-col gap-4">
         <p className="text-2xl text-gray-400 text-center">
-          Select category & publicity
+          {t('selectCategoryAndPublicity')}
         </p>
         <div className="flex w-full max-[500px]:flex-col items-center gap-4">
           <select
@@ -174,13 +175,12 @@ export default function EditNote() {
               setCategory(e.target.value);
             }}
             defaultValue={category}
-            placeholder="Select category"
-            className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
+            placeholder={t('selectCategoryPlaceholder')}
+            className="w-full py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
             {categories.map((category) => (
               <option key={category} value={category}>
-                {category.charAt(0).toUpperCase() +
-                  category.slice(1).toLowerCase()}
+                {t(category)}
               </option>
             ))}
           </select>
@@ -189,18 +189,18 @@ export default function EditNote() {
               setPublicity(e.target.value);
             }}
             defaultValue={publicity}
-            placeholder="Select publicity"
-            className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
+            placeholder={t('selectPublicityPlaceholder')}
+            className="w-full py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
-            <option value="PUBLIC">Public</option>
-            <option value="PRIVATE">Private</option>
-            <option value="CLASS">Class</option>
+            <option value="PUBLIC">{t('public')}</option>
+            <option value="PRIVATE">{t('private')}</option>
+            <option value="CLASS">{t('class')}</option>
           </select>
         </div>
       </div>
       <Button type="default" className="!text-xl !w-48 mb-8" onClick={saveNote}>
         <TbDeviceFloppy />
-        Save Note
+        {t('save')}
       </Button>
       <motion.div
         initial={{ scaleX: 1 }}

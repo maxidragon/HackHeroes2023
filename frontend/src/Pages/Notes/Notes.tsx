@@ -9,18 +9,8 @@ import { userAtom } from "../../Atoms";
 import { useAtomValue } from "jotai";
 import Button from "../../Components/Button";
 import { TbEdit, TbTrash } from "react-icons/tb";
+import { Note } from "../../lib/interfaces";
 
-interface Note {
-  id: number;
-  title: string;
-  content: string;
-  user: {
-    id: number;
-    username: string;
-  };
-  category: string;
-  createdAt: string;
-}
 
 export default function Notes() {
   const isPresent = useIsPresent();
@@ -30,6 +20,7 @@ export default function Notes() {
   const [search, setSearch] = useState<string>("");
   const [notes, setNotes] = useState<Note[]>();
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [totalNotes, setTotalNotes] = useState<number>(0);
 
   useEffect(() => {
     setIsFetching(true);
@@ -44,8 +35,7 @@ export default function Notes() {
     }
 
     fetch(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/notes/${publicity.toLowerCase()}${queryString}`,
       {
         method: "GET",
@@ -57,18 +47,19 @@ export default function Notes() {
     )
       .then((res) => res.json())
       .then((data) => {
-        setNotes(data);
+        setNotes(data.data);
+        setTotalNotes(data.count);
         setIsFetching(false);
       })
       .catch((err) => {
-        toast.error("Couldn't fetch notes");
+        toast.error(t('errorNotes'));
         console.log(err);
         setIsFetching(false);
       });
   }, [category, publicity, search]);
 
   function deleteNote(id: number) {
-    if (!confirm("Are you sure you want to delete this note?")) return;
+    if (!confirm(t('deleteNoteConfirm'))) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/notes/${id}`, {
       method: "DELETE",
@@ -79,13 +70,39 @@ export default function Notes() {
     })
       .then(() => {
         setNotes((prev) => prev?.filter((note) => note.id !== id));
-        toast.success("Note deleted");
+        toast.success(t('noteDeleted'));
       })
       .catch((err) => {
-        toast.error("Couldn't delete note");
+        toast.error(t('errorDeleteNote'));
         console.log(err);
       });
   }
+
+  const handleFetchMoreNotes = () => {
+    setIsFetching(true);
+    fetch(
+      `${import.meta.env.VITE_API_URL
+      }/notes/${publicity.toLowerCase()}?offset=${notes?.length}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    ).then((res) => {
+      if (res.status === 200) {
+        res.json().then((data) => {
+          setNotes((prev) => [...prev!, ...data.data]);
+          setTotalNotes(data.count);
+          setIsFetching(false);
+        });
+      } else {
+        toast.error(t('errorNotes'));
+        setIsFetching(false);
+      }
+    });
+  };
 
   const markdownStyling =
     "flex-1 w-full overflow-x-hidden box-border overflow-y-auto text-lg text-white break-words";
@@ -103,7 +120,7 @@ export default function Notes() {
       {!search && !category && publicity === "Public" && (
         <div className="xl:w-3/5 w-4/5 lg:flex hidden flex-col items-center gap-8 mb-10">
           <h2 className="text-3xl roboto text-white mr-auto">
-            The newest notes
+            {t("latestNotes")}
           </h2>
           {notes && notes?.length > 3 ? (
             <div className="container w-full h-screen grid grid-cols-5 grid-rows-6 gap-2">
@@ -112,7 +129,7 @@ export default function Notes() {
                   {notes[0].category}
                 </p>
                 <h2 className="w-full text-left text-white break-words">
-                  Title: "{notes[0].title}"
+                  {t('title')}: "{notes[0].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
@@ -124,7 +141,7 @@ export default function Notes() {
                   {notes[1].category}
                 </p>
                 <h2 className="w-full text-left text-white break-words">
-                  Title: "{notes[1].title}"
+                  {t('title')}: "{notes[1].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
@@ -136,7 +153,7 @@ export default function Notes() {
                   {notes[2].category}
                 </p>
                 <h2 className="w-full text-left text-white break-words">
-                  Title: "{notes[2].title}"
+                  {t('title')}: "{notes[2].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
@@ -148,7 +165,7 @@ export default function Notes() {
                   {notes[3].category}
                 </p>
                 <h2 className="w-full text-left text-white break-words">
-                  Title: "{notes[3].title}"
+                  {t('title')}: "{notes[3].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
@@ -159,54 +176,63 @@ export default function Notes() {
           ) : isFetching ? (
             <Loader width="200" />
           ) : (
-            <p className="text-2xl text-white roboto">No notes to display</p>
+            <p className="text-2xl text-white roboto">{t('noNotes')}</p>
           )}
         </div>
       )}
-      <h2 className="text-3xl roboto text-white lg:flex hidden">All notes</h2>
+      <h2 className="text-3xl roboto text-white lg:flex hidden">{t('allNotes')}</h2>
       <div className="xl:w-3/5 w-full px-4 flex justify-evenly flex-wrap items-center gap-8 mb-10">
         {notes && notes.length > 0 ? (
-          notes.map((note) => (
-            <div
-              key={note.id}
-              className="md:w-2/5 w-2/3 max-[500px]:w-full flex flex-col items-center gap-2 border-2 shadow-xl lg:border-gray-400 border-purple-400 h-[30rem] rounded-xl p-4"
-            >
-              <h2 className="text-3xl roboto text-white text-center break-words">
-                {note.category}
-              </h2>
-              <h2 className="w-full text-center text-white break-words">
-                Title: "{note.title}"
-              </h2>
-              <MarkdownComponent
-                className={markdownStyling}
-                value={note.content}
-              />
-              {user.id === note.user.id && (
-                <div className="flex w-full justify-end">
-                  <Button
-                    type="alt"
-                    isLink={true}
-                    to={`/notes/edit/${note.id}`}
-                  >
-                    <TbEdit />
-                    Edit
-                  </Button>
-                  <Button
-                    type="alt"
-                    className="ml-4"
-                    onClick={() => deleteNote(note.id)}
-                  >
-                    <TbTrash />
-                    Delete
-                  </Button>
-                </div>
-              )}
-            </div>
-          ))
+          <>
+            {notes.map((note: Note) => (
+              <div
+                key={note.id}
+                className="md:w-2/5 w-2/3 max-[500px]:w-full flex flex-col items-center gap-2 border-2 shadow-xl lg:border-gray-400 border-purple-400 h-[30rem] rounded-xl p-4"
+              >
+                <h2 className="text-3xl roboto text-white text-center break-words">
+                  {note.category}
+                </h2>
+                <h2 className="w-full text-center text-white break-words">
+                  {t('title')}: "{note.title}"
+                </h2>
+                <MarkdownComponent
+                  className={markdownStyling}
+                  value={note.content}
+                />
+                {user.id === note.user.id && (
+                  <div className="flex w-full justify-end">
+                    <Button
+                      type="alt"
+                      isLink={true}
+                      to={`/notes/edit/${note.id}`}
+                    >
+                      <TbEdit />
+                      {t('edit')}
+                    </Button>
+                    <Button
+                      type="alt"
+                      className="ml-4"
+                      onClick={() => deleteNote(note.id)}
+                    >
+                      <TbTrash />
+                      {t('delete')}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </>
         ) : isFetching ? (
           <Loader width="200" />
         ) : (
-          <p className="text-2xl text-white roboto">No notes to display</p>
+          <p className="text-2xl text-white roboto">{t('noNotes')}</p>
+        )}
+      </div>
+      <div className="flex flex-col items-center gap-4 mb-3">
+        {notes && notes.length < totalNotes && (
+          <Button type="default" onClick={handleFetchMoreNotes}>
+            {t('moreNotes')}
+          </Button>
         )}
       </div>
       <motion.div

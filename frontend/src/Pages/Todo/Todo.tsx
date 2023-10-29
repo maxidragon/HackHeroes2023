@@ -132,7 +132,7 @@ export default function Todo() {
           {isLoading && <Loader width="200" />}
         </div>
         <div className="flex flex-row flex-wrap justify-center gap-4 mt-5">
-          {showMoreTodosButton && <Button type="default" onClick={getMoreTodos}>{t('loadMoreTodos')}</Button>}
+          {showMoreTodosButton && <Button type="default" onClick={getMoreTodos}>{t('loadMore')}</Button>}
         </div>
         <motion.div
           initial={{ scaleX: 1 }}

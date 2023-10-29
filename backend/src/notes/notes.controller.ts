@@ -23,8 +23,10 @@ export class NotesController {
   async getPublicNotes(
     @Query('category') category: string,
     @Query('search') search: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
   ) {
-    return await this.notesService.getPublicNotes(category, search);
+    return await this.notesService.getPublicNotes(category, search, skip, take);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -33,8 +35,16 @@ export class NotesController {
     @GetUser() user: JwtAuthDto,
     @Query('category') category: string,
     @Query('search') search: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
   ) {
-    return await this.notesService.getClassNotes(user.userId, category, search);
+    return await this.notesService.getClassNotes(
+      user.userId,
+      category,
+      search,
+      skip,
+      take,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -43,8 +53,16 @@ export class NotesController {
     @GetUser() user: JwtAuthDto,
     @Query('search') search: string,
     @Query('category') category: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
   ) {
-    return await this.notesService.getUserNotes(category, user.userId, search);
+    return await this.notesService.getUserNotes(
+      category,
+      user.userId,
+      search,
+      skip,
+      take,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'))
