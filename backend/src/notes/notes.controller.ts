@@ -48,6 +48,12 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get(':id')
+  async getNoteById(@GetUser() user: JwtAuthDto, @Param('id') id: number) {
+    return await this.notesService.getNoteById(id, user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async createNote(@GetUser() user: JwtAuthDto, @Body() data: NoteDto) {
     return await this.notesService.createNote(data, user.userId);

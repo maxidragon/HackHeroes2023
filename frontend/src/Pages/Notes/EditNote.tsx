@@ -1,14 +1,15 @@
 import { motion, useIsPresent } from "framer-motion";
-import Input from "../../Components/Input";
-import { useRef, useState } from "react";
-import Button from "../../Components/Button";
-import { TbDeviceFloppy } from "react-icons/tb";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Input from "../../Components/Input";
 import MarkdownComponent from "./Components/MarkdownComponent";
+import { TbDeviceFloppy } from "react-icons/tb";
+import Button from "../../Components/Button";
 
-export default function AddNote() {
+export default function EditNote() {
   const isPresent = useIsPresent();
+  const noteId = useParams().id;
   const [isMd, setIsMd] = useState(false);
   const [md, setMd] = useState("# Preview");
   const [category, setCategory] = useState("MATH");
@@ -37,7 +38,7 @@ export default function AddNote() {
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
-  function addNote() {
+  function saveNote() {
     if (!titleRef.current?.value || !contentRef.current?.value) {
       toast.error("Please fill all fields");
       return;
@@ -49,8 +50,8 @@ export default function AddNote() {
       return;
     }
 
-    fetch(`${import.meta.env.VITE_API_URL}/notes`, {
-      method: "POST",
+    fetch(`${import.meta.env.VITE_API_URL}/notes/${noteId}`, {
+      method: "PUT",
       body: JSON.stringify({
         title: titleRef.current.value,
         content: contentRef.current.value,
@@ -63,8 +64,8 @@ export default function AddNote() {
         "Content-Type": "application/json",
       },
     }).then((res) => {
-      if (res.status === 201) {
-        toast.success("Note added successfully!");
+      if (res.status === 200) {
+        toast.success("Note edited successfully!");
         setTimeout(() => {
           navigate("/notes");
         }, 750);
@@ -74,9 +75,38 @@ export default function AddNote() {
     });
   }
 
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/notes/${noteId}`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code === 404) {
+          toast.error("Couldn't fetch note");
+          navigate("/notes");
+        } else if (data.code === 403) {
+          toast.error("You can only edit your own notes");
+          navigate("/notes");
+        } else {
+          titleRef.current!.value = data.title;
+          contentRef.current!.value = data.content;
+          setMd(data.content);
+          setCategory(data.category);
+          setPublicity(data.publicity);
+          setIsMd(data.isMd);
+        }
+      })
+      .catch((err) => {
+        toast.error("Couldn't fetch note");
+        console.log(err);
+        navigate("/notes");
+      });
+  }, []);
+
   return (
     <div className="flex-1 flex flex-col items-center gap-4">
-      <h1 className="text-center text-4xl roboto text-white mt-4">New Note</h1>
+      <h1 className="text-center text-4xl roboto text-white mt-4">Edit Note</h1>
       <Input
         type="text"
         placeholder="Note title"
@@ -135,12 +165,15 @@ export default function AddNote() {
         </a>
       )}
       <div className="lg:w-1/3 md:w-1/2 w-full px-4 flex items-center flex-col gap-4">
-        <p className="text-2xl text-gray-400 text-center">Select category & publicity</p>
+        <p className="text-2xl text-gray-400 text-center">
+          Select category & publicity
+        </p>
         <div className="flex w-full max-[500px]:flex-col items-center gap-4">
           <select
             onChange={(e) => {
               setCategory(e.target.value);
             }}
+            defaultValue={category}
             placeholder="Select category"
             className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
@@ -155,6 +188,7 @@ export default function AddNote() {
             onChange={(e) => {
               setPublicity(e.target.value);
             }}
+            defaultValue={publicity}
             placeholder="Select publicity"
             className="w-full capitalize py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
@@ -164,9 +198,9 @@ export default function AddNote() {
           </select>
         </div>
       </div>
-      <Button type="default" className="!text-xl !w-48 mb-8" onClick={addNote}>
+      <Button type="default" className="!text-xl !w-48 mb-8" onClick={saveNote}>
         <TbDeviceFloppy />
-        Add Note
+        Save Note
       </Button>
       <motion.div
         initial={{ scaleX: 1 }}

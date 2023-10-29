@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { NoteDto } from './dto/note.dto';
 
@@ -73,7 +73,16 @@ export class NotesService {
             { content: { contains: search } },
           ],
         },
-        select: { id: true, title: true, content: true, isMd: true },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          category: true,
+          isMd: true,
+          user: {
+            select: { id: true, username: true },
+          },
+        },
       });
     }
 
@@ -86,7 +95,15 @@ export class NotesService {
           schoolClass: user.schoolClass,
         },
       },
-      select: { id: true, title: true, content: true },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        category: true,
+        user: {
+          select: { id: true, username: true },
+        },
+      },
     });
   }
 
@@ -101,7 +118,16 @@ export class NotesService {
             { content: { contains: search } },
           ],
         },
-        select: { id: true, title: true, content: true, isMd: true },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          category: true,
+          isMd: true,
+          user: {
+            select: { id: true, username: true },
+          },
+        },
       });
     }
     return this.prisma.note.findMany({
@@ -109,8 +135,35 @@ export class NotesService {
         category: category as any,
         userId,
       },
-      select: { id: true, title: true, content: true },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        category: true,
+        user: {
+          select: { id: true, username: true },
+        },
+      },
     });
+  }
+
+  async getNoteById(id: number, userId: number) {
+    const note = await this.prisma.note.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        category: true,
+        isMd: true,
+        publicity: true,
+        user: {
+          select: { id: true, username: true },
+        },
+      },
+    }); 
+
+    return note.user.id === userId ? note : new HttpException('Forbidden', 403);
   }
 
   async createNote(data: NoteDto, userId: number): Promise<object | null> {

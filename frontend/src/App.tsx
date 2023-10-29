@@ -23,6 +23,7 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword.tsx";
 import Exams from "./Pages/ClassRegister/Pages/Exams.tsx";
 import AddNote from "./Pages/Notes/AddNote.tsx";
 import Timetable from "./Pages/ClassRegister/Pages/Timetable.tsx";
+import EditNote from "./Pages/Notes/EditNote.tsx";
 
 function App() {
   const element = useRoutes([
@@ -57,6 +58,10 @@ function App() {
         {
           path: "/notes/add",
           element: <AddNote />
+        },
+        {
+          path: "/notes/edit/:id",
+          element: <EditNote />,
         },
         {
           path: "/class-register",
