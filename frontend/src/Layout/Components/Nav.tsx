@@ -28,7 +28,7 @@ export default function Nav({ user, logout }: any) {
   const [isShown, setIsShown] = useState(false);
 
   const menuLinkClass = (isActive: boolean) => {
-    return `rounded-full px-4 link flex items-center gap-2 ${
+    return `rounded-full px-4 link flex items-center gap-2 text-center ${
       isActive ? "text-slate-200 !bg-left" : "text-gray-400 bg-bgLght !bg-right"
     }`;
   };
@@ -74,7 +74,7 @@ export default function Nav({ user, logout }: any) {
               userName={user.username}
               size="2rem"
             />
-            {user.username}
+            <p className="max-w-[200px] text-ellipsis overflow-hidden">{user.username}</p>
           </NavLink>
           <Button
             type="default"
@@ -151,7 +151,7 @@ export default function Nav({ user, logout }: any) {
                 userName={user.username}
                 size="2rem"
               />
-              {user.username}
+              <p className="max-w-[250px] text-ellipsis overflow-hidden">{user.username}</p>
             </NavLink>
             <Button
               type="default"

@@ -49,6 +49,7 @@ export interface Grade {
   weight: number;
   name: string;
   type: string;
+  subject?: string;
 }
 
 export interface Grades {
