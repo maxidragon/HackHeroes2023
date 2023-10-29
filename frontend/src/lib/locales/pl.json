@@ -174,5 +174,6 @@
   "selectCategoryPlaceholder": "Wybierz kategorię",
   "selectPublicityPlaceholder": "Wybierz dostępność",
   "content": "Treść",
-  "searchPlaceholder": "Szukaj"
+  "searchPlaceholder": "Szukaj",
+  "average": "Średnia"
 }

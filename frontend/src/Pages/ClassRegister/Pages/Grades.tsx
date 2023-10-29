@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import Loader from "../../../Components/Loader";
 import { t } from "i18next";
 import { Grades as GradesInterface } from "../../../lib/interfaces";
+import { calculateWeightedAverage } from "../../../lib/utils";
 
 
 export default function Grades() {
@@ -42,15 +43,18 @@ export default function Grades() {
                 <th scope="col" className="lg:px-6 px-2 py-3 bg-purple-700">
                   {t('grades')}
                 </th>
+                <th scope="col" className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-500">
+                  {t('average')}
+                </th>
                 <th
                   scope="col"
-                  className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-500 w-1/6"
+                  className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-700 w-1/6"
                 >
                   {t('predictedFinalGrade')}
                 </th>
                 <th
                   scope="col"
-                  className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-700 w-1/6"
+                  className="md:table-cell hidden md:px-6 px-2 py-3 bg-purple-500 w-1/6"
                 >
                   {t('finalGrade')}
                 </th>
@@ -87,9 +91,12 @@ export default function Grades() {
                       })}
                     </td>
                     <td className="md:table-cell hidden md:px-6 px-2 py-4 text-white bg-purple-500">
-                      {t('none')}
+                      {calculateWeightedAverage(grades[key]) || t('none')}
                     </td>
                     <td className="md:table-cell hidden md:px-6 px-2 py-4 text-white bg-purple-700">
+                      {t('none')}
+                    </td>
+                    <td className="md:table-cell hidden md:px-6 px-2 py-4 text-white bg-purple-500">
                       {t('none')}
                     </td>
                   </tr>
