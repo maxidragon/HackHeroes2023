@@ -175,10 +175,11 @@
   "markdown": "Markdown",
   "howToUseMarkdown": "How to use markdown?",
   "selectCategoryAndPublicity": "Select category and publicity",
-  "noteCreated": "Succesfully created note!",
+  "noteCreated": "Successfully created note!",
   "selectCategoryPlaceholder": "Select category",
   "selectPublicityPlaceholder": "Select publicity",
   "content": "Content",
   "searchPlaceholder": "Search",
-  "average": "Average"
+  "average": "Average",
+  "flashcardDeleted": "Flashcard set successfully deleted"
 }
