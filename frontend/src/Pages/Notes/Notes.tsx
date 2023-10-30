@@ -10,7 +10,7 @@ import { useAtomValue } from "jotai";
 import Button from "../../Components/Button";
 import { TbEdit, TbTrash } from "react-icons/tb";
 import { Note } from "../../lib/interfaces";
-
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 export default function Notes() {
   const isPresent = useIsPresent();
@@ -27,16 +27,18 @@ export default function Notes() {
     let queryString = "";
 
     if (category && search) {
-      queryString = `?category=${category}&&search=${search}`;
+      queryString = `?category=${category}&search=${search}`;
     } else if (category) {
       queryString = `?category=${category}`;
     } else if (search) {
       queryString = `?search=${search}`;
     }
-
+    let url = `${import.meta.env.VITE_API_URL}/notes/${publicity.toLowerCase()}`;
+    if (user.id && publicity === "Public") {
+      url += `/auth`;
+    }
     fetch(
-      `${import.meta.env.VITE_API_URL
-      }/notes/${publicity.toLowerCase()}${queryString}`,
+      `${url}${queryString}`,
       {
         method: "GET",
         headers: {
@@ -56,7 +58,7 @@ export default function Notes() {
         console.log(err);
         setIsFetching(false);
       });
-  }, [category, publicity, search]);
+  }, [category, publicity, search, user.id]);
 
   function deleteNote(id: number) {
     if (!confirm(t('deleteNoteConfirm'))) return;
@@ -104,6 +106,52 @@ export default function Notes() {
     });
   };
 
+  const likeNote = async (id: number) => {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/notes/${id}/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (res.status === 201) {
+      setNotes((prev) =>
+        prev?.map((note) => {
+          if (note.id === id) {
+            note.isLiked = true;
+            note.likesCount++;
+          }
+          return note;
+        })
+      );
+    } else {
+      toast.error(t('somethingWentWrong'));
+    }
+  };
+
+  const unlikeNote = async (id: number) => {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/notes/${id}/unlike`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (res.status === 200) {
+      setNotes((prev) =>
+        prev?.map((note) => {
+          if (note.id === id) {
+            note.isLiked = false;
+            note.likesCount--;
+          }
+          return note;
+        })
+      );
+    } else {
+      toast.error(t('somethingWentWrong'));
+    }
+  };
+
   const markdownStyling =
     "flex-1 w-full overflow-x-hidden box-border overflow-y-auto text-lg text-white break-words";
 
@@ -128,6 +176,19 @@ export default function Notes() {
                 <p className="text-2xl roboto text-white">
                   {notes[0].category}
                 </p>
+                <div className="flex w-full">
+                  {notes[0].isLiked && (
+                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                      await unlikeNote(notes[0].id);
+                    }} />
+                  )}
+                  {!notes[0].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                    await likeNote(notes[0].id);
+                  }}/>}
+                  <p className="text-2xl roboto text-white ml-2">
+                    {notes[0].likesCount}
+                  </p>
+                </div>
                 <h2 className="w-full text-left text-white break-words">
                   {t('title')}: "{notes[0].title}"
                 </h2>
@@ -135,11 +196,25 @@ export default function Notes() {
                   className={markdownStyling}
                   value={notes[0].content}
                 />
+
               </div>
               <div className="shadow-xl col-span-2 row-start-1 row-end-4 gap-4 flex flex-col border-purple-400 border-4 rounded-xl p-4">
                 <p className="text-2xl roboto text-white">
                   {notes[1].category}
                 </p>
+                <div className="flex w-full">
+                  {notes[1].isLiked && (
+                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                      await unlikeNote(notes[1].id);
+                    }} />
+                  )}
+                  {!notes[1].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                    await likeNote(notes[1].id);
+                  }}/>}
+                  <p className="text-2xl roboto text-white ml-2">
+                    {notes[1].likesCount}
+                  </p>
+                </div>
                 <h2 className="w-full text-left text-white break-words">
                   {t('title')}: "{notes[1].title}"
                 </h2>
@@ -152,6 +227,19 @@ export default function Notes() {
                 <p className="text-2xl roboto text-white">
                   {notes[2].category}
                 </p>
+                <div className="flex w-full">
+                  {notes[2].isLiked && (
+                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                      await unlikeNote(notes[2].id);
+                    }} />
+                  )}
+                  {!notes[2].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                    await likeNote(notes[2].id);
+                  }}/>}
+                  <p className="text-2xl roboto text-white ml-2">
+                    {notes[2].likesCount}
+                  </p>
+                </div>
                 <h2 className="w-full text-left text-white break-words">
                   {t('title')}: "{notes[2].title}"
                 </h2>
@@ -164,6 +252,19 @@ export default function Notes() {
                 <p className="text-2xl roboto text-white">
                   {notes[3].category}
                 </p>
+                <div className="flex w-full">
+                  {notes[3].isLiked && (
+                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                      await unlikeNote(notes[3].id);
+                    }} />
+                  )}
+                  {!notes[3].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                    await likeNote(notes[3].id);
+                  }}/>}
+                  <p className="text-2xl roboto text-white ml-2">
+                    {notes[3].likesCount}
+                  </p>
+                </div>
                 <h2 className="w-full text-left text-white break-words">
                   {t('title')}: "{notes[3].title}"
                 </h2>
@@ -195,6 +296,19 @@ export default function Notes() {
                 <h2 className="w-full text-center text-white break-words">
                   {t('title')}: "{note.title}"
                 </h2>
+                <div className="flex w-full">
+                  {note.isLiked && (
+                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                      await unlikeNote(note.id);
+                    }} />
+                  )}
+                  {!note.isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
+                    await likeNote(note.id);
+                  }}/>}
+                  <p className="text-2xl roboto text-white ml-2">
+                    {note.likesCount}
+                  </p>
+                </div>
                 <MarkdownComponent
                   className={markdownStyling}
                   value={note.content}
@@ -231,7 +345,7 @@ export default function Notes() {
       <div className="flex flex-col items-center gap-4 mb-3">
         {notes && notes.length < totalNotes && (
           <Button type="default" onClick={handleFetchMoreNotes}>
-            {t('moreNotes')}
+            {t('loadMore')}
           </Button>
         )}
       </div>

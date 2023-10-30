@@ -87,4 +87,6 @@ export interface Note {
   };
   category: string;
   createdAt: string;
+  likesCount: number;
+  isLiked: boolean;
 }

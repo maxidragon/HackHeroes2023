@@ -26,7 +26,31 @@ export class NotesController {
     @Query('skip') skip: number,
     @Query('take') take: number,
   ) {
-    return await this.notesService.getPublicNotes(category, search, skip, take);
+    return await this.notesService.getPublicNotes(
+      category,
+      search,
+      0,
+      skip,
+      take,
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('public/auth')
+  async getPublicNotesAsLoggedUser(
+    @GetUser() user: JwtAuthDto,
+    @Query('category') category: string,
+    @Query('search') search: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
+  ) {
+    return await this.notesService.getPublicNotes(
+      category,
+      search,
+      user.userId,
+      skip,
+      take,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -63,6 +87,17 @@ export class NotesController {
       skip,
       take,
     );
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':id/like')
+  async likeNote(@GetUser() user: JwtAuthDto, @Param('id') id: number) {
+    return await this.notesService.likeNote(id, user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id/unlike')
+  async unlikeNote(@GetUser() user: JwtAuthDto, @Param('id') id: number) {
+    return await this.notesService.unlikeNote(id, user.userId);
   }
 
   @UseGuards(AuthGuard('jwt'))

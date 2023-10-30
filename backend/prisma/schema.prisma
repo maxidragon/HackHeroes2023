@@ -33,6 +33,7 @@ model User {
   PasswordResetRequest PasswordResetRequest?
   FlashCardSet         FlashCardSet[]
   Note                 Note[]
+  NoteLike             NoteLike[]
 }
 
 model RestURL {
@@ -58,16 +59,16 @@ model PasswordResetRequest {
 }
 
 model FlashCardSet {
-  id          Int                @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   title       String
   description String?
   forkedFrom  String?
   cards       FlashCard[]
-  user        User?              @relation(fields: [userId], references: [id])
+  user        User?       @relation(fields: [userId], references: [id])
   userId      Int?
   publicity   Publicity
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model FlashCard {
@@ -81,18 +82,28 @@ model FlashCard {
 }
 
 model Note {
-  id         Int           @id @default(autoincrement())
-  title      String
-  content    String        @db.Text
-  user       User?         @relation(fields: [userId], references: [id])
-  userId     Int?
-  category   NoteCategory
-  publicity  Publicity     @default(PRIVATE)
-  isMd       Boolean       @default(false)
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
+  id        Int          @id @default(autoincrement())
+  title     String
+  content   String       @db.Text
+  user      User?        @relation(fields: [userId], references: [id])
+  userId    Int?
+  category  NoteCategory
+  publicity Publicity    @default(PRIVATE)
+  isMd      Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  NoteLike  NoteLike[]
 }
 
+model NoteLike {
+  id     Int  @id @default(autoincrement())
+  noteId Int
+  userId Int
+  note   Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([noteId, userId])
+}
 
 enum Publicity {
   PUBLIC
