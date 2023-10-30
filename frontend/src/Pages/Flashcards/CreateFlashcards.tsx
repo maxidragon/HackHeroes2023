@@ -60,7 +60,7 @@ export default function CreateFlashcards() {
     });
 
     if (titleRef.current?.value.length === 0) {
-      toast.error(t('flashCardsTitleEmpty'));
+      toast.error(t("flashCardsTitleEmpty"));
     }
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set`, {
@@ -78,31 +78,31 @@ export default function CreateFlashcards() {
     });
 
     if (!response.ok) {
-      toast.error(t('somethingWentWrong'));
+      toast.error(t("somethingWentWrong"));
       return;
     }
-    toast.success(t('flashCardsCreated'));
+    toast.success(t("flashCardsCreated"));
   };
 
   return (
     <div className="py-10 flex flex-col items-center gap-8 w-[80%] mx-auto max-w-[1300px]">
       <div className="flex justify-between items-center w-full sticky top-3 p-4 bg-violet-950 rounded-2xl z-20">
-        <h2 className="text-3xl">{t('createNewFlashCardSet')}</h2>
-        <Button type="default" onClick={createSet}>{t('createBtn')}</Button>
+        <h2 className="text-3xl">{t("createNewFlashCardSet")}</h2>
+        <Button type="default" onClick={createSet}>{t("createBtn")}</Button>
       </div>
       <div className="w-full flex gap-4">
-        <Input containerClassName="w-full" className="sm:w-full" placeholder={t('title')} ref={titleRef} type="text" />
+        <Input containerClassName="w-full" className="sm:w-full" placeholder={t("title")} ref={titleRef} type="text" />
         <Select ref={publicityRef} defaultValue={"PRIVATE"}>
-          <option value="PRIVATE">{t('private')}</option>
-          <option value="PUBLIC">{t('public')}</option>
-          <option value="CLASS">{t('class')}</option>
+          <option value="PRIVATE">{t("private")}</option>
+          <option value="PUBLIC">{t("public")}</option>
+          <option value="CLASS">{t("class")}</option>
         </Select>
       </div>
       <div className="w-full flex flex-col gap-4">
-        <label htmlFor="flashcards-desc" className="text-white text-xl">{t('description')}</label>
+        <label htmlFor="flashcards-desc" className="text-white text-xl">{t("description")}</label>
         <textarea
           ref={descriptionRef}
-          placeholder={t('flashCardsDescriptionPlaceHolder')}
+          placeholder={t("flashCardsDescriptionPlaceHolder")}
           id="flashcards-desc"
           className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
         >
@@ -112,15 +112,15 @@ export default function CreateFlashcards() {
         return (
           <div key={index} className="w-full p-5 flex flex-col gap-4 border-4 border-violet-900 rounded-lg">
             <p className="text-white">Flashcard nr. {index + 1}</p>
-            <Input className="sm:w-full" id={`concept-${index}`} placeholder={t('concept')} />
-            <Input className="sm:w-full" id={`definition-${index}`} placeholder={t('definition')} />
+            <Input className="sm:w-full" id={`concept-${index}`} placeholder={t("concept")} />
+            <Input className="sm:w-full" id={`definition-${index}`} placeholder={t("definition")} />
           </div>
         );
       })}
       <div className="flex gap-4 w-full justify-center">
         {flashcards.length > 1 ?
-          <Button type="alt" className="w-fit" onClick={removeLastFlashcard}>{t('delete')}</Button> : ""}
-        <Button type="alt" className="w-fit" onClick={addFlashcard}>{t('add')}</Button>
+          <Button type="alt" className="w-fit" onClick={removeLastFlashcard}>{t("delete")}</Button> : ""}
+        <Button type="alt" className="w-fit" onClick={addFlashcard}>{t("add")}</Button>
       </div>
 
       <motion.div

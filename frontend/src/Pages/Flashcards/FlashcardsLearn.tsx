@@ -4,8 +4,6 @@ import getFlashcardSet from "../../lib/flashcards/getFlashcardSet.ts";
 import { useEffect, useState } from "react";
 import Button from "../../Components/Button.tsx";
 import { t } from "i18next";
-// import { useAtom } from "jotai";
-// import { atomWithStorage } from "jotai/utils";
 
 interface flashcard {
   id: number,
@@ -70,17 +68,6 @@ export default function FlashcardsLearn() {
       getFlashcardSet(id).then(({ flashCards }) => {
         setFlashCards(flashCards);
       });
-
-      /*
-    if (!progress.filter(singleSet => singleSet.id === parseInt(id)).length) {
-      setProgress((prevState: progressSet[]) => {
-        return [...prevState.filter(state => state.id !== 0), {
-          id,
-          correctAnswers: [],
-          wrongAnswers: []
-        }];
-      });
-    } */
     }
   }, [id]);
 
