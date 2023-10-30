@@ -59,33 +59,36 @@ export default function Flashcards() {
 
   return (
     <div className="flex w-[80%] mx-auto max-w-[1300px] flex-col items-center gap-5 py-6">
-      <Link to="/flashcards/create" className="py-4 hover:text-purple-500 transition text-xl">{t('createNewFlashCardSet')}</Link>
+      <Link to="/flashcards/create"
+            className="py-4 hover:text-violet-600 transition text-xl">{t("createNewFlashCardSet")}</Link>
       <div className="w-full py-6">
-        <h2 className="py-4 text-2xl">{t('personalSets')}</h2>
-        {myFlashcards.length ? "" : <p className="text-2xl text-red-400 py-4">{t('notFlashCards')}</p>}
-        <div className="grid grid-cols-4 gap-4 w-full">
+        <h2 className="py-4 text-2xl">{t("personalSets")}</h2>
+        {myFlashcards.length ? "" : <p className="text-2xl text-red-400 py-4">{t("notFlashCards")}</p>}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
           {myFlashcards.map((flashcard: flashcard) => {
+
+            console.log(flashcard);
             return (
-              <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg"
-                key={flashcard.id}
-                to={`/flashcards/details/${flashcard.id}`}>
-                <h3>{flashcard.title}</h3>
+              <Link className="shadow-lg px-3 py-6 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
+                    key={flashcard.id}
+                    to={`/flashcards/details/${flashcard.id}`}>
+                <h3 className="text-xl">{flashcard.title}</h3>
               </Link>
             );
           })}
         </div>
       </div>
       <div className="w-full py-6">
-        <h2 className="py-4 text-2xl">{t('classSets')}</h2>
+        <h2 className="py-4 text-2xl">{t("classSets")}</h2>
         {classFlashcards.length ? "" :
-          <p className="text-xl text-red-400 py-4">{t('notFlashCards')}</p>}
-        <div className="grid grid-cols-4 gap-4 w-full">
+          <p className="text-xl text-red-400 py-4">{t("notFlashCards")}</p>}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
           {classFlashcards.map((flashcard: flashcard) => {
             return (
-              <Link className="px-4 py-2 text-white bg-violet-950 border-purple-300 border-2 rounded-lg"
-                key={flashcard.id}
-                to={`/flashcards/details/${flashcard.id}`}>
-                <h3>{flashcard.title}</h3>
+              <Link className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
+                    key={flashcard.id}
+                    to={`/flashcards/details/${flashcard.id}`}>
+                <h3 className="text-xl">{flashcard.title}</h3>
               </Link>
             );
           })}

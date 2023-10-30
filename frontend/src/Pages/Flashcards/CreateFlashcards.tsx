@@ -94,8 +94,9 @@ export default function CreateFlashcards() {
 
   return (
     <div className="py-10 flex flex-col items-center gap-8 w-[80%] mx-auto max-w-[1300px]">
-      <div className="flex justify-between items-center w-full sticky top-3 p-4 bg-violet-950 rounded-2xl z-20">
-        <h2 className="text-3xl">{t("createNewFlashCardSet")}</h2>
+      <div
+        className="flex flex-col sm:gap-0 gap-6 sm:flex-row justify-between items-center w-full shadow-2xl sticky top-3 py-4 px-5 bg-blue-900 rounded-2xl z-20">
+        <h2 className="text-xl font-bold sm:text-3xl">{t("createNewFlashCardSet")}</h2>
         <Button type="default" onClick={createSet}>{t("createBtn")}</Button>
       </div>
       <div className="w-full flex gap-4">
@@ -118,8 +119,9 @@ export default function CreateFlashcards() {
       </div>
       {flashcards.map((_flashcard: flashcard, index) => {
         return (
-          <div key={index} className="w-full p-5 flex flex-col gap-4 border-4 border-violet-900 rounded-lg">
-            <p className="text-white">Flashcard nr. {index + 1}</p>
+          <div key={index}
+               className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
+            <p className="text-white text-lg">Flashcard nr. {index + 1}</p>
             <Input className="sm:w-full" id={`concept-${index}`} placeholder={t("concept")} />
             <Input className="sm:w-full" id={`definition-${index}`} placeholder={t("definition")} />
           </div>
@@ -127,8 +129,8 @@ export default function CreateFlashcards() {
       })}
       <div className="flex gap-4 w-full justify-center">
         {flashcards.length > 1 ?
-          <Button type="alt" className="w-fit" onClick={removeLastFlashcard}>{t("delete")}</Button> : ""}
-        <Button type="alt" className="w-fit" onClick={addFlashcard}>{t("add")}</Button>
+          <Button type="default" width="w-full" onClick={removeLastFlashcard}>{t("delete")}</Button> : ""}
+        <Button type="default" width="w-full" onClick={addFlashcard}>{t("add")}</Button>
       </div>
 
       <motion.div
