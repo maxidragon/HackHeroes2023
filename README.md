@@ -8,7 +8,7 @@ EduSphere is an application created for the HackHeroes 2023 competition. It is d
 - [Jakub Grzybek](https://github.com/kubaplayer05)
 
 
-# Language and tools
+# Languages and frameworks
 
 ## Frontend
 - React
