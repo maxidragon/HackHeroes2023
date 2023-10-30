@@ -5,6 +5,9 @@ import { useEffect, useReducer, useState } from "react";
 import Button from "../../Components/Button.tsx";
 import useFlashcardProgress from "../../lib/flashcards/useFlashcardProgress.ts";
 import { t } from "i18next";
+import { LuMousePointerClick } from "react-icons/lu";
+import { FaCheck } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa6";
 
 interface flashcard {
   id: number,
@@ -164,21 +167,24 @@ export default function FlashcardsLearn() {
   }, [id]);
 
   return (
-    <div className="mx-auto w-[80%] max-w-[1300px] text-white">
+    <div className="mx-auto sm:w-[80%] w-[90%] max-w-[1300px] text-white">
 
       {learningSet.flashcardsLeft.length > 0 &&
         <div className="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2">
-          <div className="min-w-[300px] bg-violet-950 p-6 rounded-2xl cursor-pointer" onClick={changeFlashCardSide}>
-            {side ? <p className="text-center text-2xl">{learningSet.flashcardsLeft[0].answer}</p> :
-              <p className="text-center text-2xl">{learningSet.flashcardsLeft[0].question}</p>}
+          <div
+            className="min-w-[400px] sm:min-w-[300px] min-h-[200px] sm:min-h-[400px] bg-violet-900 p-6 rounded-2xl shadow-2xl cursor-pointer flex justify-center items-center"
+            onClick={changeFlashCardSide}>
+            <LuMousePointerClick className="absolute top-5 right-5 sm:text-2xl text-xl" />
+            {side ? <p className="text-center text-2xl sm:text-3xl">{learningSet.flashcardsLeft[0].answer}</p> :
+              <p className="text-center text-2xl sm:text-3xl">{learningSet.flashcardsLeft[0].question}</p>}
           </div>
-          <div className="flex gap-4 mt-10">
-            <Button onClick={() => {
+          <div className="flex flex-col-reverse items-center sm:flex-row gap-4 mt-10">
+            <Button className="sm:py-4 py-2" width="w-full sm:w-96" onClick={() => {
               learningSetDispatch({ type: "WRONG" });
-            }} type={"default"}>{t("iDoNotKnow")}</Button>
-            <Button onClick={() => {
+            }} type={"default"}><FaXmark /></Button>
+            <Button className="sm:py-4 py-2" width="w-full sm:w-96" onClick={() => {
               learningSetDispatch({ type: "CORRECT" });
-            }} type={"default"}>{t("iKnow")}</Button>
+            }} type={"default"}><FaCheck /></Button>
           </div>
         </div>}
 
