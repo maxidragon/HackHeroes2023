@@ -6,6 +6,7 @@ import { useState } from "react";
 import Select from "../../Components/Select.tsx";
 import { t } from "i18next";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface flashcard {
   concept: string,
@@ -15,6 +16,7 @@ interface flashcard {
 export default function CreateFlashcards() {
 
   const isPresent = useIsPresent();
+  const navigate = useNavigate();
 
   const [flashcards, setFlashcards] = useState([
     {
@@ -52,7 +54,6 @@ export default function CreateFlashcards() {
       const concept = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
       const definition = (document.querySelector(`#definition-${index}`) as HTMLInputElement).value || "";
 
-
       flashcardsArray.push({
         concept,
         definition
@@ -60,7 +61,7 @@ export default function CreateFlashcards() {
     });
 
     if (titleRef.current?.value.length === 0) {
-      toast.error(t("flashCardsTitleEmpty"));
+      return toast.error(t("flashCardsTitleEmpty"));
     }
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set`, {
@@ -81,7 +82,14 @@ export default function CreateFlashcards() {
       toast.error(t("somethingWentWrong"));
       return;
     }
+
     toast.success(t("flashCardsCreated"));
+
+    const { id } = await response.json();
+
+    setTimeout(() => {
+      return navigate(`/flashcards/details/${id}`);
+    }, 750);
   };
 
   return (
