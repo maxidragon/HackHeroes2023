@@ -9,14 +9,18 @@ interface flashcard {
 
 interface progressSet {
   id: number,
-  actualIndex: number,
+  allFlashcards: flashcard[],
   correctAnswers: flashcard[],
   wrongAnswers: flashcard[],
   flashcardsLeft: flashcard[]
 }
 
-const progress = atomWithStorage<progressSet[]>("progress", []);
+const getInitialValue = () => {
+  const value = localStorage.getItem("progress");
+  return value ? JSON.parse(value) : [];
+};
 
+const progress = atomWithStorage<progressSet[] | never[]>("progress", getInitialValue());
 
 const useFlashcardProgress = () => {
 
@@ -24,7 +28,8 @@ const useFlashcardProgress = () => {
 
   // get progress to single flashcards set
   const getSingleSet = (id: number) => {
-    return progressSets.filter(flashcardSet => flashcardSet.id === id);
+    console.log(progressSets);
+    return progressSets.filter(flashcardSet => flashcardSet.id == id)[0];
   };
 
   const updateSet = (updatedSet: progressSet) => {
@@ -33,7 +38,7 @@ const useFlashcardProgress = () => {
 
     setProgressSets(prevState => {
 
-      const otherSets = prevState.filter(flashcardSet => flashcardSet.id !== id);
+      const otherSets = prevState.filter(flashcardSet => flashcardSet.id != id);
       return [...otherSets, updatedSet];
     });
   };

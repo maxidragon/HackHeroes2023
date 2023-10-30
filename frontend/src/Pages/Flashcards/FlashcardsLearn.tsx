@@ -1,8 +1,9 @@
 import { motion, useIsPresent } from "framer-motion";
 import { useParams } from "react-router-dom";
 import getFlashcardSet from "../../lib/flashcards/getFlashcardSet.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Button from "../../Components/Button.tsx";
+import useFlashcardProgress from "../../lib/flashcards/useFlashcardProgress.ts";
 import { t } from "i18next";
 
 interface flashcard {
@@ -11,28 +12,118 @@ interface flashcard {
   answer: string,
 }
 
-/* interface progressSet {
+interface progressSet {
   id: number,
-  actualIndex: number,
+  allFlashcards: flashcard[],
   correctAnswers: flashcard[],
-  wrongAnswers: flashcard[]
-} */
+  wrongAnswers: flashcard[],
+  flashcardsLeft: flashcard[]
+}
 
-// const learnProgress = atomWithStorage<progressSet[]>("progress", []);
+interface action {
+  type: string,
+  payload?: any
+}
 
 export default function FlashcardsLearn() {
 
   const isPresent = useIsPresent();
 
-  // const [progress, setProgress] = useAtom(learnProgress);
-
-  const [flashCards, setFlashCards] = useState<flashcard[]>([]);
-  const [correctAnswers, setCorrectAnswers] = useState<flashcard[]>([]);
-  const [wrongAnswers, setWrongAnswers] = useState<flashcard[]>([]);
-  const [actualIndex, setActualIndex] = useState(0);
-  const [side, setSide] = useState(0);
-
+  const { getSingleSet, updateSet } = useFlashcardProgress();
   const { id } = useParams();
+
+  const learnReducer = (state: progressSet, action: action) => {
+
+    let updatedSet;
+    let updatedLeft = [];
+
+    switch (action.type) {
+      case "CORRECT":
+        const updatedCorrectAnswers = [...state.correctAnswers, state.flashcardsLeft[0]];
+        // updatedLeft = state.flashcardsLeft.filter((card, index) => index !== 0);
+
+        for (let i = 1; i < state.flashcardsLeft.length; i++) {
+          updatedLeft.push(state.flashcardsLeft[i]);
+        }
+
+        updatedSet = {
+          ...state,
+          flashcardsLeft: updatedLeft,
+          correctAnswers: updatedCorrectAnswers
+        };
+
+        updateSet(updatedSet);
+
+        return updatedSet;
+      case "WRONG":
+        const updatedWrongAnswers = [...state.wrongAnswers, state.flashcardsLeft[0]];
+
+        for (let i = 1; i < state.flashcardsLeft.length; i++) {
+          updatedLeft.push(state.flashcardsLeft[i]);
+        }
+
+        updatedSet = {
+          ...state,
+          flashcardsLeft: updatedLeft,
+          wrongAnswers: updatedWrongAnswers
+        };
+
+        updateSet(updatedSet);
+
+        return updatedSet;
+      case "LOAD_PROGRESS":
+        return action.payload;
+      case "UPDATE_ALL_FLASHCARDS":
+
+        return {
+          ...state,
+          allFlashcards: [...action.payload.flashcards]
+        };
+      case "UPDATE":
+
+        const { flashcards, id } = action.payload;
+
+        return {
+          id,
+          allFlashcards: [...flashcards],
+          flashcardsLeft: [...flashcards],
+          correctAnswers: [],
+          wrongAnswers: []
+        };
+      case "NEXT_ROUND":
+
+        if (state.wrongAnswers.length === 0) {
+          return {
+            ...state,
+            wrongAnswers: [],
+            correctAnswers: [],
+            flashcardsLeft: [...state.allFlashcards]
+          };
+        }
+
+        return {
+          ...state,
+          wrongAnswers: [],
+          flashcardsLeft: [...state.wrongAnswers]
+        };
+
+      default:
+        return state;
+    }
+  };
+
+  const learnInitializer = () => {
+    return {
+      id: -1,
+      flashcardsLeft: [],
+      correctAnswers: [],
+      wrongAnswers: []
+    };
+  };
+
+  const [learningSet, learningSetDispatch] = useReducer(learnReducer, null, learnInitializer);
+
+  const [side, setSide] = useState(0);
 
   const changeFlashCardSide = () => {
     setSide(prevState => {
@@ -40,33 +131,34 @@ export default function FlashcardsLearn() {
     });
   };
 
-  const correct = () => {
-
-    setCorrectAnswers(prevState => {
-      return [...prevState, flashCards[actualIndex]];
-    });
-    setActualIndex(prevState => prevState + 1);
-  };
-
-  const wrong = () => {
-    setWrongAnswers(prevState => {
-      return [...prevState, flashCards[actualIndex]];
-    });
-    setActualIndex(prevState => prevState + 1);
-  };
-
-  const playAgain = () => {
-    setActualIndex(0);
-    setSide(0);
-    setFlashCards([...wrongAnswers]);
-    setWrongAnswers([]);
-  };
-
   useEffect(() => {
 
     if (id) {
+
+      const savedProgressSet = getSingleSet(parseInt(id));
+      console.log(savedProgressSet);
+
+      if (savedProgressSet) {
+        learningSetDispatch({ type: "LOAD_PROGRESS", payload: savedProgressSet });
+      }
+
       getFlashcardSet(id).then(({ flashCards }) => {
-        setFlashCards(flashCards);
+
+        if (savedProgressSet) {
+          learningSetDispatch({
+            type: "UPDATE_ALL_FLASHCARDS",
+            payload: {
+              flashcards: flashCards
+            }
+          });
+        } else {
+          learningSetDispatch({
+            type: "UPDATE", payload: {
+              id,
+              flashcards: flashCards
+            }
+          });
+        }
       });
     }
   }, [id]);
@@ -74,34 +166,41 @@ export default function FlashcardsLearn() {
   return (
     <div className="mx-auto w-[80%] max-w-[1300px] text-white">
 
-      {flashCards.length && actualIndex < flashCards.length &&
+      {learningSet.flashcardsLeft.length > 0 &&
         <div className="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2">
           <div className="min-w-[300px] bg-violet-950 p-6 rounded-2xl cursor-pointer" onClick={changeFlashCardSide}>
-            {side ? <p className="text-center text-2xl">{flashCards[actualIndex].answer}</p> :
-              <p className="text-center text-2xl">{flashCards[actualIndex].question}</p>}
+            {side ? <p className="text-center text-2xl">{learningSet.flashcardsLeft[0].answer}</p> :
+              <p className="text-center text-2xl">{learningSet.flashcardsLeft[0].question}</p>}
           </div>
           <div className="flex gap-4 mt-10">
-            <Button onClick={wrong} type={"default"}>{t('iDoNotKnow')}</Button>
-            <Button onClick={correct} type={"default"}>{t('iKnow')}</Button>
+            <Button onClick={() => {
+              learningSetDispatch({ type: "WRONG" });
+            }} type={"default"}>{t("iDoNotKnow")}</Button>
+            <Button onClick={() => {
+              learningSetDispatch({ type: "CORRECT" });
+            }} type={"default"}>{t("iKnow")}</Button>
           </div>
         </div>}
 
-      {flashCards.length && flashCards.length <= actualIndex && <div className="py-8 flex flex-col gap-8">
+      {learningSet.flashcardsLeft.length === 0 && <div className="py-8 flex flex-col gap-8">
         <div className="w-full">
           <div className="flex justify-between items-center">
-            <h3 className="text-2xl py-4">{t('youKnowThis')}:</h3>
-            <Button onClick={playAgain} width="w-42" className="text-lg py-1.5 px-3" type="default">{t('nextRound')}</Button>
+            <h3 className="text-2xl py-4">{t("youKnowThis")}:</h3>
+            <Button onClick={() => {
+              learningSetDispatch({ type: "NEXT_ROUND" });
+            }} width="w-42" className="text-lg py-1.5 px-3"
+                    type="default">{t("nextRound")}</Button>
           </div>
           <div className="flex flex-col gap-2">
-            {correctAnswers.map(flashcard => {
+            {learningSet.correctAnswers.map((flashcard: flashcard) => {
               return <p className="text-green-500" key={flashcard.id}>{flashcard.question} - {flashcard.answer}</p>;
             })}
           </div>
         </div>
         <div>
-          <h3 className="text-2xl py-4">{t('youShouldRepeatThis')}:</h3>
+          <h3 className="text-2xl py-4">{t("youShouldRepeatThis")}:</h3>
           <div className="flex flex-col gap-2">
-            {wrongAnswers.map(flashcard => {
+            {learningSet.wrongAnswers.map((flashcard: flashcard) => {
               return <p className="text-red-500" key={flashcard.id}>{flashcard.question} - {flashcard.answer}</p>;
             })}
           </div>
