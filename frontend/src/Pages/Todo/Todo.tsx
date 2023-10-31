@@ -148,10 +148,13 @@ export default function Todo() {
       </div>
       <div className="flex flex-wrap justify-center gap-4 mt-5 lg:w-4/5 w-full px-4">
         <Suspense fallback={<Loader width="200" />}>
-          {todos &&
+          {todos && todos.length ? (
             todos.map((todo: TodoInterface) => (
-              <TodoCard key={todo.id} todo={todo} fetchTodos={getMyTodos} />
-            ))}
+              <TodoCard key={todo.id} todo={todo} fetchTodos={() => getMyTodos(0, 10, loadOnlyDone)} />
+            ))
+          ) : (
+            <p className="text-4xl text-white roboto text-center">No todos found!</p>
+          )}
         </Suspense>
         {isLoading && <Loader width="200" />}
       </div>
