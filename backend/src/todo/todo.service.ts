@@ -21,6 +21,10 @@ export class TodoService {
       Object.assign(whereParams, {
         done: isDone,
       });
+    } else {
+      Object.assign(whereParams, {
+        done: false,
+      });
     }
     if (search) {
       Object.assign(whereParams, {
