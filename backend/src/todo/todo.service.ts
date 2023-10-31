@@ -7,49 +7,39 @@ import { UpdateTodoDto } from './dto/updateTodo.dto';
 export class TodoService {
   constructor(private readonly prisma: DbService) {}
 
-  async getAllUserTodos(userId: number, search: string, skip = 0, take = 10) {
-    if (!search) {
-      const data = await this.prisma.todo.findMany({
-        where: {
-          userId: userId,
-        },
-        skip: skip ? skip : 0,
-        take: take ? take : 10,
-        orderBy: {
-          updatedAt: 'desc',
-        },
+  async getAllUserTodos(
+    userId: number,
+    search: string,
+    isDone: boolean,
+    skip = 0,
+    take = 10,
+  ) {
+    const whereParams = {
+      userId: userId,
+    };
+    if (isDone) {
+      Object.assign(whereParams, {
+        done: isDone,
       });
-      const count = await this.prisma.todo.count({
-        where: {
-          userId: userId,
-        },
-      });
-
-      return {
-        todos: data,
-        count: count,
-      };
     }
-    const data = await this.prisma.todo.findMany({
-      where: {
-        userId: userId,
+    if (search) {
+      Object.assign(whereParams, {
         text: {
           contains: search,
         },
-      },
+      });
+    }
+    const data = await this.prisma.todo.findMany({
+      where: whereParams,
       skip: skip ? skip : 0,
       take: take ? take : 10,
       orderBy: {
         updatedAt: 'desc',
       },
     });
+
     const count = await this.prisma.todo.count({
-      where: {
-        userId: userId,
-        text: {
-          contains: search,
-        },
-      },
+      where: whereParams,
     });
 
     return {

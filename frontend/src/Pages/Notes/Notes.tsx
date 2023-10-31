@@ -124,6 +124,8 @@ export default function Notes() {
           return note;
         })
       );
+    } else if (res.status === 401) {
+      toast.error(t('loginToLike'));
     } else {
       toast.error(t('somethingWentWrong'));
     }
@@ -184,7 +186,7 @@ export default function Notes() {
                   )}
                   {!notes[0].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
                     await likeNote(notes[0].id);
-                  }}/>}
+                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[0].likesCount}
                   </p>
@@ -210,7 +212,7 @@ export default function Notes() {
                   )}
                   {!notes[1].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
                     await likeNote(notes[1].id);
-                  }}/>}
+                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[1].likesCount}
                   </p>
@@ -235,7 +237,7 @@ export default function Notes() {
                   )}
                   {!notes[2].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
                     await likeNote(notes[2].id);
-                  }}/>}
+                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[2].likesCount}
                   </p>
@@ -260,7 +262,7 @@ export default function Notes() {
                   )}
                   {!notes[3].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
                     await likeNote(notes[3].id);
-                  }}/>}
+                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[3].likesCount}
                   </p>
@@ -304,7 +306,7 @@ export default function Notes() {
                   )}
                   {!note.isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
                     await likeNote(note.id);
-                  }}/>}
+                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {note.likesCount}
                   </p>

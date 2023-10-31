@@ -193,8 +193,12 @@ export class VulcanService {
         time: item.timeSlot.display,
         position: item.timeSlot.position,
         room: item.room,
-        teacher: item.teacherPrimary.displayName,
-        subject: item.subject.name,
+        teacher: item.teacherPrimary ? item.teacherPrimary.displayName : null,
+        subject: item.subject
+          ? item.subject.name
+          : item.event
+          ? item.event
+          : null,
         group: {
           shortcut: item.distribution?.shortcut,
           name: item.distribution?.name,

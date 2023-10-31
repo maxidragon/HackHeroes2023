@@ -181,5 +181,8 @@
   "content": "Content",
   "searchPlaceholder": "Search",
   "average": "Average",
-  "flashcardDeleted": "Flashcard set successfully deleted"
+  "flashcardDeleted": "Flashcard set successfully deleted",
+  "loginToLike": "You need to login to like this note!",
+  "loadUndone": "Load undone todos",  
+  "loadDone": "Load done todos"
 }

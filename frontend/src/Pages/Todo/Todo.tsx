@@ -18,12 +18,13 @@ export default function Todo() {
   const [showMoreTodosButton, setShowMoreTodosButton] = useState<boolean>(true);
   const [todos, setTodos] = useState<TodoInterface[]>();
   const [search, setSearch] = useState<string>("");
+  const [loadOnlyDone, setLoadOnlyDone] = useState<boolean>(false);
   const [openCreate, setOpenCreate] = useState<boolean>(false);
 
-  const getMyTodos = useCallback(async (skip = 0, take = 10, searchParam?: string) => {
+  const getMyTodos = useCallback(async (skip = 0, take = 10, isDone = false, searchParam?: string) => {
     setIsLoading(true);
-    let url = `${import.meta.env.VITE_API_URL}/todo?skip=${skip}&take=${take}`;
-    console.log(searchParam);
+    setLoadOnlyDone(isDone);
+    let url = `${import.meta.env.VITE_API_URL}/todo?skip=${skip}&take=${take}&done=${isDone}`;
     if (searchParam && searchParam !== "") {
       url += `&search=${searchParam}`;
     }
@@ -86,7 +87,7 @@ export default function Todo() {
 
   const handleSearch = async (event: any) => {
     setSearch(event.target.value);
-    await getMyTodos(0, 10, event.target.value);
+    await getMyTodos(0, 10, loadOnlyDone, event.target.value);
   };
   return (
     <>
@@ -102,6 +103,10 @@ export default function Todo() {
                   value={search}
                   className="w-96"
                 />
+              </div>
+              <div className="flex flex-row flex-wrap gap-4 justify-center">
+                <Button type={loadOnlyDone ? "default" : "alt"} onClick={() => getMyTodos(0, 10, false)}>{t('loadUndone')}</Button>
+                <Button type={loadOnlyDone ? "alt" : "default"} onClick={() => getMyTodos(0, 10, true)}>{t('loadDone')}</Button>
               </div>
               <div className="flex flex-row flex-wrap justify-center gap-4">
                 <Button type="default" onClick={() => setOpenCreate(!openCreate)} width="5"><AiFillPlusCircle /></Button>

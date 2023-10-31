@@ -25,12 +25,14 @@ export class TodoController {
   async getAllUserTodos(
     @GetUser() user: JwtAuthDto,
     @Query('search') search: string,
+    @Query('done') done: boolean,
     @Query('skip') skip: number,
     @Query('take') take: number,
   ) {
     return await this.todoService.getAllUserTodos(
       user.userId,
       search,
+      done,
       skip,
       take,
     );

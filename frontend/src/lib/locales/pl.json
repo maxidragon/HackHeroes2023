@@ -181,5 +181,9 @@
   "content": "Treść",
   "searchPlaceholder": "Szukaj",
   "average": "Średnia",
-  "flashcardDeleted": "Zestaw fiszek został pomyślnie usunięty"
+  "flashcardDeleted": "Zestaw fiszek został pomyślnie usunięty",
+  "loginToLike": "Zaloguj się, aby polubić",
+  "loadUndone": "Załaduj zadania do zrobienia",  
+  "loadDone": "Załaduj zrobione zadania"
+
 }
