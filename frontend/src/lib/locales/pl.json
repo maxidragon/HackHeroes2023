@@ -203,6 +203,7 @@
   "loadUndone": "Załaduj zadania do zrobienia",  
   "loadDone": "Załaduj zrobione zadania",
   "login": "Zaloguj się",
-  "register": "Zarejestruj się"
-
+  "register": "Zarejestruj się",
+  "flashcardEdit": "Edytuj swój zestaw",
+  "flashcardEdited": "Zestaw fiszek został pomyślnie zedytowany"
 }

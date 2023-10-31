@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import Button from "../../Components/Button.tsx";
 import getFlashcardSet from "../../lib/flashcards/getFlashcardSet.ts";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { pl, enUS } from "date-fns/locale";
 import { t } from "i18next";
+import i18n from "../../lib/i18n.ts";
 import getUserObject from "../../lib/getUser.ts";
 import toast from "react-hot-toast";
 import { BsFillTrashFill, BsFillPencilFill, BsFillPlayFill } from "react-icons/bs";
@@ -103,7 +105,7 @@ export default function FlashcardsDetails() {
             <Button className="text-lg px-4 py-2 mt-8" width="w-42"
                     type="alt" onClick={deleteSet}><BsFillTrashFill /></Button>}
           {loggedUser.id === user.id &&
-            <Button className="text-lg px-4 py-2 mt-8" width="w-42"
+            <Button isLink={true} to={`/flashcards/edit/${id}`} className="text-lg px-4 py-2 mt-8" width="w-42"
                     type="alt"><BsFillPencilFill /></Button>}
           <Button isLink={true} to={`/flashcards/learn/${id}`} className="text-lg px-4 py-2 mt-8" width="w-42"
                   type="default">{t("startLearning")} <BsFillPlayFill /></Button>
@@ -111,8 +113,14 @@ export default function FlashcardsDetails() {
       </div>
       <p>{t("author")}: <Link to={`/profile/${user.id}`}>{user.username}</Link></p>
       {forkedFrom && <p>{t("forkedFrom")}: <Link to={`/profile/${forkedFrom.id}`}>{forkedFrom.username}</Link></p>}
-      <p>{t("createdAt")}: {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), { addSuffix: true }) || ""}</p>
-      <p>{t("lastModified")}: {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), { addSuffix: true }) || ""}</p>
+      <p>{t("createdAt")}: {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), {
+        addSuffix: true,
+        locale: i18n.language === "pl" ? pl : enUS
+      }) || ""}</p>
+      <p>{t("lastModified")}: {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), {
+        addSuffix: true,
+        locale: i18n.language === "pl" ? pl : enUS
+      }) || ""}</p>
       <p>{t("description")}: {description}</p>
       <p className="text-gray-400">{t("publicity")}: {publicity}</p>
       <div className="flex flex-col gap-4 mt-8">

@@ -81,7 +81,7 @@ export default function Flashcards() {
       <div className="w-full py-6">
         <h2 className="py-4 text-2xl">{t("classSets")}</h2>
         {classFlashcards.length ? "" :
-          <p className="text-xl text-red-400 py-4">{t("notFlashCards")}</p>}
+          <p className="text-2xl text-red-400 py-4">{t("notFlashCards")}</p>}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
           {classFlashcards.map((flashcard: flashcard) => {
             return (

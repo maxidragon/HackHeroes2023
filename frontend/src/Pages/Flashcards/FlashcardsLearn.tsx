@@ -172,6 +172,7 @@ export default function FlashcardsLearn() {
       {learningSet.flashcardsLeft.length > 0 &&
         <div className="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2">
           <div
+            id="card"
             className="min-w-[400px] sm:min-w-[300px] min-h-[200px] sm:min-h-[400px] bg-violet-900 p-6 rounded-2xl shadow-2xl cursor-pointer flex justify-center items-center"
             onClick={changeFlashCardSide}>
             <LuMousePointerClick className="absolute top-5 right-5 sm:text-2xl text-xl" />

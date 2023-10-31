@@ -7,8 +7,10 @@ import Select from "../../Components/Select.tsx";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { FaXmark } from "react-icons/fa6";
 
 interface flashcard {
+  key?: number
   concept: string,
   definition: string
 }
@@ -20,6 +22,7 @@ export default function CreateFlashcards() {
 
   const [flashcards, setFlashcards] = useState([
     {
+      key: Date.now(),
       concept: "",
       definition: ""
     }
@@ -33,16 +36,35 @@ export default function CreateFlashcards() {
   const addFlashcard = () => {
     setFlashcards(prev => {
       return [...prev, {
+        key: Date.now(),
         concept: "",
         definition: ""
       }];
     });
   };
 
-  const removeLastFlashcard = () => {
+  const updateQuestion = (e: any, index: number) => {
+    setFlashcards(prevState => {
+      const updatedArr = [...prevState];
+      updatedArr[index].concept = e.target.value;
+      return updatedArr;
+    });
+  };
 
-    setFlashcards(prev => {
-      return [...prev].slice(0, -1);
+  const updateAnswer = (e: any, index: number) => {
+    setFlashcards(prevState => {
+      const updatedArr = [...prevState];
+      updatedArr[index].definition = e.target.value;
+      return updatedArr;
+    });
+  };
+
+  const removeFlashcardByIndex = (index: number) => {
+    setFlashcards(prevState => {
+      const newFlashcards = [...prevState];
+      newFlashcards.splice(index, 1);
+      console.log(newFlashcards);
+      return newFlashcards;
     });
   };
 
@@ -50,13 +72,11 @@ export default function CreateFlashcards() {
 
     const flashcardsArray: flashcard[] = [];
 
-    flashcards.map((_flashcard, index) => {
-      const concept = (document.querySelector(`#concept-${index}`) as HTMLInputElement).value || "";
-      const definition = (document.querySelector(`#definition-${index}`) as HTMLInputElement).value || "";
+    flashcards.map((_flashcard: flashcard) => {
 
       flashcardsArray.push({
-        concept,
-        definition
+        concept: _flashcard.concept,
+        definition: _flashcard.definition
       });
     });
 
@@ -119,17 +139,25 @@ export default function CreateFlashcards() {
       </div>
       {flashcards.map((_flashcard: flashcard, index) => {
         return (
-          <div key={index}
+          <div key={_flashcard.key}
                className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
-            <p className="text-white text-lg">Flashcard nr. {index + 1}</p>
-            <Input className="sm:w-full" id={`concept-${index}`} placeholder={t("concept")} />
-            <Input className="sm:w-full" id={`definition-${index}`} placeholder={t("definition")} />
+            <div className="flex justify-between items-center">
+              <p className="text-white text-lg">Flashcard nr. {index + 1}</p>
+              {flashcards.length > 1 && <Button type="alt" width="w-42" className="text-lg" onClick={() => {
+                removeFlashcardByIndex(index);
+              }}><FaXmark /></Button>}
+            </div>
+            <Input onChange={(e) => {
+              updateQuestion(e, index);
+            }} className="sm:w-full" value={_flashcard.concept} placeholder={t("concept")} />
+            <Input onChange={(e) => {
+              updateAnswer(e, index);
+            }} className="sm:w-full" value={_flashcard.definition}
+                   placeholder={t("definition")} />
           </div>
         );
       })}
       <div className="flex gap-4 w-full justify-center">
-        {flashcards.length > 1 ?
-          <Button type="default" width="w-full" onClick={removeLastFlashcard}>{t("delete")}</Button> : ""}
         <Button type="default" width="w-full" onClick={addFlashcard}>{t("add")}</Button>
       </div>
 

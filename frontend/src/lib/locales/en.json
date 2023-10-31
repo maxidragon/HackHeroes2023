@@ -200,8 +200,10 @@
   "average": "Average",
   "flashcardDeleted": "Flashcard set successfully deleted",
   "loginToLike": "You need to login to like this note!",
-  "loadUndone": "Load undone todos",  
+  "loadUndone": "Load undone todos",
   "loadDone": "Load done todos",
   "login": "Login",
-  "register": "Register"
+  "register": "Register",
+  "flashcardEdit": "Edit your flashcard set",
+  "flashcardEdited": "Flashcard set successfully edited"
 }

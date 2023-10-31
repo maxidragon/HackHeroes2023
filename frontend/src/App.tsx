@@ -24,6 +24,7 @@ import Exams from "./Pages/ClassRegister/Pages/Exams.tsx";
 import AddNote from "./Pages/Notes/AddNote.tsx";
 import Timetable from "./Pages/ClassRegister/Pages/Timetable.tsx";
 import EditNote from "./Pages/Notes/EditNote.tsx";
+import EditFlashcards from "./Pages/Flashcards/EditFlashcards.tsx";
 
 function App() {
   const element = useRoutes([
@@ -52,6 +53,10 @@ function App() {
           element: <FlashcardsLearn />
         },
         {
+          path: "/flashcards/edit/:id",
+          element: <EditFlashcards />
+        },
+        {
           path: "/notes",
           element: <Notes />
         },
@@ -61,7 +66,7 @@ function App() {
         },
         {
           path: "/notes/edit/:id",
-          element: <EditNote />,
+          element: <EditNote />
         },
         {
           path: "/class-register",
