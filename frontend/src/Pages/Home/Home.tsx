@@ -4,29 +4,33 @@ import Logo from "../../graphics/logo.svg";
 import Button from "../../Components/Button";
 import { TbArrowBigDownFilled } from "react-icons/tb";
 import AnimatedSvgBg from "./Assets/AnimatedSvgBg";
-import { userAtom } from "../../Atoms";
 import { useAtomValue } from "jotai";
+import { userAtom } from "../../Atoms";
+import notes from "./Assets/notes.png";
+import grades from "./Assets/grades.png";
+import todo from "./Assets/todo.png";
+import flashcards from "./Assets/flashcards.png";
 
 export default function Home() {
-  const isPresent = useIsPresent();
   const user = useAtomValue(userAtom);
+  const isPresent = useIsPresent();
 
   return (
     <div className="flex-1 pb-10 flex flex-col items-center">
       <div className="w-full h-screen flex items-center justify-evenly coolBg">
         <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
           <h1 className="text-7xl text-white roboto mb-8 text-center">
-            Edu Sphere
+            EduSphere
           </h1>
           <p className="text-xl text-white roboto">{t("home1")}</p>
           <p className="text-xl text-white roboto">{t("home2")}</p>
           <div className="w-full h-1 rounded-full bg-gray-500" />
           <div className="w-full flex items-center gap-4">
             <Button type="alt" className="mt-4" isLink to="/register">
-              Register
+              {t('register')}
             </Button>
             <Button type="default" className="mt-4" isLink to="/login">
-              Login
+              {t('login')}
             </Button>
           </div>
           <div className="flex items-center justify-center gap-4 text-md text-white ">
@@ -38,7 +42,7 @@ export default function Home() {
       </div>
       <div className="w-full h-32" />
       <div className="w-full h-screen flex items-center justify-evenly coolBg2">
-        <img src={Logo} alt="Edu sphere's logo" className="w-1/4" />
+        <img src={flashcards} className="w-1/2" />
         <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
           <h1 className="text-7xl text-white roboto mb-8 text-center capitalize">
             {t("navFlashCards")}
@@ -82,11 +86,11 @@ export default function Home() {
             <TbArrowBigDownFilled className="animate-bounce" />
           </div>
         </div>
-        <img src={Logo} alt="Edu sphere's logo" className="w-1/4" />
+        <img src={notes} />
       </div>
       <div className="w-full h-32" />
       <div className="w-full h-screen flex items-center justify-evenly relative overflow-y-hidden">
-        <img src={Logo} alt="Edu sphere's logo" className="w-1/4" />
+        <img src={grades} className="w-1/2" />
         <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
           <h1 className="text-6xl text-white roboto mb-8 text-center capitalize">
             {t("navClassRegister")}
@@ -102,7 +106,7 @@ export default function Home() {
             type="default"
             className="!w-full mt-4 text-center"
             isLink
-            to="/class-register"
+            to={user.id ? "/class-register" : "/login"}
           >
             {t("homeToClassRegister")}
           </Button>
@@ -126,49 +130,18 @@ export default function Home() {
             type="default"
             className="!w-full mt-4 text-center"
             isLink
-            to="/todo"
+            to={user.id ? "/todo" : "/login"}
           >
             {t("homeToToDo")}
           </Button>
-          <div className="flex items-center justify-center gap-4 text-md text-white ">
-            <h2 className="text-center">{t("homeScroll")}</h2>
-            <TbArrowBigDownFilled className="animate-bounce" />
-          </div>
         </div>
-        <img src={Logo} alt="Edu sphere's logo" className="w-1/4" />
+        <img src={todo} className="w-1/2" />
         <div className="air air1" />
         <div className="air air2" />
         <div className="air air3" />
         <div className="air air4" />
       </div>
       <div className="w-full h-32" />
-      <div className="w-full h-screen flex items-center justify-evenly relative overflow-y-hidden">
-        <img src={Logo} alt="Edu sphere's logo" className="w-1/4" />
-        <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
-          <h1 className="text-6xl text-white roboto mb-8 text-center capitalize">
-            {t("homeProfileTitle")}
-          </h1>
-          <p className="text-xl text-white roboto text-right">
-            {t("homeProfile1")}
-          </p>
-          <p className="text-xl text-white roboto text-right">
-            {t("homeProfile2")}
-          </p>
-          <div className="w-full h-1 rounded-full bg-white" />
-          <Button
-            type="default"
-            className="!w-full mt-4 text-center"
-            isLink
-            to={user.id ? `/profile/${user.id}` : "/login"}
-          >
-            {t("homeToProfile")}
-          </Button>
-          <div className="flex items-center justify-center gap-4 text-md text-white ">
-            <h2 className="text-center">{t("homeScroll")}</h2>
-            <TbArrowBigDownFilled className="animate-bounce" />
-          </div>
-        </div>
-      </div>
       <p className="text-center text-2xl text-white mb-10">{t("homeEndTitle")}</p>
       <Button type="default" onClick={() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
