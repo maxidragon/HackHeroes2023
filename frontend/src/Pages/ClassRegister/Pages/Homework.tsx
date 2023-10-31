@@ -6,7 +6,7 @@ import { t } from "i18next";
 import { Homework as HomeworkInterface } from "../../../lib/interfaces";
 
 export default function Homework() {
-  const [homework, setHomework] = useState<Array<HomeworkInterface>>();
+  const [homework, setHomework] = useState<Array<HomeworkInterface>>([]);
   const [isFetching, setIsFetching] = useState<boolean>(true);
 
   useEffect(() => {
@@ -16,8 +16,7 @@ export default function Homework() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode >= 400)
-          toast.error(t('noHomework'));
+        if (data.statusCode >= 400) toast.error(t("noHomework"));
         else {
           setHomework(data);
           setIsFetching(false);
@@ -29,12 +28,12 @@ export default function Homework() {
     <Loader width="200" />
   ) : (
     <div className="lg:w-4/5 md:w-full px-8 flex gap-8 flex-wrap justify-center text-white mb-10">
-      {homework ? (
+      {homework?.length > 0 ? (
         homework.map((item: HomeworkInterface) => (
-          <HomeworkCard homework={item} key={item.id}/>
+          <HomeworkCard homework={item} key={item.id} />
         ))
       ) : (
-        <p>{t('noHomework')}</p>
+        <p>{t("noHomework")}</p>
       )}
     </div>
   );

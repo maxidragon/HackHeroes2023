@@ -8,9 +8,8 @@ import MarkdownComponent from "./Components/MarkdownComponent";
 import { userAtom } from "../../Atoms";
 import { useAtomValue } from "jotai";
 import Button from "../../Components/Button";
-import { TbEdit, TbTrash } from "react-icons/tb";
+import { TbEdit, TbHeart, TbHeartFilled, TbTrash } from "react-icons/tb";
 import { Note } from "../../lib/interfaces";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 export default function Notes() {
   const isPresent = useIsPresent();
@@ -33,20 +32,19 @@ export default function Notes() {
     } else if (search) {
       queryString = `?search=${search}`;
     }
-    let url = `${import.meta.env.VITE_API_URL}/notes/${publicity.toLowerCase()}`;
+    let url = `${
+      import.meta.env.VITE_API_URL
+    }/notes/${publicity.toLowerCase()}`;
     if (user.id && publicity === "Public") {
       url += `/auth`;
     }
-    fetch(
-      `${url}${queryString}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    )
+    fetch(`${url}${queryString}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setNotes(data.data);
@@ -54,14 +52,14 @@ export default function Notes() {
         setIsFetching(false);
       })
       .catch((err) => {
-        toast.error(t('errorNotes'));
+        toast.error(t("errorNotes"));
         console.log(err);
         setIsFetching(false);
       });
   }, [category, publicity, search, user.id]);
 
   function deleteNote(id: number) {
-    if (!confirm(t('deleteNoteConfirm'))) return;
+    if (!confirm(t("deleteNoteConfirm"))) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/notes/${id}`, {
       method: "DELETE",
@@ -72,27 +70,44 @@ export default function Notes() {
     })
       .then(() => {
         setNotes((prev) => prev?.filter((note) => note.id !== id));
-        toast.success(t('noteDeleted'));
+        toast.success(t("noteDeleted"));
       })
       .catch((err) => {
-        toast.error(t('errorDeleteNote'));
+        toast.error(t("errorDeleteNote"));
         console.log(err);
       });
   }
 
   const handleFetchMoreNotes = () => {
     setIsFetching(true);
-    fetch(
-      `${import.meta.env.VITE_API_URL
-      }/notes/${publicity.toLowerCase()}?offset=${notes?.length}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    ).then((res) => {
+    let queryString = "";
+    if (category && search) {
+      queryString = `?category=${category}&search=${search}`;
+    } else if (category) {
+      queryString = `?category=${category}`;
+    } else if (search) {
+      queryString = `?search=${search}`;
+    } else if (!category && !search) {
+      queryString = "?";
+    }
+
+    let url = `${
+      import.meta.env.VITE_API_URL
+    }/notes/${publicity.toLowerCase()}`;
+
+    if (user.id && publicity === "Public") {
+      url += `/auth`;
+    }
+
+    url += `${queryString}&skip=${notes?.length}&take=5`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then((res) => {
       if (res.status === 200) {
         res.json().then((data) => {
           setNotes((prev) => [...prev!, ...data.data]);
@@ -100,20 +115,23 @@ export default function Notes() {
           setIsFetching(false);
         });
       } else {
-        toast.error(t('errorNotes'));
+        toast.error(t("errorNotes"));
         setIsFetching(false);
       }
     });
   };
 
   const likeNote = async (id: number) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/notes/${id}/like`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/notes/${id}/like`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
     if (res.status === 201) {
       setNotes((prev) =>
         prev?.map((note) => {
@@ -125,20 +143,23 @@ export default function Notes() {
         })
       );
     } else if (res.status === 401) {
-      toast.error(t('loginToLike'));
+      toast.error(t("loginToLike"));
     } else {
-      toast.error(t('somethingWentWrong'));
+      toast.error(t("somethingWentWrong"));
     }
   };
 
   const unlikeNote = async (id: number) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/notes/${id}/unlike`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/notes/${id}/unlike`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
     if (res.status === 200) {
       setNotes((prev) =>
         prev?.map((note) => {
@@ -150,7 +171,7 @@ export default function Notes() {
         })
       );
     } else {
-      toast.error(t('somethingWentWrong'));
+      toast.error(t("somethingWentWrong"));
     }
   };
 
@@ -179,46 +200,59 @@ export default function Notes() {
                   {notes[0].category}
                 </p>
                 <div className="flex w-full">
-                  {notes[0].isLiked && (
-                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                      await unlikeNote(notes[0].id);
-                    }} />
+                  {notes[0].isLiked ? (
+                    <TbHeartFilled
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await unlikeNote(notes[0].id);
+                      }}
+                    />
+                  ) : (
+                    <TbHeart
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await likeNote(notes[0].id);
+                      }}
+                    />
                   )}
-                  {!notes[0].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                    await likeNote(notes[0].id);
-                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[0].likesCount}
                   </p>
                 </div>
                 <h2 className="w-full text-left text-white break-words">
-                  {t('title')}: "{notes[0].title}"
+                  {t("title")}: "{notes[0].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
                   value={notes[0].content}
                 />
-
               </div>
               <div className="shadow-xl col-span-2 row-start-1 row-end-4 gap-4 flex flex-col border-purple-400 border-4 rounded-xl p-4">
                 <p className="text-2xl roboto text-white">
                   {notes[1].category}
                 </p>
                 <div className="flex w-full">
-                  {notes[1].isLiked && (
-                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                      await unlikeNote(notes[1].id);
-                    }} />
+                  {notes[1].isLiked ? (
+                    <TbHeartFilled
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await unlikeNote(notes[1].id);
+                      }}
+                    />
+                  ) : (
+                    <TbHeart
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await likeNote(notes[1].id);
+                      }}
+                    />
                   )}
-                  {!notes[1].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                    await likeNote(notes[1].id);
-                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[1].likesCount}
                   </p>
                 </div>
                 <h2 className="w-full text-left text-white break-words">
-                  {t('title')}: "{notes[1].title}"
+                  {t("title")}: "{notes[1].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
@@ -230,20 +264,27 @@ export default function Notes() {
                   {notes[2].category}
                 </p>
                 <div className="flex w-full">
-                  {notes[2].isLiked && (
-                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                      await unlikeNote(notes[2].id);
-                    }} />
+                  {notes[2].isLiked ? (
+                    <TbHeartFilled
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await unlikeNote(notes[2].id);
+                      }}
+                    />
+                  ) : (
+                    <TbHeart
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await likeNote(notes[2].id);
+                      }}
+                    />
                   )}
-                  {!notes[2].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                    await likeNote(notes[2].id);
-                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[2].likesCount}
                   </p>
                 </div>
                 <h2 className="w-full text-left text-white break-words">
-                  {t('title')}: "{notes[2].title}"
+                  {t("title")}: "{notes[2].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
@@ -255,20 +296,27 @@ export default function Notes() {
                   {notes[3].category}
                 </p>
                 <div className="flex w-full">
-                  {notes[3].isLiked && (
-                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                      await unlikeNote(notes[3].id);
-                    }} />
+                  {notes[3].isLiked ? (
+                    <TbHeartFilled
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await unlikeNote(notes[3].id);
+                      }}
+                    />
+                  ) : (
+                    <TbHeart
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await likeNote(notes[3].id);
+                      }}
+                    />
                   )}
-                  {!notes[3].isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                    await likeNote(notes[3].id);
-                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {notes[3].likesCount}
                   </p>
                 </div>
                 <h2 className="w-full text-left text-white break-words">
-                  {t('title')}: "{notes[3].title}"
+                  {t("title")}: "{notes[3].title}"
                 </h2>
                 <MarkdownComponent
                   className={markdownStyling}
@@ -279,11 +327,13 @@ export default function Notes() {
           ) : isFetching ? (
             <Loader width="200" />
           ) : (
-            <p className="text-2xl text-white roboto">{t('noNotes')}</p>
+            <p className="text-2xl text-white roboto">{t("noNotes")}</p>
           )}
         </div>
       )}
-      <h2 className="text-3xl roboto text-white lg:flex hidden">{t('allNotes')}</h2>
+      <h2 className="text-3xl roboto text-white lg:flex hidden">
+        {t("allNotes")}
+      </h2>
       <div className="xl:w-3/5 w-full px-4 flex justify-evenly flex-wrap items-center gap-8 mb-10">
         {notes && notes.length > 0 ? (
           <>
@@ -296,17 +346,24 @@ export default function Notes() {
                   {note.category}
                 </h2>
                 <h2 className="w-full text-center text-white break-words">
-                  {t('title')}: "{note.title}"
+                  {t("title")}: "{note.title}"
                 </h2>
                 <div className="flex w-full">
-                  {note.isLiked && (
-                    <AiFillHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                      await unlikeNote(note.id);
-                    }} />
+                  {note.isLiked ? (
+                    <TbHeartFilled
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await unlikeNote(note.id);
+                      }}
+                    />
+                  ) : (
+                    <TbHeart
+                      className="text-red-500 cursor-pointer text-4xl heartAnimated"
+                      onClick={async () => {
+                        await likeNote(note.id);
+                      }}
+                    />
                   )}
-                  {!note.isLiked && <AiOutlineHeart className="text-red-500 cursor-pointer text-4xl" onClick={async () => {
-                    await likeNote(note.id);
-                  }} />}
                   <p className="text-2xl roboto text-white ml-2">
                     {note.likesCount}
                   </p>
@@ -323,7 +380,7 @@ export default function Notes() {
                       to={`/notes/edit/${note.id}`}
                     >
                       <TbEdit />
-                      {t('edit')}
+                      {t("edit")}
                     </Button>
                     <Button
                       type="alt"
@@ -331,7 +388,7 @@ export default function Notes() {
                       onClick={() => deleteNote(note.id)}
                     >
                       <TbTrash />
-                      {t('delete')}
+                      {t("delete")}
                     </Button>
                   </div>
                 )}
@@ -341,13 +398,13 @@ export default function Notes() {
         ) : isFetching ? (
           <Loader width="200" />
         ) : (
-          <p className="text-2xl text-white roboto">{t('noNotes')}</p>
+          <p className="text-2xl text-white roboto">{t("noNotes")}</p>
         )}
       </div>
       <div className="flex flex-col items-center gap-4 mb-3">
         {notes && notes.length < totalNotes && (
           <Button type="default" onClick={handleFetchMoreNotes}>
-            {t('loadMore')}
+            {t("loadMore")}
           </Button>
         )}
       </div>
