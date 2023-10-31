@@ -32,9 +32,8 @@ export default function Notes() {
     } else if (search) {
       queryString = `?search=${search}`;
     }
-    let url = `${
-      import.meta.env.VITE_API_URL
-    }/notes/${publicity.toLowerCase()}`;
+    let url = `${import.meta.env.VITE_API_URL
+      }/notes/${publicity.toLowerCase()}`;
     if (user.id && publicity === "Public") {
       url += `/auth`;
     }
@@ -80,27 +79,24 @@ export default function Notes() {
 
   const handleFetchMoreNotes = () => {
     setIsFetching(true);
-    let queryString = "";
-    if (category && search) {
-      queryString = `?category=${category}&search=${search}`;
-    } else if (category) {
-      queryString = `?category=${category}`;
-    } else if (search) {
-      queryString = `?search=${search}`;
-    } else if (!category && !search) {
-      queryString = "?";
+    if (!notes) return setIsFetching(false);
+    const queryParams = new URLSearchParams();
+    if (category) {
+      queryParams.append('category', category);
     }
-
-    let url = `${
-      import.meta.env.VITE_API_URL
-    }/notes/${publicity.toLowerCase()}`;
-
+    if (search) {
+      queryParams.append('search', search);
+    }
+    let url = `${import.meta.env.VITE_API_URL}/notes/${publicity.toLowerCase()}`;
     if (user.id && publicity === "Public") {
-      url += `/auth`;
+      url += '/auth';
     }
-
-    url += `${queryString}&skip=${notes?.length}&take=5`;
-
+    const queryString = queryParams.toString();
+    if (queryString !== "") {
+      url += `?${queryString}&skip=${notes.length}&take=5`;
+    } else {
+      url += `?skip=${notes.length}&take=5`;
+    }
     fetch(url, {
       method: "GET",
       headers: {
@@ -122,6 +118,15 @@ export default function Notes() {
   };
 
   const likeNote = async (id: number) => {
+    setNotes((prev) =>
+      prev?.map((note) => {
+        if (note.id === id) {
+          note.isLiked = true;
+          note.likesCount++;
+        }
+        return note;
+      })
+    );
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/notes/${id}/like`,
       {
@@ -132,24 +137,41 @@ export default function Notes() {
         credentials: "include",
       }
     );
-    if (res.status === 201) {
+    if (res.status === 401) {
       setNotes((prev) =>
         prev?.map((note) => {
           if (note.id === id) {
-            note.isLiked = true;
-            note.likesCount++;
+            note.isLiked = false;
+            note.likesCount--;
           }
           return note;
         })
       );
-    } else if (res.status === 401) {
       toast.error(t("loginToLike"));
-    } else {
+    } else if (res.status !== 201) {
+      setNotes((prev) =>
+        prev?.map((note) => {
+          if (note.id === id) {
+            note.isLiked = false;
+            note.likesCount--;
+          }
+          return note;
+        })
+      );
       toast.error(t("somethingWentWrong"));
     }
   };
 
   const unlikeNote = async (id: number) => {
+    setNotes((prev) =>
+      prev?.map((note) => {
+        if (note.id === id) {
+          note.isLiked = false;
+          note.likesCount--;
+        }
+        return note;
+      })
+    );
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/notes/${id}/unlike`,
       {
@@ -160,18 +182,17 @@ export default function Notes() {
         credentials: "include",
       }
     );
-    if (res.status === 200) {
+    if (res.status != 200) {
+      toast.error(t("somethingWentWrong"));
       setNotes((prev) =>
         prev?.map((note) => {
           if (note.id === id) {
-            note.isLiked = false;
-            note.likesCount--;
+            note.isLiked = true;
+            note.likesCount++;
           }
           return note;
         })
       );
-    } else {
-      toast.error(t("somethingWentWrong"));
     }
   };
 
