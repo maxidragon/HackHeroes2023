@@ -26,7 +26,7 @@ interface flashcardSet {
   title: string,
   description?: string,
   id: number,
-  forkedFrom?: user,
+  forkedFrom?: string,
   user: user,
   flashCards: flashCards[]
   publicity: string,
@@ -35,6 +35,7 @@ interface flashcardSet {
 }
 
 export default function FlashcardsDetails() {
+
   const isPresent = useIsPresent();
   const [{
     title,
@@ -49,7 +50,7 @@ export default function FlashcardsDetails() {
     createdAt: "",
     description: "",
     flashCards: [],
-    forkedFrom: undefined,
+    forkedFrom: "",
     id: 0,
     publicity: "",
     title: "",
@@ -88,9 +89,32 @@ export default function FlashcardsDetails() {
     }, 750);
   };
 
+  const setFork = async () => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/set/${id}/fork`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      return toast.error(t("somethingWentWrong"));
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    toast.success(t("flashcardForked"));
+    setTimeout(() => {
+      return navigate("/flashcards");
+    }, 750);
+  };
+
   useEffect(() => {
     if (id) {
       getFlashcardSet(id).then(data => {
+        console.log(data);
         setFlashcardSet(data);
       });
     }
@@ -107,12 +131,15 @@ export default function FlashcardsDetails() {
           {loggedUser.id === user.id &&
             <Button isLink={true} to={`/flashcards/edit/${id}`} className="text-lg px-4 py-2 mt-8" width="w-42"
                     type="alt"><BsFillPencilFill /></Button>}
+          {loggedUser.id !== user.id &&
+            <Button className="text-lg px-4 py-2 mt-8" width="w-42"
+                    type="alt" onClick={setFork}>Fork</Button>}
           <Button isLink={true} to={`/flashcards/learn/${id}`} className="text-lg px-4 py-2 mt-8" width="w-42"
                   type="default">{t("startLearning")} <BsFillPlayFill /></Button>
         </div>
       </div>
       <p>{t("author")}: <Link to={`/profile/${user.id}`}>{user.username}</Link></p>
-      {forkedFrom && <p>{t("forkedFrom")}: <Link to={`/profile/${forkedFrom.id}`}>{forkedFrom.username}</Link></p>}
+      {forkedFrom && <p>{t("forkedFrom")}: {forkedFrom}</p>}
       <p>{t("createdAt")}: {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), {
         addSuffix: true,
         locale: i18n.language === "pl" ? pl : enUS

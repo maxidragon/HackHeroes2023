@@ -208,5 +208,6 @@
   "flashcardEdited": "Zestaw fiszek został pomyślnie zedytowany",
   "publicSets": "Publiczne zestawy fiszek",
   "flashcardsLegend": "Wyszukaj lub stwórz zestaw fiszek",
-  "noFlashcards": "Nie ma żadnych zestawów do wyświetlenia"
+  "noFlashcards": "Nie ma żadnych zestawów do wyświetlenia",
+  "flashcardForked": "Skopiowano zestaw!"
 }
