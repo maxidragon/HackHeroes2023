@@ -31,7 +31,8 @@ export default function EditFlashcards() {
         flashCards.map((flashcard, index) => {
           flashcardsWithKey.push({
             ...flashcard,
-            key: Date.now() * (index + 1)
+            key: Date.now() * (index + 1),
+            isDelete: false
           });
         });
         setExistingSet({
@@ -59,7 +60,8 @@ export default function EditFlashcards() {
       flashcardsArray.push({
         id: _flashcard.id,
         question: _flashcard.question,
-        answer: _flashcard.answer
+        answer: _flashcard.answer,
+        isDelete: _flashcard.isDelete
       });
     });
 
@@ -135,8 +137,7 @@ export default function EditFlashcards() {
   const removeFlashcardByIndex = (index: number) => {
     setExistingSet(prevState => {
       const newFlashcards = [...prevState.flashCards];
-      newFlashcards.splice(index, 1);
-      console.log(newFlashcards);
+      newFlashcards[index].isDelete = true;
       return {
         ...prevState,
         flashCards: newFlashcards
@@ -153,7 +154,7 @@ export default function EditFlashcards() {
       </div>
       <div className="w-full flex gap-4">
         <Input containerClassName="w-full" className="sm:w-full" placeholder={t("title")} value={existingSet.title}
-          ref={titleRef} type="text" />
+               ref={titleRef} type="text" />
         <Select ref={publicityRef} defaultValue={existingSet.publicity}>
           <option value="PRIVATE">{t("private")}</option>
           <option value="PUBLIC">{t("public")}</option>
@@ -172,9 +173,9 @@ export default function EditFlashcards() {
         </textarea>
       </div>
       {existingSet.flashCards.map((flashcard: Flashcard, index) => {
-        return (
+        return flashcard.isDelete ? "" : (
           <div key={flashcard.key}
-            className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
+               className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
             <div className="flex justify-between items-center">
               <p className="text-white text-lg">Flashcard nr. {index + 1}</p>
               {existingSet.flashCards.length > 1 && <Button type="alt" width="w-42" className="text-lg" onClick={() => {
@@ -184,11 +185,11 @@ export default function EditFlashcards() {
             <Input className="sm:w-full" placeholder={t("concept")} onChange={(e) => {
               updateQuestion(e, index);
             }}
-              value={flashcard.question} />
+                   value={flashcard.question} />
             <Input className="sm:w-full" onChange={(e) => {
               updateAnswer(e, index);
             }}
-              placeholder={t("definition")} value={flashcard.answer} />
+                   placeholder={t("definition")} value={flashcard.answer} />
           </div>
         );
       })}

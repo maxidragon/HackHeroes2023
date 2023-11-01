@@ -2,6 +2,9 @@ import { motion, useIsPresent } from "framer-motion";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import getFlashcards from "../../lib/flashcards/getFlashcards.ts";
+import Input from "../../Components/Input.tsx";
+import Button from "../../Components/Button.tsx";
 
 interface flashcard {
   id: number,
@@ -13,61 +16,42 @@ export default function Flashcards() {
   const isPresent = useIsPresent();
   const [myFlashcards, setMyFlashcards] = useState([]);
   const [classFlashcards, setClassFlashcards] = useState([]);
-
-
-  const getMyFlashcards = async () => {
-
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/my`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include"
-    });
-
-    if (!response.ok) return [];
-
-    return await response.json();
-  };
-
-  const getClassFlashcards = async () => {
-
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/class`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include"
-    });
-
-    if (!response.ok) return [];
-
-    return await response.json();
-  };
+  const [publicFlashcards, setPublicFlashcards] = useState([]);
 
   useEffect(() => {
 
-    getMyFlashcards().then(data => {
+    getFlashcards("my").then(data => {
       setMyFlashcards(data);
     });
 
-    getClassFlashcards().then(data => {
+    getFlashcards("class").then(data => {
       setClassFlashcards(data);
+    });
+
+    getFlashcards("public").then(data => {
+      setPublicFlashcards(data);
     });
 
   }, []);
 
   return (
     <div className="flex w-[80%] mx-auto max-w-[1300px] flex-col items-center gap-5 py-6">
-      <Link to="/flashcards/create"
-            className="py-4 hover:text-violet-600 transition text-xl">{t("createNewFlashCardSet")}</Link>
-      <div className="w-full py-6">
+
+      <fieldset
+        className="flex flex-col md:flex-row border-gray-500 border-2 p-6 justify-between items-center w-full gap-6">
+        <legend className="text-xl text-white px-2">{t("flashcardsLegend")}</legend>
+        <Input placeholder={t("searchPlaceholder")} className="w-full text-xl" containerClassName="w-full" />
+        <div className="flex gap-6">
+          <Button type="default" className="text-xl py-4" width="w-70">{t("searchPlaceholder")}</Button>
+          <Button type="alt" isLink={true} to="/flashcards/create"
+                  className="py-4 text-xl">{t("createNewFlashCardSet")}</Button>
+        </div>
+      </fieldset>
+
+      {myFlashcards.length ? <div className="w-full py-6">
         <h2 className="py-4 text-2xl">{t("personalSets")}</h2>
-        {myFlashcards.length ? "" : <p className="text-2xl text-red-400 py-4">{t("notFlashCards")}</p>}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
           {myFlashcards.map((flashcard: flashcard) => {
-
-            console.log(flashcard);
             return (
               <Link className="shadow-lg px-3 py-6 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
                     key={flashcard.id}
@@ -77,11 +61,11 @@ export default function Flashcards() {
             );
           })}
         </div>
-      </div>
-      <div className="w-full py-6">
+      </div> : ""}
+
+      {classFlashcards.length ? <div className="w-full py-6">
         <h2 className="py-4 text-2xl">{t("classSets")}</h2>
-        {classFlashcards.length ? "" :
-          <p className="text-2xl text-red-400 py-4">{t("notFlashCards")}</p>}
+
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
           {classFlashcards.map((flashcard: flashcard) => {
             return (
@@ -93,7 +77,24 @@ export default function Flashcards() {
             );
           })}
         </div>
-      </div>
+      </div> : ""}
+
+      {publicFlashcards.length ?
+        <div className="w-full py-6">
+          <h2 className="py-4 text-2xl">{t("publicSets")}</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+            {publicFlashcards.map((flashcard: flashcard) => {
+              return (
+                <Link className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
+                      key={flashcard.id}
+                      to={`/flashcards/details/${flashcard.id}`}>
+                  <h3 className="text-xl">{flashcard.title}</h3>
+                </Link>
+              );
+            })}
+          </div>
+        </div> : ""}
+
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{

@@ -94,6 +94,7 @@ export interface Note {
 export interface Flashcard {
   key?: number,
   id?: number,
+  isDelete?: boolean,
   question: string,
   answer: string
 }

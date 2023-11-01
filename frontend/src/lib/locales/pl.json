@@ -14,7 +14,7 @@
   "classRegisterTitle": "Dziennik elektroniczny",
   "homeTitle": "Strona główna",
   "home1": "Jedyna taka aplikacja, która pozwala na zarządzanie wszystkimi aspektami życia szkolnego w jednym miejscu. Na naszym portalu, zaraz po sprawdzeniu swoich ocen, możesz zacząć uczyć się do egzaminów, poprzez fiszki, lub czytając notatki na ten temat.",
-  "home2" : "A to raptem część funkcji, które oferuje nasza aplikacja...",
+  "home2": "A to raptem część funkcji, które oferuje nasza aplikacja...",
   "homeScroll": "Przesuń niżej, aby dowiedzieć się więcej!",
   "homeFlashcards1": "Fiszki w naszej aplikacji to narzędzie do uczenia się. Użytkownicy tworzą własne fiszki, a aplikacja pomaga  powtórkach. Dzięki temu użytkownicy mogą skuteczniej zapamiętywać informacje.",
   "homeFlashcards2": "To proste i intuicyjne narzędzie, które sprawia, że nauka staje się bardziej efektywna.",
@@ -76,7 +76,7 @@
   "save": "Zapisz",
   "noVulcan": "Połącz swoje konto z Vulcanem!",
   "noVulcanWhereInputs": "Możesz znaleźć dane do tych kodów w ustawieniach!",
-  "relogAgain": "Jeśli dodałeś dzinnik i nadal to widzisz, odśwież stronę!",
+  "relogAgain": "Jeśli dodałeś dziennik i nadal to widzisz, odśwież stronę!",
   "registerGrades": "Oceny",
   "registerAttendance": "Obecność",
   "registerHomework": "Zadania domowe",
@@ -200,10 +200,12 @@
   "average": "Średnia",
   "flashcardDeleted": "Zestaw fiszek został pomyślnie usunięty",
   "loginToLike": "Zaloguj się, aby polubić",
-  "loadUndone": "Załaduj zadania do zrobienia",  
+  "loadUndone": "Załaduj zadania do zrobienia",
   "loadDone": "Załaduj zrobione zadania",
   "login": "Zaloguj się",
   "register": "Zarejestruj się",
   "flashcardEdit": "Edytuj swój zestaw",
-  "flashcardEdited": "Zestaw fiszek został pomyślnie zedytowany"
+  "flashcardEdited": "Zestaw fiszek został pomyślnie zedytowany",
+  "publicSets": "Publiczne zestawy fiszek",
+  "flashcardsLegend": "Wyszukaj lub stwórz zestaw fiszek"
 }
