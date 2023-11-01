@@ -304,7 +304,7 @@ export class FlashcardService {
       },
     });
 
-    await this.prisma.flashCardSet.create({
+    const newSet = await this.prisma.flashCardSet.create({
       data: {
         title: `${flashCardSet.title} (copy)`,
         description: flashCardSet.description,
@@ -325,7 +325,7 @@ export class FlashcardService {
         return {
           question: card.question,
           answer: card.answer,
-          setId: card.setId,
+          setId: newSet.id,
         };
       }),
     });
