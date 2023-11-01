@@ -207,5 +207,6 @@
   "flashcardEdit": "Edit your flashcard set",
   "flashcardEdited": "Flashcard set successfully edited",
   "publicSets": "Public flashcards sets",
-  "flashcardsLegend": "Search or Create flashcard set"
+  "flashcardsLegend": "Search or Create flashcard set",
+  "noFlashcards": "There are no flashcard sets to display"
 }

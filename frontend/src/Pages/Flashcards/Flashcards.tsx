@@ -104,6 +104,9 @@ export default function Flashcards() {
           </div>
         </div> : ""}
 
+      {!publicFlashcards.length && !myFlashcards.length && !classFlashcards.length &&
+        <h3 className="text-2xl text-white mt-10">{t("noFlashcards")}</h3>}
+
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{
