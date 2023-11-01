@@ -16,6 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateFlashCardDto } from './dto/createFlashCard.dto';
 import { CreateFlashCardSetDto } from './dto/createFlashCardSet.dto';
 import { ForkFlashCardSetDto } from './dto/forkFlashCardSet.dto';
+import { UpdateFlashCardSetDto } from './dto/updateFlashCardSet.dto';
 
 @Controller('flashcard')
 export class FlashcardController {
@@ -69,7 +70,7 @@ export class FlashcardController {
   @UseGuards(AuthGuard('jwt'))
   @Put('set/:id')
   async updateFlashCardSet(
-    @Body() dto: CreateFlashCardSetDto,
+    @Body() dto: UpdateFlashCardSetDto,
     @GetUser() user: JwtAuthDto,
     @Param('id') id: number,
   ): Promise<object> {

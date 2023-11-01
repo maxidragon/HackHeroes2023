@@ -1,6 +1,6 @@
 import { motion, useIsPresent } from "framer-motion";
 import Input from "../../Components/Input.tsx";
-import { useEffect, useRef } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import Button from "../../Components/Button.tsx";
 import { useState } from "react";
 import Select from "../../Components/Select.tsx";
@@ -9,19 +9,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import getFlashcardSet from "../../lib/flashcards/getFlashcardSet.ts";
 import { FaXmark } from "react-icons/fa6";
-
-interface flashcard {
-  key?: number,
-  question: string,
-  answer: string
-}
-
-interface flashcardSet {
-  title: string,
-  description?: string,
-  publicity: string,
-  flashCards: flashcard[]
-}
+import { Flashcard, FlashcardSet } from "../../lib/interfaces.ts";
 
 export default function EditFlashcards() {
 
@@ -29,7 +17,7 @@ export default function EditFlashcards() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [existingSet, setExistingSet] = useState<flashcardSet>({
+  const [existingSet, setExistingSet] = useState<FlashcardSet>({
     title: "",
     description: "",
     flashCards: [{ question: "", answer: "", key: Date.now() }],
@@ -38,17 +26,14 @@ export default function EditFlashcards() {
 
   useEffect(() => {
     if (id) {
-      getFlashcardSet(id).then(({ title, description, publicity, flashCards }: flashcardSet) => {
-
-        const flashcardsWithKey: flashcard[] = [];
-
+      getFlashcardSet(id).then(({ title, description, publicity, flashCards }: FlashcardSet) => {
+        const flashcardsWithKey: Flashcard[] = [];
         flashCards.map((flashcard, index) => {
           flashcardsWithKey.push({
             ...flashcard,
             key: Date.now() * (index + 1)
           });
         });
-
         setExistingSet({
           title,
           description,
@@ -67,11 +52,12 @@ export default function EditFlashcards() {
 
   const updateSet = async () => {
 
-    const flashcardsArray: flashcard[] = [];
+    const flashcardsArray: Flashcard[] = [];
 
     existingSet.flashCards.map((_flashcard) => {
 
       flashcardsArray.push({
+        id: _flashcard.id,
         question: _flashcard.question,
         answer: _flashcard.answer
       });
@@ -124,7 +110,7 @@ export default function EditFlashcards() {
     });
   };
 
-  const updateQuestion = (e: any, index: number) => {
+  const updateQuestion = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     setExistingSet(prevState => {
       const updatedArr = [...prevState.flashCards];
       updatedArr[index].question = e.target.value;
@@ -135,7 +121,7 @@ export default function EditFlashcards() {
     });
   };
 
-  const updateAnswer = (e: any, index: number) => {
+  const updateAnswer = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     setExistingSet(prevState => {
       const updatedArr = [...prevState.flashCards];
       updatedArr[index].answer = e.target.value;
@@ -163,11 +149,11 @@ export default function EditFlashcards() {
       <div
         className="flex flex-col sm:gap-0 gap-6 sm:flex-row justify-between items-center w-full shadow-2xl sticky top-3 py-4 px-5 bg-blue-900 rounded-2xl z-20">
         <h2 className="text-xl font-bold sm:text-3xl">{t("flashcardEdit")}</h2>
-        <Button type="default" onClick={updateSet}>{t("createBtn")}</Button>
+        <Button type="default" onClick={updateSet}>{t("save")}</Button>
       </div>
       <div className="w-full flex gap-4">
         <Input containerClassName="w-full" className="sm:w-full" placeholder={t("title")} value={existingSet.title}
-               ref={titleRef} type="text" />
+          ref={titleRef} type="text" />
         <Select ref={publicityRef} defaultValue={existingSet.publicity}>
           <option value="PRIVATE">{t("private")}</option>
           <option value="PUBLIC">{t("public")}</option>
@@ -183,12 +169,12 @@ export default function EditFlashcards() {
           id="flashcards-desc"
           className="h-full block px-2.5 py-2.5 w-full text-lg text-white bg-transparent rounded-lg border-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-purple-600"
         >
-      </textarea>
+        </textarea>
       </div>
-      {existingSet.flashCards.map((flashcard: flashcard, index) => {
+      {existingSet.flashCards.map((flashcard: Flashcard, index) => {
         return (
           <div key={flashcard.key}
-               className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
+            className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
             <div className="flex justify-between items-center">
               <p className="text-white text-lg">Flashcard nr. {index + 1}</p>
               {existingSet.flashCards.length > 1 && <Button type="alt" width="w-42" className="text-lg" onClick={() => {
@@ -198,11 +184,11 @@ export default function EditFlashcards() {
             <Input className="sm:w-full" placeholder={t("concept")} onChange={(e) => {
               updateQuestion(e, index);
             }}
-                   value={flashcard.question} />
+              value={flashcard.question} />
             <Input className="sm:w-full" onChange={(e) => {
               updateAnswer(e, index);
             }}
-                   placeholder={t("definition")} value={flashcard.answer} />
+              placeholder={t("definition")} value={flashcard.answer} />
           </div>
         );
       })}

@@ -3,6 +3,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { CreateFlashCardSetDto } from './dto/createFlashCardSet.dto';
 import { CreateFlashCardDto } from './dto/createFlashCard.dto';
 import { ForkFlashCardSetDto } from './dto/forkFlashCardSet.dto';
+import { UpdateFlashCardSetDto } from './dto/updateFlashCardSet.dto';
 
 @Injectable()
 export class FlashcardService {
@@ -253,7 +254,7 @@ export class FlashcardService {
   }
 
   async updateFlashCardSet(
-    dto: CreateFlashCardSetDto,
+    dto: UpdateFlashCardSetDto,
     setId: number,
     userId: number,
   ): Promise<object> {
@@ -266,6 +267,27 @@ export class FlashcardService {
         'You are not the owner of this flashcard set!',
         403,
       );
+    }
+    for (const card of dto.flashCards) {
+      if (card.id) {
+        await this.prisma.flashCard.update({
+          where: { id: card.id },
+          data: {
+            question: card.question,
+            answer: card.answer,
+          },
+        });
+      } else {
+        await this.prisma.flashCard.create({
+          data: {
+            question: card.question,
+            answer: card.answer,
+            set: {
+              connect: { id: setId },
+            },
+          },
+        });
+      }
     }
     return this.prisma.flashCardSet.update({
       where: { id: setId },

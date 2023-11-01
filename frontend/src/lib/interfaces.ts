@@ -90,3 +90,17 @@ export interface Note {
   likesCount: number;
   isLiked: boolean;
 }
+
+export interface Flashcard {
+  key?: number,
+  id?: number,
+  question: string,
+  answer: string
+}
+
+export interface FlashcardSet {
+  title: string,
+  description?: string,
+  publicity: string,
+  flashCards: Flashcard[]
+}

@@ -88,7 +88,7 @@ export default function Login() {
           ref={passwordRef}
         />
         <Button type="default" onClick={login}>
-          {t("loginTitle")}
+          {t("login")}
         </Button>
         <Link to="/register">{t("loginRegisterLink")}</Link>
         <Link to="/password/forgot">{t("forgotPasswordLink")}</Link>
