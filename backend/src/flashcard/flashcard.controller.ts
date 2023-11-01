@@ -15,7 +15,6 @@ import { JwtAuthDto } from 'src/auth/dto';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateFlashCardDto } from './dto/createFlashCard.dto';
 import { CreateFlashCardSetDto } from './dto/createFlashCardSet.dto';
-import { ForkFlashCardSetDto } from './dto/forkFlashCardSet.dto';
 import { UpdateFlashCardSetDto } from './dto/updateFlashCardSet.dto';
 
 @Controller('flashcard')
@@ -68,6 +67,15 @@ export class FlashcardController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get('set/:id/fork')
+  async forkFlashCardSet(
+    @GetUser() user: JwtAuthDto,
+    @Param('id') id: number,
+  ): Promise<object> {
+    return await this.flashcardService.forkFlashCardSet(id, user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Put('set/:id')
   async updateFlashCardSet(
     @Body() dto: UpdateFlashCardSetDto,
@@ -84,15 +92,6 @@ export class FlashcardController {
     @Param('id') id: number,
   ): Promise<object> {
     return await this.flashcardService.deleteFlashCardSet(id, user.userId);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post('set/fork')
-  async forkFlashCardSet(
-    @GetUser() user: JwtAuthDto,
-    @Body() dto: ForkFlashCardSetDto,
-  ): Promise<object> {
-    return await this.flashcardService.forkFlashCardSet(dto, user.userId);
   }
 
   @UseGuards(AuthGuard('jwt'))

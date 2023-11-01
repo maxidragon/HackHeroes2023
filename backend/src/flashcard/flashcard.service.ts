@@ -2,7 +2,6 @@ import { DbService } from './../db/db.service';
 import { HttpException, Injectable } from '@nestjs/common';
 import { CreateFlashCardSetDto } from './dto/createFlashCardSet.dto';
 import { CreateFlashCardDto } from './dto/createFlashCard.dto';
-import { ForkFlashCardSetDto } from './dto/forkFlashCardSet.dto';
 import { UpdateFlashCardSetDto } from './dto/updateFlashCardSet.dto';
 
 @Injectable()
@@ -10,33 +9,19 @@ export class FlashcardService {
   constructor(private readonly prisma: DbService) {}
 
   async getPublicFlashCardsSets(search: string): Promise<object> {
+    const whereParams = {
+      publicity: 'PUBLIC' as any,
+    };
     if (search) {
-      return this.prisma.flashCardSet.findMany({
-        where: {
-          publicity: 'PUBLIC',
-          OR: [
-            { title: { contains: search } },
-            { description: { contains: search } },
-          ],
-        },
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          createdAt: true,
-          updatedAt: true,
-          user: {
-            select: {
-              id: true,
-              username: true,
-            },
-          },
-        },
+      Object.assign(whereParams, {
+        OR: [
+          { title: { contains: search } },
+          { description: { contains: search } },
+        ],
       });
     }
-
     return this.prisma.flashCardSet.findMany({
-      where: { publicity: 'PUBLIC' },
+      where: whereParams,
       select: {
         id: true,
         title: true,
@@ -54,27 +39,22 @@ export class FlashcardService {
   }
 
   async getMyFlashCardsSets(userId: number, search: string): Promise<object> {
+    const whereParams = {
+      userId: userId,
+      publicity: 'PRIVATE' as any,
+    };
+
     if (search) {
-      return this.prisma.flashCardSet.findMany({
-        where: {
-          userId: userId,
-          OR: [
-            { title: { contains: search } },
-            { description: { contains: search } },
-          ],
-        },
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          createdAt: true,
-          updatedAt: true,
-        },
+      Object.assign(whereParams, {
+        OR: [
+          { title: { contains: search } },
+          { description: { contains: search } },
+        ],
       });
     }
 
     return this.prisma.flashCardSet.findMany({
-      where: { userId: userId },
+      where: whereParams,
       select: {
         id: true,
         title: true,
@@ -95,36 +75,23 @@ export class FlashcardService {
         schoolName: true,
       },
     });
+    const whereParams = {
+      user: {
+        schoolClass: user.schoolClass,
+        schoolName: user.schoolName,
+      },
+      publicity: 'CLASS' as any,
+    };
     if (search) {
-      return this.prisma.flashCardSet.findMany({
-        where: {
-          user: {
-            schoolClass: user.schoolClass,
-            schoolName: user.schoolName,
-          },
-          OR: [
-            { title: { contains: search } },
-            { description: { contains: search } },
-          ],
-        },
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          createdAt: true,
-          updatedAt: true,
-        },
+      Object.assign(whereParams, {
+        OR: [
+          { title: { contains: search } },
+          { description: { contains: search } },
+        ],
       });
     }
-
     return this.prisma.flashCardSet.findMany({
-      where: {
-        user: {
-          schoolClass: user.schoolClass,
-          schoolName: user.schoolName,
-        },
-        publicity: 'CLASS',
-      },
+      where: whereParams,
     });
   }
 
@@ -270,13 +237,20 @@ export class FlashcardService {
     }
     for (const card of dto.flashCards) {
       if (card.id) {
-        await this.prisma.flashCard.update({
-          where: { id: card.id },
-          data: {
-            question: card.question,
-            answer: card.answer,
-          },
-        });
+        if (card.isDelete) {
+          await this.prisma.flashCard.delete({
+            where: { id: card.id },
+          });
+          continue;
+        } else {
+          await this.prisma.flashCard.update({
+            where: { id: card.id },
+            data: {
+              question: card.question,
+              answer: card.answer,
+            },
+          });
+        }
       } else {
         await this.prisma.flashCard.create({
           data: {
@@ -315,13 +289,13 @@ export class FlashcardService {
     });
   }
 
-  async forkFlashCardSet(
-    data: ForkFlashCardSetDto,
-    userId: number,
-  ): Promise<object> {
+  async forkFlashCardSet(setId: number, userId: number): Promise<object> {
     const flashCardSet = await this.prisma.flashCardSet.findUnique({
-      where: { id: data.setId },
-      include: {
+      where: { id: setId },
+      select: {
+        title: true,
+        description: true,
+        publicity: true,
         user: {
           select: {
             username: true,
@@ -332,10 +306,10 @@ export class FlashcardService {
 
     await this.prisma.flashCardSet.create({
       data: {
-        title: data.title,
-        description: data.description,
-        publicity: data.publicity,
-        forkedFrom: `${flashCardSet.title} by ${flashCardSet.user.username}`,
+        title: `${flashCardSet.title} (copy)`,
+        description: flashCardSet.description,
+        publicity: flashCardSet.publicity,
+        forkedFrom: `${flashCardSet.user.username}/${flashCardSet.title}`,
         user: {
           connect: { id: userId },
         },
@@ -343,7 +317,7 @@ export class FlashcardService {
     });
 
     const flashCards = await this.prisma.flashCard.findMany({
-      where: { setId: data.setId },
+      where: { setId: setId },
     });
 
     await this.prisma.flashCard.createMany({

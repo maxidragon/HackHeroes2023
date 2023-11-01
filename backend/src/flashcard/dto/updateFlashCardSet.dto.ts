@@ -25,4 +25,5 @@ interface FlashCard {
   id?: number;
   question: string;
   answer: string;
+  isDelete?: boolean;
 }
