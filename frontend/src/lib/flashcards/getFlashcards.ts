@@ -1,6 +1,8 @@
-const getFlashcards = async (type: "my" | "class" | "public") => {
+const getFlashcards = async (type: "my" | "class" | "public", querySearch = "") => {
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/flashcard/${type}`, {
+  const URL = querySearch ? `${import.meta.env.VITE_API_URL}/flashcard/${type}?search=${querySearch}` : `${import.meta.env.VITE_API_URL}/flashcard/${type}`;
+
+  const response = await fetch(URL, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"

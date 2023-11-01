@@ -1,6 +1,6 @@
 import { motion, useIsPresent } from "framer-motion";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import getFlashcards from "../../lib/flashcards/getFlashcards.ts";
 import Input from "../../Components/Input.tsx";
@@ -14,25 +14,32 @@ interface flashcard {
 
 export default function Flashcards() {
   const isPresent = useIsPresent();
+  const searchRef = useRef<HTMLInputElement>();
+
   const [myFlashcards, setMyFlashcards] = useState([]);
   const [classFlashcards, setClassFlashcards] = useState([]);
   const [publicFlashcards, setPublicFlashcards] = useState([]);
+  const [searchString, setSearchString] = useState("");
+
+  const searchHandler = () => {
+    setSearchString(searchRef.current?.value || "");
+  };
 
   useEffect(() => {
 
-    getFlashcards("my").then(data => {
+    getFlashcards("my", searchString).then(data => {
       setMyFlashcards(data);
     });
 
-    getFlashcards("class").then(data => {
+    getFlashcards("class", searchString).then(data => {
       setClassFlashcards(data);
     });
 
-    getFlashcards("public").then(data => {
+    getFlashcards("public", searchString).then(data => {
       setPublicFlashcards(data);
     });
 
-  }, []);
+  }, [searchString]);
 
   return (
     <div className="flex w-[80%] mx-auto max-w-[1300px] flex-col items-center gap-5 py-6">
@@ -40,9 +47,11 @@ export default function Flashcards() {
       <fieldset
         className="flex flex-col md:flex-row border-gray-500 border-2 p-6 justify-between items-center w-full gap-6">
         <legend className="text-xl text-white px-2">{t("flashcardsLegend")}</legend>
-        <Input placeholder={t("searchPlaceholder")} className="w-full text-xl" containerClassName="w-full" />
+        <Input ref={searchRef} placeholder={t("searchPlaceholder")} className="w-full text-xl"
+               containerClassName="w-full" />
         <div className="flex gap-6">
-          <Button type="default" className="text-xl py-4" width="w-70">{t("searchPlaceholder")}</Button>
+          <Button onClick={searchHandler} type="default" className="text-xl py-4"
+                  width="w-70">{t("searchPlaceholder")}</Button>
           <Button type="alt" isLink={true} to="/flashcards/create"
                   className="py-4 text-xl">{t("createNewFlashCardSet")}</Button>
         </div>
