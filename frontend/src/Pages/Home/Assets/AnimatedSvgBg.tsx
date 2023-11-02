@@ -1,6 +1,6 @@
 export default function AnimatedSvgBg() {
   return (
-    <div className="absolute left-0 top-0 w-full h-full -z-10">
+    <div className="absolute left-0 top-0 w-full h-full -z-10 lg:block hidden overflow-hidden">
       <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
         <defs>
           <radialGradient

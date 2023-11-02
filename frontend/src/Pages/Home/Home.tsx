@@ -17,19 +17,19 @@ export default function Home() {
 
   return (
     <div className="flex-1 pb-10 flex flex-col items-center">
-      <div className="w-full h-screen flex items-center justify-evenly coolBg">
-        <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
-          <h1 className="text-7xl text-white roboto mb-8 text-center">
+      <div className="w-full min-h-screen flex lg:flex-row flex-col p-16 px-8 gap-16 items-center justify-evenly coolBg">
+        <div className="2xl:w-1/4 lg:w-1/3 md:w-1/2 w-full flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
+          <h1 className="text-6xl max-[500px]:text-4xl text-white roboto mb-8 text-center">
             EduSphere
           </h1>
-          <p className="text-xl text-white roboto">{t("home1")}</p>
-          <p className="text-xl text-white roboto">{t("home2")}</p>
+          <p className="sm:text-xl text-lg text-white roboto text-justify sm:text-left">{t("home1")}</p>
+          <p className="sm:text-xl text-lg text-white roboto text-justify sm:text-left">{t("home2")}</p>
           <div className="w-full h-1 rounded-full bg-gray-500" />
-          <div className="w-full flex items-center gap-4">
-            <Button type="alt" className="mt-4" isLink to="/register">
+          <div className="w-full flex items-center max-[500px]:flex-col gap-4">
+            <Button type="alt" className="mt-4 w-full" isLink to="/register">
               {t('register')}
             </Button>
-            <Button type="default" className="mt-4" isLink to="/login">
+            <Button type="default" className="mt-4 w-full" isLink to="/login">
               {t('login')}
             </Button>
           </div>
@@ -38,19 +38,19 @@ export default function Home() {
             <TbArrowBigDownFilled className="animate-bounce" />
           </div>
         </div>
-        <img src={Logo} alt="Edu sphere's logo" className="w-1/4" />
+        <img src={Logo} alt="Edu sphere's logo" className="2xl:w-1/4 sm:w-1/3 w-full" />
       </div>
       <div className="w-full h-32" />
-      <div className="w-full h-screen flex items-center justify-evenly coolBg2">
-        <img src={flashcards} className="w-1/2" />
-        <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
+      <div className="w-full min-h-screen flex lg:flex-row flex-col-reverse p-16 px-8 gap-16 items-center justify-evenly coolBg2">
+        <img src={flashcards} className="lg:w-1/2 w-full" />
+        <div className="2xl:w-1/4 lg:w-1/3 md:w-1/2 w-full flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
           <h1 className="text-7xl text-white roboto mb-8 text-center capitalize">
             {t("navFlashCards")}
           </h1>
-          <p className="text-xl text-white roboto text-right">
+          <p className="text-xl text-white roboto text-justify sm:text-right">
             {t("homeFlashcards1")}
           </p>
-          <p className="text-xl text-white roboto text-right">
+          <p className="text-xl text-white roboto text-justify sm:text-right">
             {t("homeFlashcards2")}
           </p>
           <div className="w-full h-1 rounded-full bg-white" />
@@ -69,14 +69,14 @@ export default function Home() {
         </div>
       </div>
       <div className="w-full h-32" />
-      <div className="w-full h-screen flex items-center justify-evenly relative overflow-y-hidden">
+      <div className="w-full min-h-screen flex xl:flex-row flex-col p-16 px-8 gap-16 items-center justify-evenly relative">
         <AnimatedSvgBg />
-        <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
+        <div className="2xl:w-1/4 xl:w-1/3 md:w-1/2 w-full flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
           <h1 className="text-7xl text-white roboto mb-8 text-center">
             {t("navNotes")}
           </h1>
-          <p className="text-xl text-white roboto">{t("homeNotes1")}</p>
-          <p className="text-xl text-white roboto">{t("homeNotes2")}</p>
+          <p className="text-xl text-white roboto text-justify sm:text-left">{t("homeNotes1")}</p>
+          <p className="text-xl text-white roboto text-justify sm:text-left">{t("homeNotes2")}</p>
           <div className="w-full h-1 rounded-full bg-white" />
           <Button type="default" className="!w-full mt-4" isLink to="/notes">
             {t("homeToNotes")}
@@ -86,19 +86,19 @@ export default function Home() {
             <TbArrowBigDownFilled className="animate-bounce" />
           </div>
         </div>
-        <img src={notes} />
+        <img src={notes} className="lg:w-1/2 w-full"/>
       </div>
       <div className="w-full h-32" />
-      <div className="w-full h-screen flex items-center justify-evenly relative overflow-y-hidden">
-        <img src={grades} className="w-1/2" />
-        <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
+      <div className="w-full min-h-screen flex xl:flex-row flex-col-reverse p-16 px-8 gap-16 items-center justify-evenly overflow-hidden relative">
+        <img src={grades} className="lg:w-1/2 w-full" />
+        <div className="2xl:w-1/4 xl:w-1/3 md:w-1/2 w-full flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
           <h1 className="text-6xl text-white roboto mb-8 text-center capitalize">
             {t("navClassRegister")}
           </h1>
-          <p className="text-xl text-white roboto text-right">
+          <p className="text-xl text-white roboto text-justify sm:text-right">
             {t("homeClassRegister1")}
           </p>
-          <p className="text-xl text-white roboto text-right">
+          <p className="text-xl text-white roboto text-justify sm:text-right">
             {t("homeClassRegister2")}
           </p>
           <div className="w-full h-1 rounded-full bg-white" />
@@ -118,13 +118,13 @@ export default function Home() {
         <div className="coolBg3 absolute left-0 top-0 w-full h-full -z-10"></div>
       </div>
       <div className="w-full h-32" />
-      <div className="w-full h-screen flex items-center justify-evenly relative overflow-y-hidden">
-        <div className="w-1/4 flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
+      <div className="w-full min-h-screen flex xl:flex-row flex-col-reverse p-16 px-8 gap-16 items-center justify-evenly overflow-y-hidden relative">
+        <div className="2xl:w-1/4 xl:w-1/3 md:w-1/2 w-full flex flex-col gap-4 p-8 bg-gray-300 bg-opacity-10 backdrop-blur-2xl rounded-xl">
           <h1 className="text-6xl text-white roboto mb-8 text-center capitalize">
             {t("navTodo")}
           </h1>
-          <p className="text-xl text-white roboto">{t("homeToDo1")}</p>
-          <p className="text-xl text-white roboto">{t("homeToDo2")}</p>
+          <p className="text-xl text-white roboto text-justify sm:text-left">{t("homeToDo1")}</p>
+          <p className="text-xl text-white roboto text-justify sm:text-left">{t("homeToDo2")}</p>
           <div className="w-full h-1 rounded-full bg-white" />
           <Button
             type="default"
@@ -135,7 +135,7 @@ export default function Home() {
             {t("homeToToDo")}
           </Button>
         </div>
-        <img src={todo} className="w-1/2" />
+        <img src={todo} className="lg:w-1/2 w-full" />
         <div className="air air1" />
         <div className="air air2" />
         <div className="air air3" />
