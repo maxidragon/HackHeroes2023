@@ -9,6 +9,7 @@ import { LuMousePointerClick } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa6";
 import { FaXmark } from "react-icons/fa6";
 import getUserObject from "../../lib/getUser.ts";
+import ProgressBar from "../../Components/ProgressBar.tsx";
 
 interface flashcard {
   id: number,
@@ -131,6 +132,8 @@ export default function FlashcardsLearn() {
   const [learningSet, learningSetDispatch] = useReducer(learnReducer, null, learnInitializer);
 
   const [side, setSide] = useState(0);
+  const score = (learningSet.correctAnswers.length / (learningSet.correctAnswers.length + learningSet.wrongAnswers.length));
+  const percentage = (Math.round(score * 100) / 100) * 100;
 
   const changeFlashCardSide = () => {
     setSide(prevState => {
@@ -193,30 +196,50 @@ export default function FlashcardsLearn() {
           </div>
         </div>}
 
-      {learningSet.flashcardsLeft.length === 0 && <div className="py-8 flex flex-col gap-8">
-        <div className="w-full">
+      {learningSet.flashcardsLeft.length === 0 && learningSet.wrongAnswers.length === 0 &&
+        <div className="w-full text-center py-8">
           <div className="flex justify-between items-center">
-            <h3 className="text-2xl py-4">{t("youKnowThis")}:</h3>
+            <h2 className="text-2xl py-6">{t("allCorrect")}</h2>
             <Button onClick={() => {
               learningSetDispatch({ type: "NEXT_ROUND" });
             }} width="w-42" className="text-lg py-1.5 px-3"
-                    type="default">{t("nextRound")}</Button>
+                    type="default">{t("playAgain")}</Button>
           </div>
-          <div className="flex flex-col gap-2">
-            {learningSet.correctAnswers.map((flashcard: flashcard) => {
-              return <p className="text-green-500" key={flashcard.id}>{flashcard.question} - {flashcard.answer}</p>;
-            })}
-          </div>
+          <p className="mt-4 p-4 bg-violet-500 rounded-full text-xl">100 %</p>
         </div>
-        <div>
-          <h3 className="text-2xl py-4">{t("youShouldRepeatThis")}:</h3>
-          <div className="flex flex-col gap-2">
-            {learningSet.wrongAnswers.map((flashcard: flashcard) => {
-              return <p className="text-red-500" key={flashcard.id}>{flashcard.question} - {flashcard.answer}</p>;
-            })}
+      }
+
+      {(learningSet.flashcardsLeft.length === 0) && learningSet.wrongAnswers.length !== 0 &&
+        <div className="py-8 flex flex-col gap-8">
+          <div className="w-full">
+            <div className="flex justify-between items-center gap-8 mb-6">
+              <ProgressBar progress={percentage} display={true} />
+              <Button onClick={() => {
+                learningSetDispatch({ type: "NEXT_ROUND" });
+              }} width="w-52" className="text-lg py-1.5 px-3"
+                      type="default">{t("nextRound")}</Button>
+            </div>
+            {learningSet.correctAnswers.length > 0 &&
+              <div>
+                <h3 className="text-2xl py-4">{t("youKnowThis")}:</h3>
+                <div className="flex flex-col gap-2">
+                  {learningSet.correctAnswers.map((flashcard: flashcard) => {
+                    return <p className="text-green-500"
+                              key={flashcard.id}>{flashcard.question} - {flashcard.answer}</p>;
+                  })}
+                </div>
+              </div>
+            }
           </div>
-        </div>
-      </div>}
+          {learningSet.wrongAnswers.length > 0 && <div>
+            <h3 className="text-2xl py-4">{t("youShouldRepeatThis")}:</h3>
+            <div className="flex flex-col gap-2">
+              {learningSet.wrongAnswers.map((flashcard: flashcard) => {
+                return <p className="text-red-500" key={flashcard.id}>{flashcard.question} - {flashcard.answer}</p>;
+              })}
+            </div>
+          </div>}
+        </div>}
 
       <motion.div
         initial={{ scaleX: 1 }}

@@ -209,5 +209,7 @@
   "publicSets": "Publiczne zestawy fiszek",
   "flashcardsLegend": "Wyszukaj lub stwórz zestaw fiszek",
   "noFlashcards": "Nie ma żadnych zestawów do wyświetlenia",
-  "flashcardForked": "Skopiowano zestaw!"
+  "flashcardForked": "Skopiowano zestaw!",
+  "playAgain": "Jeszcze raz",
+  "allCorrect": "Gratulacje, skończyłeś naukę zestawu"
 }
