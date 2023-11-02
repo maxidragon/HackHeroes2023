@@ -151,7 +151,7 @@ export class VulcanService {
         type: grade.column.category?.name,
       };
     });
-    return returnObject;
+    return returnObject.reverse();
   }
 
   async getSemester(client: VulcanHebe, semesterNumber: number) {

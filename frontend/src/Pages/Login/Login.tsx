@@ -4,12 +4,13 @@ import background from "../../graphics/loginBackground.jpg";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import toast from "react-hot-toast";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../Atoms";
 import getUserObject from "../../lib/getUser";
 import { TbArrowLeft } from "react-icons/tb";
 import { t } from "i18next";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Login() {
   const isPresent = useIsPresent();
@@ -17,6 +18,7 @@ export default function Login() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const [, setUser] = useAtom(userAtom);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const login = () => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -28,7 +30,7 @@ export default function Login() {
       toast.error(t('invalidEmail'));
       return;
     }
-
+    setIsLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -43,17 +45,20 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode >= 400) {
+          setIsLoading(false);
           toast.error(t('loginErrorsInvalidCredentials'));
           return;
         } else {
           toast.success(t('loginSuccess'));
           setUser(() => getUserObject());
           setTimeout(() => {
+            setIsLoading(false);
             navigate("/");
           }, 750);
         }
       })
       .catch((err) => {
+        setIsLoading(false);
         toast.error(t('somethingWentWrong'));
         console.log(err);
       });
@@ -79,15 +84,22 @@ export default function Login() {
           placeholder={t("loginEmail")}
           ref={emailRef}
           type="email"
+          disabled={isLoading}
           containerClassName="sm:w-96 w-72"
         />
         <Input
           containerClassName="sm:w-96 w-72"
           placeholder={t("loginPassword")}
           type="password"
+          disabled={isLoading}
           ref={passwordRef}
         />
-        <Button type="default" onClick={login}>
+        <ThreeDots
+          height={40}
+          width={40}
+          visible={isLoading}
+        />
+        <Button type="default" onClick={login} disabled={isLoading}>
           {t("login")}
         </Button>
         <Link to="/register">{t("loginRegisterLink")}</Link>

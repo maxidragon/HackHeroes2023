@@ -8,6 +8,7 @@ interface InputProps {
   containerClassName?: string;
   max?: number;
   name?: string;
+  disabled?: boolean;
   value?: string;
   readonly?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -22,6 +23,7 @@ export default forwardRef(function Input(
     containerClassName,
     value,
     onChange,
+    disabled,
     readonly,
     name,
     max,
@@ -39,6 +41,7 @@ export default forwardRef(function Input(
         name={name}
         id={id || placeholder}
         placeholder=" "
+        disabled={disabled}
         ref={ref || null}
         maxLength={max}
       />

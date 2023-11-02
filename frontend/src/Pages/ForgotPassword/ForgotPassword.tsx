@@ -4,13 +4,15 @@ import background from "../../graphics/loginBackground.jpg";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import toast from "react-hot-toast";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { TbArrowLeft } from "react-icons/tb";
 import { t } from "i18next";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function ForgotPassword() {
   const isPresent = useIsPresent();
   const emailRef = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const login = () => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -22,7 +24,7 @@ export default function ForgotPassword() {
       toast.error(t('invalidEmail'));
       return;
     }
-
+    setIsLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/auth/reset/`, {
       method: "POST",
       headers: {
@@ -35,14 +37,18 @@ export default function ForgotPassword() {
     })
       .then((res) => {
         if (res.status === 204) {
+          setIsLoading(false);
           toast.success(t('resetEmailSent'));
         } else if (res.status === 404) {
+          setIsLoading(false);
           toast.error(t('wrongEmail'));
         } else {
+          setIsLoading(false);
           toast.error(t('somethingWentWrong'));
         }
       })
       .catch((err) => {
+        setIsLoading(false);
         toast.error(t('somethingWentWrong'));
         console.log(err);
       });
@@ -68,9 +74,15 @@ export default function ForgotPassword() {
           placeholder={t("loginEmail")}
           ref={emailRef}
           type="email"
+          disabled={isLoading}
           containerClassName="sm:w-96 w-72"
         />
-        <Button type="default" onClick={login}>
+          <ThreeDots
+            height={40}
+            width={40}
+            visible={isLoading}
+          />
+        <Button type="default" onClick={login} disabled={isLoading}>
           {t("sendResetEmail")}
         </Button>
       </div>

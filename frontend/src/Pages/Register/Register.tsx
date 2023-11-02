@@ -3,10 +3,11 @@ import { motion, useIsPresent } from "framer-motion";
 import background from "../../graphics/loginBackground.jpg";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { TbArrowLeft } from "react-icons/tb";
 import { t } from "i18next";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Register() {
   const isPresent = useIsPresent();
@@ -15,7 +16,7 @@ export default function Register() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const repeatPasswordRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const register = () => {
@@ -32,7 +33,7 @@ export default function Register() {
     } else if (!emailRegex.test(emailRef.current?.value)) {
       toast.error(t('invalidEmail'));
       return;
-    } else if ( 
+    } else if (
       passwordRef.current?.value !== repeatPasswordRef.current?.value
     ) {
       toast.error(t('registerErrorsPasswordsDontMatch'));
@@ -41,7 +42,7 @@ export default function Register() {
       toast.error(t('registerErrorsPasswordIsTooShort'));
       return;
     }
-
+    setIsLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
       method: "POST",
       headers: {
@@ -58,10 +59,12 @@ export default function Register() {
       .then((data) => {
         if (data.statusCode >= 400) {
           toast.error(t('registerErrorsDataAlreadyTaken'));
+          setIsLoading(false);
           return;
         } else {
           toast.success(t('registerSuccess'))
           setTimeout(() => {
+            setIsLoading(false);
             navigate("/login");
           }, 1000);
         }
@@ -86,28 +89,37 @@ export default function Register() {
         <Input
           placeholder={t("registerUsername")}
           ref={usernameRef}
+          disabled={isLoading}
           containerClassName="sm:w-96 w-72"
         />
         <Input
           placeholder={t("registerEmail")}
           type="email"
+          disabled={isLoading}
           ref={emailRef}
           containerClassName="sm:w-96 w-72"
         />
         <Input
           placeholder={t("registerPassword")}
           type="password"
+          disabled={isLoading}
           ref={passwordRef}
           containerClassName="sm:w-96 w-72"
         />
         <Input
           placeholder={t("registerRepeatPassword")}
           type="password"
+          disabled={isLoading}
           ref={repeatPasswordRef}
           containerClassName="sm:w-96 w-72"
         />
-        <Button type="default" onClick={register}>
-          {t("registerTitle")}
+        <ThreeDots
+          height={40}
+          width={40}
+          visible={isLoading}
+        />
+        <Button type="default" onClick={register} disabled={isLoading}>
+          {t("register")}
         </Button>
         <Link to="/login">{t("registerLoginLink")}</Link>
       </div>

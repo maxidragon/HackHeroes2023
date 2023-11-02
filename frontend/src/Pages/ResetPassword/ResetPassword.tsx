@@ -3,14 +3,16 @@ import { motion, useIsPresent } from "framer-motion";
 import background from "../../graphics/loginBackground.jpg";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { TbArrowLeft } from "react-icons/tb";
 import { t } from "i18next";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function ResetPassword() {
   const { hash } = useParams();
   const isPresent = useIsPresent();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const passwordRef = useRef<HTMLInputElement>(null);
   const repeatPasswordRef = useRef<HTMLInputElement>(null);
@@ -34,7 +36,7 @@ export default function ResetPassword() {
       toast.error(t('registerErrorsPasswordIsTooShort'));
       return;
     }
-
+    setIsLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/auth/reset/${hash}`, {
       method: "PATCH",
       headers: {
@@ -47,16 +49,19 @@ export default function ResetPassword() {
     })
       .then((res) => {
         if (res.status >= 400) {
+          setIsLoading(false);
           toast.error(t('somethingWentWrong'));
           return;
         } else {
           toast.success(t('resetPasswordSuccess'))
           setTimeout(() => {
+            setIsLoading(false);
             navigate("/login");
           }, 1000);
         }
       })
       .catch((err) => {
+        setIsLoading(false);
         toast.error(t('somethingWentWrong'));
         console.log(err);
       });
@@ -76,16 +81,23 @@ export default function ResetPassword() {
         <Input
           placeholder={t("registerPassword")}
           type="password"
+          disabled={isLoading}
           ref={passwordRef}
           containerClassName="sm:w-96 w-72"
         />
         <Input
           placeholder={t("registerRepeatPassword")}
           type="password"
+          disabled={isLoading}
           ref={repeatPasswordRef}
           containerClassName="sm:w-96 w-72"
         />
-        <Button type="default" onClick={register}>
+        <ThreeDots
+          height={40}
+          width={40}
+          visible={isLoading}
+        />
+        <Button type="default" onClick={register} disabled={isLoading}>
           {t("changePassword")}
         </Button>
       </div>
