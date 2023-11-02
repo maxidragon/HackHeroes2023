@@ -8,6 +8,7 @@ import { t } from "i18next";
 import { LuMousePointerClick } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa6";
 import { FaXmark } from "react-icons/fa6";
+import getUserObject from "../../lib/getUser.ts";
 
 interface flashcard {
   id: number,
@@ -17,6 +18,7 @@ interface flashcard {
 
 interface progressSet {
   id: number,
+  userId: number,
   allFlashcards: flashcard[],
   correctAnswers: flashcard[],
   wrongAnswers: flashcard[],
@@ -34,6 +36,7 @@ export default function FlashcardsLearn() {
 
   const { getSingleSet, updateSet } = useFlashcardProgress();
   const { id } = useParams();
+  const { id: userId } = getUserObject();
 
   const learnReducer = (state: progressSet, action: action) => {
 
@@ -43,7 +46,6 @@ export default function FlashcardsLearn() {
     switch (action.type) {
       case "CORRECT":
         const updatedCorrectAnswers = [...state.correctAnswers, state.flashcardsLeft[0]];
-        // updatedLeft = state.flashcardsLeft.filter((card, index) => index !== 0);
 
         for (let i = 1; i < state.flashcardsLeft.length; i++) {
           updatedLeft.push(state.flashcardsLeft[i]);
@@ -88,6 +90,7 @@ export default function FlashcardsLearn() {
 
         return {
           id,
+          userId,
           allFlashcards: [...flashcards],
           flashcardsLeft: [...flashcards],
           correctAnswers: [],
@@ -118,6 +121,7 @@ export default function FlashcardsLearn() {
   const learnInitializer = () => {
     return {
       id: -1,
+      userId: -1,
       flashcardsLeft: [],
       correctAnswers: [],
       wrongAnswers: []
@@ -138,8 +142,7 @@ export default function FlashcardsLearn() {
 
     if (id) {
 
-      const savedProgressSet = getSingleSet(parseInt(id));
-      console.log(savedProgressSet);
+      const savedProgressSet = getSingleSet(parseInt(id), userId);
 
       if (savedProgressSet) {
         learningSetDispatch({ type: "LOAD_PROGRESS", payload: savedProgressSet });
@@ -158,6 +161,7 @@ export default function FlashcardsLearn() {
           learningSetDispatch({
             type: "UPDATE", payload: {
               id,
+              userId,
               flashcards: flashCards
             }
           });

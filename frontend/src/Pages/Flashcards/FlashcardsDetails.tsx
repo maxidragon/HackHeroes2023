@@ -114,7 +114,6 @@ export default function FlashcardsDetails() {
   useEffect(() => {
     if (id) {
       getFlashcardSet(id).then(data => {
-        console.log(data);
         setFlashcardSet(data);
       });
     }

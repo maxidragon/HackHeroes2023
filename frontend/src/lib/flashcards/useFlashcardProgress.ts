@@ -9,6 +9,7 @@ interface flashcard {
 
 interface progressSet {
   id: number,
+  userId: number,
   allFlashcards: flashcard[],
   correctAnswers: flashcard[],
   wrongAnswers: flashcard[],
@@ -27,18 +28,17 @@ const useFlashcardProgress = () => {
   const [progressSets, setProgressSets] = useAtom(progress);
 
   // get progress to single flashcards set
-  const getSingleSet = (id: number) => {
-    console.log(progressSets);
-    return progressSets.filter(flashcardSet => flashcardSet.id == id)[0];
+  const getSingleSet = (id: number, userId = -1) => {
+    return progressSets.filter(flashcardSet => flashcardSet.id == id && flashcardSet.userId == userId)[0];
   };
 
   const updateSet = (updatedSet: progressSet) => {
 
-    const { id } = updatedSet;
+    const { id, userId } = updatedSet;
 
     setProgressSets(prevState => {
 
-      const otherSets = prevState.filter(flashcardSet => flashcardSet.id != id);
+      const otherSets = prevState.filter(flashcardSet => flashcardSet.id != id || flashcardSet.userId != userId);
       return [...otherSets, updatedSet];
     });
   };
