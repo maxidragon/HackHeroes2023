@@ -17,8 +17,8 @@ export default function AnimatedSvgBg() {
               values="0%;3%;0%"
               repeatCount="indefinite"
             ></animate>
-            <stop offset="0%" stop-color="rgba(217, 70, 239, 1)"></stop>
-            <stop offset="100%" stop-color="rgba(255, 0, 255, 0)"></stop>
+            <stop offset="0%" stopColor="rgba(217, 70, 239, 1)"></stop>
+            <stop offset="100%" stopColor="rgba(255, 0, 255, 0)"></stop>
           </radialGradient>
           <radialGradient
             id="Gradient2"
@@ -34,8 +34,8 @@ export default function AnimatedSvgBg() {
               values="0%;3%;0%"
               repeatCount="indefinite"
             ></animate>
-            <stop offset="0%" stop-color="rgba(217, 70, 239, 1)"></stop>
-            <stop offset="100%" stop-color="rgba(255, 255, 0, 0)"></stop>
+            <stop offset="0%" stopColor="rgba(217, 70, 239, 1)"></stop>
+            <stop offset="100%" stopColor="rgba(255, 255, 0, 0)"></stop>
           </radialGradient>
           <radialGradient
             id="Gradient3"
@@ -51,8 +51,8 @@ export default function AnimatedSvgBg() {
               values="0%;3%;0%"
               repeatCount="indefinite"
             ></animate>
-            <stop offset="0%" stop-color="rgba(147, 197, 253, 1)"></stop>
-            <stop offset="100%" stop-color="rgba(0, 255, 255, 0)"></stop>
+            <stop offset="0%" stopColor="rgba(147, 197, 253, 1)"></stop>
+            <stop offset="100%" stopColor="rgba(0, 255, 255, 0)"></stop>
           </radialGradient>
           <radialGradient
             id="Gradient4"
@@ -68,8 +68,8 @@ export default function AnimatedSvgBg() {
               values="0%;5%;0%"
               repeatCount="indefinite"
             ></animate>
-            <stop offset="0%" stop-color="rgba(3, 105, 161,1)"></stop>
-            <stop offset="100%" stop-color="rgba(0, 255, 0, 0)"></stop>
+            <stop offset="0%" stopColor="rgba(3, 105, 161,1)"></stop>
+            <stop offset="100%" stopColor="rgba(0, 255, 0, 0)"></stop>
           </radialGradient>
         </defs>
         <rect x="0" y="0" width="100%" height="100%" fill="url(#Gradient4)">
