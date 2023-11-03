@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import getFlashcards from "../../lib/flashcards/getFlashcards.ts";
 import Input from "../../Components/Input.tsx";
 import Button from "../../Components/Button.tsx";
+import Loader from "../../Components/Loader.tsx";
 
 interface flashcard {
-  id: number,
-  title: string,
-  description: string,
+  id: number;
+  title: string;
+  description: string;
 }
 
 export default function Flashcards() {
@@ -19,99 +20,134 @@ export default function Flashcards() {
   const [myFlashcards, setMyFlashcards] = useState([]);
   const [classFlashcards, setClassFlashcards] = useState([]);
   const [publicFlashcards, setPublicFlashcards] = useState([]);
-  const [searchString, setSearchString] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
-  const searchHandler = () => {
-    setSearchString(searchRef.current?.value || "");
-  };
+  const searchHandler = async () => {
+    setIsFetching(true);
 
-  useEffect(() => {
-
-    getFlashcards("my", searchString).then(data => {
+    await getFlashcards("my", searchRef.current?.value).then((data) => {
       setMyFlashcards(data);
     });
 
-    getFlashcards("class", searchString).then(data => {
+    await getFlashcards("class", searchRef.current?.value).then((data) => {
       setClassFlashcards(data);
     });
 
-    getFlashcards("public", searchString).then(data => {
+    await getFlashcards("public", searchRef.current?.value).then((data) => {
       setPublicFlashcards(data);
     });
 
-  }, [searchString]);
+    setIsFetching(false);
+  };
+
+  useEffect(() => {
+    searchHandler();
+  }, []);
 
   return (
     <div className="flex w-[80%] mx-auto max-w-[1300px] flex-col items-center gap-5 py-6">
-
-      <fieldset
-        className="flex flex-col md:flex-row border-gray-500 border-2 p-6 justify-between items-center w-full gap-6">
-        <legend className="text-xl text-white px-2">{t("flashcardsLegend")}</legend>
-        <Input ref={searchRef} placeholder={t("searchPlaceholder")} className="w-full text-xl"
-               containerClassName="w-full" />
+      <fieldset className="flex flex-col md:flex-row border-gray-500 border-t-2 p-6 justify-between items-center w-full gap-6">
+        <legend className="text-xl text-white px-2">
+          {t("flashcardsLegend")}
+        </legend>
+        <Input
+          ref={searchRef}
+          placeholder={t("searchPlaceholder")}
+          className="w-full text-xl"
+          containerClassName="w-full"
+          onChange={searchHandler}
+        />
         <div className="flex gap-6">
-          <Button onClick={searchHandler} type="default" className="text-xl py-4"
-                  width="w-70">{t("searchPlaceholder")}</Button>
-          <Button type="alt" isLink={true} to="/flashcards/create"
-                  className="py-4 text-xl">{t("createNewFlashCardSet")}</Button>
+          <Button
+            type="default"
+            className="text-xl py-4"
+            width="w-70"
+            onClick={searchHandler}
+          >
+            {t("searchPlaceholder")}
+          </Button>
+          <Button
+            type="alt"
+            isLink={true}
+            to="/flashcards/create"
+            className="py-4 text-xl"
+          >
+            {t("createNewFlashCardSet")}
+          </Button>
         </div>
       </fieldset>
-
-      {myFlashcards.length ? <div className="w-full py-6">
-        <h2 className="py-4 text-2xl">{t("personalSets")}</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-          {myFlashcards.map((flashcard: flashcard) => {
-            return (
-              <Link className="shadow-lg px-3 py-6 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
-                    key={flashcard.id}
-                    to={`/flashcards/details/${flashcard.id}`}>
-                <h3 className="text-xl">{flashcard.title}</h3>
-              </Link>
-            );
-          })}
-        </div>
-      </div> : ""}
-
-      {classFlashcards.length ? <div className="w-full py-6">
-        <h2 className="py-4 text-2xl">{t("classSets")}</h2>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-          {classFlashcards.map((flashcard: flashcard) => {
-            return (
-              <Link className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
-                    key={flashcard.id}
-                    to={`/flashcards/details/${flashcard.id}`}>
-                <h3 className="text-xl">{flashcard.title}</h3>
-              </Link>
-            );
-          })}
-        </div>
-      </div> : ""}
-
-      {publicFlashcards.length ?
-        <div className="w-full py-6">
-          <h2 className="py-4 text-2xl">{t("publicSets")}</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-            {publicFlashcards.map((flashcard: flashcard) => {
-              return (
-                <Link className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
+      {isFetching ? (
+        <Loader width="200" />
+      ) : (
+        <>
+          {myFlashcards.length && (
+            <div className="w-full py-6">
+              <h2 className="py-4 text-2xl">{t("personalSets")}</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+                {myFlashcards.map((flashcard: flashcard) => {
+                  return (
+                    <Link
+                      className="shadow-lg px-3 py-6 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
                       key={flashcard.id}
-                      to={`/flashcards/details/${flashcard.id}`}>
-                  <h3 className="text-xl">{flashcard.title}</h3>
-                </Link>
-              );
-            })}
-          </div>
-        </div> : ""}
+                      to={`/flashcards/details/${flashcard.id}`}
+                    >
+                      <h3 className="text-xl">{flashcard.title}</h3>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          {classFlashcards.length && (
+            <div className="w-full py-6">
+              <h2 className="py-4 text-2xl">{t("classSets")}</h2>
 
-      {!publicFlashcards.length && !myFlashcards.length && !classFlashcards.length &&
-        <h3 className="text-2xl text-white mt-10">{t("noFlashcards")}</h3>}
-
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+                {classFlashcards.map((flashcard: flashcard) => {
+                  return (
+                    <Link
+                      className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
+                      key={flashcard.id}
+                      to={`/flashcards/details/${flashcard.id}`}
+                    >
+                      <h3 className="text-xl">{flashcard.title}</h3>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          {publicFlashcards.length && (
+            <div className="w-full py-6">
+              <h2 className="py-4 text-2xl">{t("publicSets")}</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+                {publicFlashcards.map((flashcard: flashcard) => {
+                  return (
+                    <Link
+                      className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
+                      key={flashcard.id}
+                      to={`/flashcards/details/${flashcard.id}`}
+                    >
+                      <h3 className="text-xl">{flashcard.title}</h3>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+      {!publicFlashcards.length &&
+        !myFlashcards.length &&
+        !classFlashcards.length &&
+        !isFetching && (
+          <h3 className="text-2xl text-white mt-10">{t("noFlashcards")}</h3>
+        )}
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{
           scaleX: 0,
-          transition: { duration: 0.6, ease: "circOut" }
+          transition: { duration: 0.6, ease: "circOut" },
         }}
         exit={{ scaleX: 1, transition: { duration: 0.6, ease: "circIn" } }}
         style={{ originX: isPresent ? 0 : 1 }}
