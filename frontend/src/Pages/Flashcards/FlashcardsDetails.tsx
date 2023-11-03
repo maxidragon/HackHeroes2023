@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import {
   BsFillTrashFill,
   BsFillPencilFill,
-  BsFillPlayFill,
+  BsFillPlayFill
 } from "react-icons/bs";
 import Loader from "../../Components/Loader.tsx";
 
@@ -50,9 +50,9 @@ export default function FlashcardsDetails() {
       forkedFrom,
       description,
       publicity,
-      flashCards,
+      flashCards
     },
-    setFlashcardSet,
+    setFlashcardSet
   ] = useState<flashcardSet>({
     createdAt: "",
     description: "",
@@ -64,8 +64,8 @@ export default function FlashcardsDetails() {
     updatedAt: "",
     user: {
       username: "",
-      id: 0,
-    },
+      id: 0
+    }
   });
 
   const { id } = useParams();
@@ -81,8 +81,8 @@ export default function FlashcardsDetails() {
         method: "DELETE",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
 
@@ -106,8 +106,8 @@ export default function FlashcardsDetails() {
         method: "GET",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
 
@@ -145,12 +145,12 @@ export default function FlashcardsDetails() {
         </div>
       ) : (
         <>
-          <div className="flex justify-between items-center w-full">
-            <h2 className="text-3xl py-4">{title}</h2>
+          <div className="flex flex-col sm:flex-row justify-between items-center w-full">
+            <h2 className="text-3xl">{title}</h2>
             <div className="flex gap-3">
               {loggedUser.id === user.id && (
                 <Button
-                  className="text-lg px-4 py-2 mt-8"
+                  className="text-lg px-4 py-2 mt-8 disabled:bg-gray-400 disabled:text-gray-400"
                   width="w-42"
                   type="alt"
                   onClick={deleteSet}
@@ -190,35 +190,38 @@ export default function FlashcardsDetails() {
               </Button>
             </div>
           </div>
-          <p>
-            {t("author")}:{" "}
-            <Link to={`/profile/${user.id}`}>{user.username}</Link>
-          </p>
-          {forkedFrom && (
+          <div className="flex flex-col sm:mt-0 mt-8 gap-1">
             <p>
-              {t("forkedFrom")}: {forkedFrom}
+              {t("author")}:{" "}
+              <Link to={`/profile/${user.id}`}>{user.username}</Link>
             </p>
-          )}
-          <p>
-            {t("createdAt")}:{" "}
-            {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), {
-              addSuffix: true,
-              locale: i18n.language === "pl" ? pl : enUS,
-            }) || ""}
-          </p>
-          <p>
-            {t("lastModified")}:{" "}
-            {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), {
-              addSuffix: true,
-              locale: i18n.language === "pl" ? pl : enUS,
-            }) || ""}
-          </p>
-          <p>
-            {t("description")}: {description}
-          </p>
-          <p className="text-gray-400">
-            {t("publicity")}: {publicity}
-          </p>
+            {forkedFrom && (
+              <p>
+                {t("forkedFrom")}: {forkedFrom}
+              </p>
+            )}
+            <p>
+              {t("createdAt")}:{" "}
+              {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), {
+                addSuffix: true,
+                locale: i18n.language === "pl" ? pl : enUS
+              }) || ""}
+            </p>
+            <p>
+              {t("lastModified")}:{" "}
+              {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), {
+                addSuffix: true,
+                locale: i18n.language === "pl" ? pl : enUS
+              }) || ""}
+            </p>
+            <p>
+              {t("description")}: {description}
+            </p>
+            <p className="text-gray-400">
+              {t("publicity")}: {publicity}
+            </p>
+          </div>
+
           <div className="flex flex-col gap-4 mt-8">
             <p>{t("questionsAndAnswers")}:</p>
             {flashCards.map((flashCard) => {
@@ -242,7 +245,7 @@ export default function FlashcardsDetails() {
         initial={{ scaleX: 1 }}
         animate={{
           scaleX: 0,
-          transition: { duration: 0.6, ease: "circOut" },
+          transition: { duration: 0.6, ease: "circOut" }
         }}
         exit={{ scaleX: 1, transition: { duration: 0.6, ease: "circIn" } }}
         style={{ originX: isPresent ? 0 : 1 }}
