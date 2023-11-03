@@ -36,10 +36,21 @@ const useFlashcardProgress = () => {
 
     const { id, userId } = updatedSet;
 
+    let newFlashcardSet = updatedSet;
+
+    if (updatedSet.flashcardsLeft.length === 0 && updatedSet.wrongAnswers.length === 0) {
+      newFlashcardSet = {
+        ...updatedSet,
+        wrongAnswers: [],
+        correctAnswers: [],
+        flashcardsLeft: [...updatedSet.allFlashcards]
+      };
+    }
+
     setProgressSets(prevState => {
 
       const otherSets = prevState.filter(flashcardSet => flashcardSet.id != id || flashcardSet.userId != userId);
-      return [...otherSets, updatedSet];
+      return [...otherSets, newFlashcardSet];
     });
   };
 

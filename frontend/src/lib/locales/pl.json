@@ -108,6 +108,8 @@
   "lastModified": "Ostatnio zmodyfikowane",
   "publicity": "Widoczność",
   "questionsAndAnswers": "Pytania i odpowiedzi",
+  "question": "Pytanie",
+  "answer": "Odpowiedź",
   "iDoNotKnow": "Nie wiem",
   "iKnow": "Wiem",
   "youKnowThis": "Wiesz to",
@@ -211,5 +213,6 @@
   "noFlashcards": "Nie ma żadnych zestawów do wyświetlenia",
   "flashcardForked": "Skopiowano zestaw!",
   "playAgain": "Jeszcze raz",
-  "allCorrect": "Gratulacje, skończyłeś naukę zestawu"
+  "allCorrect": "Gratulacje, skończyłeś naukę zestawu",
+  "flipFlashcard": "Odwróć kartę, by sprawdzić odpowiedź"
 }

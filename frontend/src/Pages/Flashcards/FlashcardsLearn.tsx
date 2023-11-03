@@ -48,7 +48,7 @@ export default function FlashcardsLearn() {
       case "CORRECT":
         const updatedCorrectAnswers = [
           ...state.correctAnswers,
-          state.flashcardsLeft[0],
+          state.flashcardsLeft[0]
         ];
 
         for (let i = 1; i < state.flashcardsLeft.length; i++) {
@@ -58,7 +58,7 @@ export default function FlashcardsLearn() {
         updatedSet = {
           ...state,
           flashcardsLeft: updatedLeft,
-          correctAnswers: updatedCorrectAnswers,
+          correctAnswers: updatedCorrectAnswers
         };
 
         updateSet(updatedSet);
@@ -68,7 +68,7 @@ export default function FlashcardsLearn() {
       case "WRONG":
         const updatedWrongAnswers = [
           ...state.wrongAnswers,
-          state.flashcardsLeft[0],
+          state.flashcardsLeft[0]
         ];
 
         for (let i = 1; i < state.flashcardsLeft.length; i++) {
@@ -78,7 +78,7 @@ export default function FlashcardsLearn() {
         updatedSet = {
           ...state,
           flashcardsLeft: updatedLeft,
-          wrongAnswers: updatedWrongAnswers,
+          wrongAnswers: updatedWrongAnswers
         };
 
         updateSet(updatedSet);
@@ -90,7 +90,7 @@ export default function FlashcardsLearn() {
       case "UPDATE_ALL_FLASHCARDS":
         return {
           ...state,
-          allFlashcards: [...action.payload.flashcards],
+          allFlashcards: [...action.payload.flashcards]
         };
       case "UPDATE":
         const { flashcards, id } = action.payload;
@@ -101,7 +101,7 @@ export default function FlashcardsLearn() {
           allFlashcards: [...flashcards],
           flashcardsLeft: [...flashcards],
           correctAnswers: [],
-          wrongAnswers: [],
+          wrongAnswers: []
         };
       case "NEXT_ROUND":
         if (state.wrongAnswers.length === 0) {
@@ -109,14 +109,14 @@ export default function FlashcardsLearn() {
             ...state,
             wrongAnswers: [],
             correctAnswers: [],
-            flashcardsLeft: [...state.allFlashcards],
+            flashcardsLeft: [...state.allFlashcards]
           };
         }
 
         return {
           ...state,
           wrongAnswers: [],
-          flashcardsLeft: [...state.wrongAnswers],
+          flashcardsLeft: [...state.wrongAnswers]
         };
 
       default:
@@ -130,7 +130,7 @@ export default function FlashcardsLearn() {
       userId: -1,
       flashcardsLeft: [],
       correctAnswers: [],
-      wrongAnswers: [],
+      wrongAnswers: []
     };
   };
 
@@ -149,7 +149,7 @@ export default function FlashcardsLearn() {
   const changeFlashCardSide = () => {
     setShowButtons(true);
     setIsFlipped((prevState) => {
-      return prevState ? false : true;
+      return !prevState;
     });
   };
 
@@ -160,7 +160,7 @@ export default function FlashcardsLearn() {
       if (savedProgressSet) {
         learningSetDispatch({
           type: "LOAD_PROGRESS",
-          payload: savedProgressSet,
+          payload: savedProgressSet
         });
       }
 
@@ -169,8 +169,8 @@ export default function FlashcardsLearn() {
           learningSetDispatch({
             type: "UPDATE_ALL_FLASHCARDS",
             payload: {
-              flashcards: flashCards,
-            },
+              flashcards: flashCards
+            }
           });
         } else {
           learningSetDispatch({
@@ -178,8 +178,8 @@ export default function FlashcardsLearn() {
             payload: {
               id,
               userId,
-              flashcards: flashCards,
-            },
+              flashcards: flashCards
+            }
           });
         }
       });
@@ -191,7 +191,7 @@ export default function FlashcardsLearn() {
       {learningSet.flashcardsLeft.length > 0 && (
         <div className="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 w-1/3 h-1/3">
           <h2 className="text-2xl text-center mb-4">
-            Flip the flashcard to see if u were correct
+            {t("flipFlashcard")}
           </h2>
           <div
             onClick={changeFlashCardSide}
@@ -204,14 +204,14 @@ export default function FlashcardsLearn() {
             >
               <div className="bg-purple-600 w-full h-full rounded-2xl flex items-center justify-center flex-col gap-4">
                 <TbClick className="absolute left-2 top-2 text-2xl" />
-                <p>Answer:</p>
+                <p>{t("answer")}:</p>
                 <p className="text-center text-2xl sm:text-3xl">
                   {learningSet.flashcardsLeft[0].answer}
                 </p>
               </div>
               <div className="bg-purple-600 w-full h-full rounded-2xl flex items-center justify-center flex-col gap-4">
                 <TbClick className="absolute left-2 top-2 text-2xl" />
-                <p>Question:</p>
+                <p>{t("question")}:</p>
                 <p className="text-center text-2xl sm:text-3xl">
                   {learningSet.flashcardsLeft[0].question}
                 </p>
@@ -323,7 +323,7 @@ export default function FlashcardsLearn() {
         initial={{ scaleX: 1 }}
         animate={{
           scaleX: 0,
-          transition: { duration: 0.6, ease: "circOut" },
+          transition: { duration: 0.6, ease: "circOut" }
         }}
         exit={{ scaleX: 1, transition: { duration: 0.6, ease: "circIn" } }}
         style={{ originX: isPresent ? 0 : 1 }}

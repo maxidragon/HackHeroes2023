@@ -108,6 +108,8 @@
   "lastModified": "Last modified",
   "publicity": "Publicity",
   "questionsAndAnswers": "Questions and Answers",
+  "question": "Question",
+  "answer": "Answer",
   "iDoNotKnow": "I don't know",
   "iKnow": "I do know",
   "youKnowThis": "You know this",
@@ -211,5 +213,6 @@
   "noFlashcards": "There are no flashcard sets to display",
   "flashcardForked": "Flashcard set forked!",
   "playAgain": "Play again",
-  "allCorrect": "Congratulations, you finished this learning session"
+  "allCorrect": "Congratulations, you finished this learning session",
+  "flipFlashcard": "Flip the flashcard to see if u were correct"
 }
