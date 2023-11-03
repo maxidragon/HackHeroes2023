@@ -117,6 +117,7 @@ export default function Register() {
           height={40}
           width={40}
           visible={isLoading}
+          color="#c084fc"
         />
         <Button type="default" onClick={register} disabled={isLoading}>
           {t("register")}

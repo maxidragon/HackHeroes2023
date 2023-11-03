@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useIsPresent } from "framer-motion";
 import { t } from "i18next";
 import { Todo as TodoInterface } from "../../lib/interfaces";
@@ -146,18 +146,26 @@ export default function Todo() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-wrap justify-center gap-4 mt-5 lg:w-4/5 w-full px-4">
-        <Suspense fallback={<Loader width="200" />}>
+      {isLoading ? (
+        <Loader width="200" />
+      ) : (
+        <div className="flex flex-wrap justify-center gap-4 mt-5 lg:w-4/5 w-full px-4">
           {todos && todos.length ? (
-            todos.map((todo: TodoInterface) => (
-              <TodoCard key={todo.id} todo={todo} fetchTodos={() => getMyTodos(0, 10, loadOnlyDone)} />
+            todos.map((todo: TodoInterface, i: number) => (
+              <TodoCard
+                key={todo.id}
+                todo={todo}
+                fetchTodos={() => getMyTodos(0, 10, loadOnlyDone)}
+                index={i}
+              />
             ))
           ) : (
-            <p className="text-4xl text-white roboto text-center">No todos found!</p>
+            <p className="text-4xl text-white roboto text-center">
+              No todos found!
+            </p>
           )}
-        </Suspense>
-        {isLoading && <Loader width="200" />}
-      </div>
+        </div>
+      )}
       {showMoreTodosButton && (
         <Button type="default" onClick={getMoreTodos}>
           {t("loadMore")}

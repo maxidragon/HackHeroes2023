@@ -98,6 +98,7 @@ export default function Login() {
           height={40}
           width={40}
           visible={isLoading}
+          color="#c084fc"
         />
         <Button type="default" onClick={login} disabled={isLoading}>
           {t("login")}

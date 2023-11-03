@@ -31,7 +31,7 @@ export default function Exams() {
   ) : (
     <div className="lg:w-4/5 md:w-full px-8 flex gap-8 flex-wrap justify-center text-white mb-10">
       {exams.length > 0 ? (
-        exams.map((item: Exam) => <ExamCard exam={item} key={item.id}/>)
+        exams.map((item: Exam, i: number) => <ExamCard exam={item} key={item.id} index={i}/>)
       ) : (
         <p>{t('noExams')}</p>
       )}

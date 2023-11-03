@@ -1,11 +1,13 @@
 import { motion, useIsPresent } from "framer-motion";
 import { t } from "i18next";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import getFlashcards from "../../lib/flashcards/getFlashcards.ts";
 import Input from "../../Components/Input.tsx";
 import Button from "../../Components/Button.tsx";
 import Loader from "../../Components/Loader.tsx";
+import { useAtomValue } from "jotai";
+import { userAtom } from "../../Atoms.ts";
 
 interface flashcard {
   id: number;
@@ -15,12 +17,14 @@ interface flashcard {
 
 export default function Flashcards() {
   const isPresent = useIsPresent();
+  const navigate = useNavigate();
   const searchRef = useRef<HTMLInputElement>();
 
   const [myFlashcards, setMyFlashcards] = useState([]);
   const [classFlashcards, setClassFlashcards] = useState([]);
   const [publicFlashcards, setPublicFlashcards] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const user = useAtomValue(userAtom);
 
   const searchHandler = async () => {
     setIsFetching(true);
@@ -41,8 +45,12 @@ export default function Flashcards() {
   };
 
   useEffect(() => {
+    if (!user.id) {
+      navigate("/login");
+    }
+    
     searchHandler();
-  }, []);
+  }, [user, navigate]);
 
   return (
     <div className="flex w-[80%] mx-auto max-w-[1300px] flex-col items-center gap-5 py-6">

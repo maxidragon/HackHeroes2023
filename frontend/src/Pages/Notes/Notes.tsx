@@ -32,8 +32,9 @@ export default function Notes() {
     } else if (search) {
       queryString = `?search=${search}`;
     }
-    let url = `${import.meta.env.VITE_API_URL
-      }/notes/${publicity.toLowerCase()}`;
+    let url = `${
+      import.meta.env.VITE_API_URL
+    }/notes/${publicity.toLowerCase()}`;
     if (user.id && publicity === "Public") {
       url += `/auth`;
     }
@@ -82,14 +83,16 @@ export default function Notes() {
     if (!notes) return setIsFetching(false);
     const queryParams = new URLSearchParams();
     if (category) {
-      queryParams.append('category', category);
+      queryParams.append("category", category);
     }
     if (search) {
-      queryParams.append('search', search);
+      queryParams.append("search", search);
     }
-    let url = `${import.meta.env.VITE_API_URL}/notes/${publicity.toLowerCase()}`;
+    let url = `${
+      import.meta.env.VITE_API_URL
+    }/notes/${publicity.toLowerCase()}`;
     if (user.id && publicity === "Public") {
-      url += '/auth';
+      url += "/auth";
     }
     const queryString = queryParams.toString();
     if (queryString !== "") {
@@ -358,8 +361,14 @@ export default function Notes() {
       <div className="xl:w-3/5 w-full px-4 flex justify-evenly flex-wrap items-center gap-8 mb-10">
         {notes && notes.length > 0 ? (
           <>
-            {notes.map((note: Note) => (
-              <div
+            {notes.map((note: Note, index: number) => (
+              <motion.div
+                initial={{ opacity: 0, bottom: "-5px" }}
+                animate={{
+                  opacity: 1,
+                  bottom: 0,
+                  transition: { duration: 0.2, delay: index * 0.1 },
+                }}
                 key={note.id}
                 className="md:w-2/5 w-2/3 max-[500px]:w-full flex flex-col items-center gap-2 border-2 shadow-xl lg:border-gray-400 border-purple-400 h-[30rem] rounded-xl p-4"
               >
@@ -413,7 +422,7 @@ export default function Notes() {
                     </Button>
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </>
         ) : isFetching ? (

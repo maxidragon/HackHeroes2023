@@ -2,8 +2,9 @@ import { useState } from "react";
 import ReactCardFlip from "react-card-flip";
 import { TbClick } from "react-icons/tb";
 import { Homework } from "../../../lib/interfaces";
+import { motion } from "framer-motion";
 
-export default function HomeworkCard({ homework }: { homework: Homework }) {
+export default function HomeworkCard({ homework, index }: { homework: Homework; index: number }) {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
   function handleClick() {
@@ -11,7 +12,13 @@ export default function HomeworkCard({ homework }: { homework: Homework }) {
   }
 
   return (
-    <div className="2xl:w-1/5 xl:w-1/4 md:w-1/3 w-full h-72 cursor-pointer" onClick={handleClick}>
+    <motion.div
+    initial={{ opacity: 0, bottom: "-5px" }}
+    animate={{
+      opacity: 1,
+      bottom: 0,
+      transition: { duration: 0.2, delay: index * .1 },
+    }} className="2xl:w-1/5 xl:w-1/4 md:w-1/3 w-full h-72 cursor-pointer" onClick={handleClick}>
       <ReactCardFlip
         isFlipped={isFlipped}
         flipDirection="horizontal"
@@ -28,6 +35,6 @@ export default function HomeworkCard({ homework }: { homework: Homework }) {
           <p className="text-lg text-center">{homework.content || "Brak opisu"}</p>
         </div>
       </ReactCardFlip>
-    </div>
+    </motion.div>
   );
 }

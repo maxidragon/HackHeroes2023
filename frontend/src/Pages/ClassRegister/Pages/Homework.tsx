@@ -29,8 +29,8 @@ export default function Homework() {
   ) : (
     <div className="lg:w-4/5 md:w-full px-8 flex gap-8 flex-wrap justify-center text-white mb-10">
       {homework?.length > 0 ? (
-        homework.map((item: HomeworkInterface) => (
-          <HomeworkCard homework={item} key={item.id} />
+        homework.map((item: HomeworkInterface, i: number) => (
+          <HomeworkCard homework={item} key={item.id} index={i} />
         ))
       ) : (
         <p>{t("noHomework")}</p>

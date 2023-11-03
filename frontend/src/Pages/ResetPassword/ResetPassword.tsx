@@ -96,6 +96,7 @@ export default function ResetPassword() {
           height={40}
           width={40}
           visible={isLoading}
+          color="#c084fc"
         />
         <Button type="default" onClick={register} disabled={isLoading}>
           {t("changePassword")}
