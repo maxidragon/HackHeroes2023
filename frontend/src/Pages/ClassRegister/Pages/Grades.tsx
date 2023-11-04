@@ -70,16 +70,16 @@ export default function Grades() {
                     >
                       {key}
                     </th>
-                    <td className="lg:px-6 px-2  py-4 bg-purple-700 gap-2">
+                    <td className="lg:px-6 px-2 py-4 bg-purple-700 gap-2">
                       {grades[key].map((grade, i) => {
                         return (
                           <span
                             key={grade.id}
                             title={
                               grade.name +
-                              " " +
+                              " | " +
                               grade.teacher +
-                              " " +
+                              " | " +
                               grade.dateCreated
                             }
                             className="text-white h-full"

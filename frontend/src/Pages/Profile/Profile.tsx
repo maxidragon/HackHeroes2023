@@ -35,16 +35,13 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchBanner = async () => {
-      fetch(
-        `${import.meta.env.VITE_API_URL}/user/settings/banner/${userId}`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      fetch(`${import.meta.env.VITE_API_URL}/user/settings/banner/${userId}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
         .then((res) => {
           if (res.status >= 400) {
             toast.error("Something went wrong!");
@@ -148,58 +145,56 @@ export default function Profile() {
             {userData?.firstName} {userData?.lastName}
           </p>
           <p className="mt-4">
-            {userData?.description || t('noDescriptionYet')}
+            {userData?.description || t("noDescriptionYet")}
           </p>
         </div>
         <div className="hidden md:block w-1 h-[90%] bg-bgLght rounded-full" />
         <div className="h-full md:w-1/2 w-full p-4 box-border items-center justify-center flex flex-col gap-4">
-          <p className="text-2xl text-white text-center">
-            {t('topNotes')}
-          </p>
-          {isFetching && <Loader width="200" />}
-          {!isFetching &&
-            (userNotes.length > 0 ? (
-              <Swiper
-                className="h-full w-full mySwiper relative"
-                grabCursor={true}
-                navigation={true}
-                effect={"creative"}
-                creativeEffect={{
-                  prev: {
-                    shadow: true,
-                    origin: "left center",
-                    translate: ["-5%", 0, -200],
-                    rotate: [0, 100, 0],
-                  },
-                  next: {
-                    origin: "right center",
-                    translate: ["5%", 0, -200],
-                    rotate: [0, -100, 0],
-                  },
-                }}
-                modules={[EffectCreative, Navigation]}
-              >
-                {userNotes.map((note) => (
-                  <SwiperSlide
-                    key={note.id}
-                    className="w-full h-full flex flex-col items-center gap-2 border-2 shadow-xl border-purple-400 bg-bgClr rounded-xl p-4"
-                  >
-                    <h2 className="text-3xl roboto text-white text-center break-words overflow-x-hidden">
-                      {note.category}
-                    </h2>
-                    <h2 className="w-full text-center text-white break-words">
-                      {t("title")}: "{note.title}"
-                    </h2>
-                    <MarkdownComponent
-                      value={note.content}
-                      className="overflow-y-auto text-lg text-white break-words"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ) : (
-              <p>{t("noNotes")}</p>
-            ))}
+          <p className="text-2xl text-white text-center">{t("topNotes")}</p>
+          {isFetching ? (
+            <Loader width="200" />
+          ) : userNotes.length > 0 ? (
+            <Swiper
+              className="h-full w-full mySwiper relative"
+              grabCursor={true}
+              navigation={true}
+              effect={"creative"}
+              creativeEffect={{
+                prev: {
+                  shadow: true,
+                  origin: "left center",
+                  translate: ["-5%", 0, -200],
+                  rotate: [0, 100, 0],
+                },
+                next: {
+                  origin: "right center",
+                  translate: ["5%", 0, -200],
+                  rotate: [0, -100, 0],
+                },
+              }}
+              modules={[EffectCreative, Navigation]}
+            >
+              {userNotes.map((note) => (
+                <SwiperSlide
+                  key={note.id}
+                  className="w-full h-full flex flex-col items-center gap-2 border-2 shadow-xl border-purple-400 bg-bgClr rounded-xl p-4"
+                >
+                  <h2 className="text-3xl roboto text-white text-center break-words">
+                    {note.category}
+                  </h2>
+                  <h2 className="w-full text-center text-white break-words">
+                    {t("title")}: "{note.title}"
+                  </h2>
+                  <MarkdownComponent
+                    value={note.content}
+                    className="overflow-y-auto text-lg text-white break-words"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <p>{t("noNotes")}</p>
+          )}
         </div>
       </div>
       <motion.div
