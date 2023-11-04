@@ -73,7 +73,7 @@ export class NotesController {
 
   @Get('user/:userId')
   async getUserNotes(
-    @Param ('userId') userId: number,
+    @Param('userId') userId: number,
     @Query('search') search: string,
     @Query('category') category: string,
     @Query('skip') skip: number,
@@ -87,6 +87,25 @@ export class NotesController {
       take,
     );
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('private/:userId')
+  async getPrivateUserNotes(
+    @GetUser() user: JwtAuthDto,
+    @Query('search') search: string,
+    @Query('category') category: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
+  ) {
+    return await this.notesService.getPrivateUserNotes(
+      category,
+      user.userId,
+      search,
+      skip,
+      take,
+    );
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post(':id/like')
   async likeNote(@GetUser() user: JwtAuthDto, @Param('id') id: number) {

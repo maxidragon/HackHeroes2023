@@ -38,6 +38,9 @@ export default function Notes() {
     if (user.id && publicity === "Public") {
       url += `/auth`;
     }
+    if (user.id && publicity === "Private") {
+      url += `/${user.id}`;
+    }
     fetch(`${url}${queryString}`, {
       method: "GET",
       headers: {
@@ -93,6 +96,9 @@ export default function Notes() {
     }/notes/${publicity.toLowerCase()}`;
     if (user.id && publicity === "Public") {
       url += "/auth";
+    }
+    if (user.id && publicity === "Private") {
+      url += `/${user.id}`;
     }
     const queryString = queryParams.toString();
     if (queryString !== "") {

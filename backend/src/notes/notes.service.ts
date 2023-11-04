@@ -151,6 +151,7 @@ export class NotesService {
   ) {
     const whereParams = {
       userId: userId,
+      publicity: 'PUBLIC' as any,
     };
     if (category && category !== 'ALL')
       Object.assign(whereParams, { category: category });
@@ -182,6 +183,52 @@ export class NotesService {
       take: take ? take : 5,
     });
     return data;
+  }
+
+  async getPrivateUserNotes(
+    category: string,
+    userId: number,
+    search: string,
+    skip = 0,
+    take = 5,
+  ) {
+    const whereParams = {
+      userId: userId,
+      publicity: 'PRIVATE' as any,
+    };
+    if (category && category !== 'ALL')
+      Object.assign(whereParams, { category: category });
+    if (search && search !== '') {
+      Object.assign(whereParams, {
+        OR: [
+          { title: { contains: search } },
+          { content: { contains: search } },
+        ],
+      });
+    }
+    const data = await this.prisma.note.findMany({
+      where: whereParams,
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        category: true,
+        user: {
+          select: { id: true, username: true },
+        },
+      },
+      orderBy: {
+        NoteLike: {
+          _count: 'desc',
+        },
+      },
+      skip: skip ? skip : 0,
+      take: take ? take : 5,
+    });
+    const count = await this.prisma.note.count({
+      where: whereParams,
+    });
+    return { data, count };
   }
 
   async getNoteById(id: number, userId: number) {

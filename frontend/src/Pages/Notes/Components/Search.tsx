@@ -68,7 +68,7 @@ export default function Search({
           className="w-full py-2 px-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
         >
           <option value="Public">{t('public')}</option>
-          <option value="User">{t('private')}</option>
+          <option value="Private">{t('private')}</option>
           <option value="Class">{t('class')}</option>
         </select>
         <Button
