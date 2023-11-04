@@ -48,13 +48,13 @@ export default function Flashcards() {
     if (!user.id) {
       navigate("/login");
     }
-    
+
     searchHandler();
   }, [user, navigate]);
 
   return (
     <div className="flex w-[80%] mx-auto max-w-[1300px] flex-col items-center gap-5 py-6">
-      <fieldset className="flex flex-col md:flex-row border-gray-500 border-t-2 p-6 justify-between items-center w-full gap-6">
+      <fieldset className="flex flex-col lg:flex-row border-gray-500 border-t-2 p-6 justify-between items-center w-full gap-6">
         <legend className="text-xl text-white px-2">
           {t("flashcardsLegend")}
         </legend>
@@ -65,11 +65,11 @@ export default function Flashcards() {
           containerClassName="w-full"
           onChange={searchHandler}
         />
-        <div className="flex gap-6">
+        <div className="flex sm:flex-row flex-col sm:gap-6 gap-2 w-full">
           <Button
             type="default"
-            className="text-xl py-4"
-            width="w-70"
+            className="text-xl"
+            width="w-full"
             onClick={searchHandler}
           >
             {t("searchPlaceholder")}
@@ -78,7 +78,8 @@ export default function Flashcards() {
             type="alt"
             isLink={true}
             to="/flashcards/create"
-            className="py-4 text-xl"
+            className="text-xl text-center"
+            width="w-full"
           >
             {t("createNewFlashCardSet")}
           </Button>
@@ -106,10 +107,9 @@ export default function Flashcards() {
               </div>
             </div>
           )}
-          {classFlashcards.length && (
+          {classFlashcards.length > 0 && (
             <div className="w-full py-6">
               <h2 className="py-4 text-2xl">{t("classSets")}</h2>
-
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
                 {classFlashcards.map((flashcard: flashcard) => {
                   return (
@@ -125,7 +125,7 @@ export default function Flashcards() {
               </div>
             </div>
           )}
-          {publicFlashcards.length && (
+          {publicFlashcards.length > 0 && (
             <div className="w-full py-6">
               <h2 className="py-4 text-2xl">{t("publicSets")}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">

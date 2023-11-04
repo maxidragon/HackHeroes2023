@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import {
   BsFillTrashFill,
   BsFillPencilFill,
-  BsFillPlayFill
+  BsFillPlayFill,
 } from "react-icons/bs";
 import Loader from "../../Components/Loader.tsx";
 
@@ -50,9 +50,9 @@ export default function FlashcardsDetails() {
       forkedFrom,
       description,
       publicity,
-      flashCards
+      flashCards,
     },
-    setFlashcardSet
+    setFlashcardSet,
   ] = useState<flashcardSet>({
     createdAt: "",
     description: "",
@@ -64,8 +64,8 @@ export default function FlashcardsDetails() {
     updatedAt: "",
     user: {
       username: "",
-      id: 0
-    }
+      id: 0,
+    },
   });
 
   const { id } = useParams();
@@ -81,8 +81,8 @@ export default function FlashcardsDetails() {
         method: "DELETE",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
@@ -106,8 +106,8 @@ export default function FlashcardsDetails() {
         method: "GET",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
@@ -202,17 +202,23 @@ export default function FlashcardsDetails() {
             )}
             <p>
               {t("createdAt")}:{" "}
-              {formatDistanceToNow(createdAt ? new Date(createdAt) : new Date(), {
-                addSuffix: true,
-                locale: i18n.language === "pl" ? pl : enUS
-              }) || ""}
+              {formatDistanceToNow(
+                createdAt ? new Date(createdAt) : new Date(),
+                {
+                  addSuffix: true,
+                  locale: i18n.language === "pl" ? pl : enUS,
+                }
+              )}
             </p>
             <p>
               {t("lastModified")}:{" "}
-              {formatDistanceToNow(updatedAt ? new Date(updatedAt) : new Date(), {
-                addSuffix: true,
-                locale: i18n.language === "pl" ? pl : enUS
-              }) || ""}
+              {formatDistanceToNow(
+                updatedAt ? new Date(updatedAt) : new Date(),
+                {
+                  addSuffix: true,
+                  locale: i18n.language === "pl" ? pl : enUS,
+                }
+              )}
             </p>
             <p>
               {t("description")}: {description}
@@ -224,19 +230,31 @@ export default function FlashcardsDetails() {
 
           <div className="flex flex-col gap-4 mt-8">
             <p>{t("questionsAndAnswers")}:</p>
-            {flashCards.map((flashCard) => {
-              return (
-                <div key={flashCard.id} className="flex gap-2 items-center">
-                  <p className="bg-blue-900 px-4 py-2 rounded-lg shadow">
-                    {flashCard.question}
-                  </p>
-                  <span>-</span>
-                  <p className="bg-blue-900 px-4 py-2 rounded-lg shadow">
-                    {flashCard.answer}
-                  </p>
-                </div>
-              );
-            })}
+            <div className="flex flex-wrap gap-8 md:justify-start justify-around">
+              {flashCards.map((flashCard, i: number) => {
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, bottom: "-5px" }}
+                    animate={{
+                      opacity: 1,
+                      bottom: 0,
+                      transition: { duration: 0.2, delay: i * 0.05 },
+                    }}
+                    key={flashCard.id}
+                    className="flex flex-col p-4 bg-purple-600 rounded-xl text-lg w-48"
+                  >
+                    <p className="text-ellipsis overflow-hidden">
+                      {t("question") + ": "}
+                      {flashCard.question}
+                    </p>
+                    <p className="text-ellipsis overflow-hidden text-gray-300">
+                      {t("answer") + ": "}
+                      {flashCard.answer}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </>
       )}
@@ -245,7 +263,7 @@ export default function FlashcardsDetails() {
         initial={{ scaleX: 1 }}
         animate={{
           scaleX: 0,
-          transition: { duration: 0.6, ease: "circOut" }
+          transition: { duration: 0.6, ease: "circOut" },
         }}
         exit={{ scaleX: 1, transition: { duration: 0.6, ease: "circIn" } }}
         style={{ originX: isPresent ? 0 : 1 }}

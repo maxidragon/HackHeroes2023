@@ -24,7 +24,7 @@ function LanguageSwitcher({className}: {className?: string}) {
                     className="emojiFlag"
                     countryCode="US"
                     style={{
-                        fontSize: "2.5em",
+                        fontSize: "2em",
                         opacity: !isEn ? "0.5" : "1",
                     }}
                 />
@@ -40,7 +40,7 @@ function LanguageSwitcher({className}: {className?: string}) {
                     className="emojiFlag"
                     countryCode="PL"
                     style={{
-                        fontSize: "2.5em",
+                        fontSize: "2em",
                         opacity: isEn ? "0.5" : "1",
                     }}
                 />
