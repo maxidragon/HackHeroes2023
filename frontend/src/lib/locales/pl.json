@@ -215,5 +215,8 @@
   "playAgain": "Jeszcze raz",
   "backToFlashcards": "Powrót do fiszek",
   "allCorrect": "Gratulacje, skończyłeś naukę zestawu",
-  "flipFlashcard": "Odwróć kartę, by sprawdzić odpowiedź"
+  "flipFlashcard": "Odwróć kartę, by sprawdzić odpowiedź",
+  "copy": "Skopiuj",
+  "noDescriptionYet": "Brak opisu",
+  "topNotes": "Najbardziej lubiane notatki"
 }

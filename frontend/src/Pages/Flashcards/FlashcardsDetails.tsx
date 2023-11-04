@@ -15,45 +15,12 @@ import {
   BsFillPlayFill,
 } from "react-icons/bs";
 import Loader from "../../Components/Loader.tsx";
+import { FlashcardSet, PublicUser } from "../../lib/interfaces.ts";
 
-interface user {
-  id: number;
-  username: string;
-}
-
-interface flashCards {
-  id: number;
-  question: string;
-  answer: string;
-}
-
-interface flashcardSet {
-  title: string;
-  description?: string;
-  id: number;
-  forkedFrom?: string;
-  user: user;
-  flashCards: flashCards[];
-  publicity: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export default function FlashcardsDetails() {
   const isPresent = useIsPresent();
-  const [
-    {
-      title,
-      user,
-      createdAt,
-      updatedAt,
-      forkedFrom,
-      description,
-      publicity,
-      flashCards,
-    },
-    setFlashcardSet,
-  ] = useState<flashcardSet>({
+  const [flashCardSet, setFlashcardSet] = useState<FlashcardSet>({
     createdAt: "",
     description: "",
     flashCards: [],
@@ -69,7 +36,7 @@ export default function FlashcardsDetails() {
   });
 
   const { id } = useParams();
-  const loggedUser: user = getUserObject();
+  const loggedUser: PublicUser = getUserObject();
   const [isFetching, setIsFetching] = useState(false);
 
   const navigate = useNavigate();
@@ -90,16 +57,13 @@ export default function FlashcardsDetails() {
       return toast.error(t("somethingWentWrong"));
     }
 
-    const data = await response.json();
-    console.log(data);
-
     toast.success(t("flashcardDeleted"));
     setTimeout(() => {
       return navigate("/flashcards");
     }, 750);
   };
 
-  const setFork = async () => {
+  const forkSet = async () => {
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/flashcard/set/${id}/fork`,
       {
@@ -115,9 +79,6 @@ export default function FlashcardsDetails() {
       return toast.error(t("somethingWentWrong"));
     }
 
-    const data = await response.json();
-    console.log(data);
-
     toast.success(t("flashcardForked"));
     setTimeout(() => {
       return navigate("/flashcards");
@@ -128,9 +89,8 @@ export default function FlashcardsDetails() {
     if (id) {
       const fetchData = async () => {
         setIsFetching(true);
-        await getFlashcardSet(id).then((data) => {
-          setFlashcardSet(data);
-        });
+        const data = await getFlashcardSet(id);
+        setFlashcardSet(data);
         setIsFetching(false);
       };
       fetchData();
@@ -146,9 +106,9 @@ export default function FlashcardsDetails() {
       ) : (
         <>
           <div className="flex flex-col sm:flex-row justify-between items-center w-full">
-            <h2 className="text-3xl">{title}</h2>
+            <h2 className="text-3xl">{flashCardSet.title}</h2>
             <div className="flex gap-3">
-              {loggedUser.id === user.id && (
+              {loggedUser.id === flashCardSet.user?.id && (
                 <Button
                   className="text-lg px-4 py-2 mt-8 disabled:bg-gray-400 disabled:text-gray-400"
                   width="w-42"
@@ -158,7 +118,7 @@ export default function FlashcardsDetails() {
                   <BsFillTrashFill />
                 </Button>
               )}
-              {loggedUser.id === user.id && (
+              {loggedUser.id === flashCardSet.user?.id && (
                 <Button
                   isLink={true}
                   to={`/flashcards/edit/${id}`}
@@ -169,14 +129,14 @@ export default function FlashcardsDetails() {
                   <BsFillPencilFill />
                 </Button>
               )}
-              {loggedUser.id !== user.id && (
+              {loggedUser.id !== flashCardSet.user?.id && (
                 <Button
                   className="text-lg px-4 py-2 mt-8"
                   width="w-42"
                   type="alt"
-                  onClick={setFork}
+                  onClick={forkSet}
                 >
-                  Save
+                  {t('copy')}
                 </Button>
               )}
               <Button
@@ -193,17 +153,17 @@ export default function FlashcardsDetails() {
           <div className="flex flex-col sm:mt-0 mt-8 gap-1">
             <p>
               {t("author")}:{" "}
-              <Link to={`/profile/${user.id}`}>{user.username}</Link>
+              <Link to={`/profile/${flashCardSet.user?.id}`}>{flashCardSet.user?.username}</Link>
             </p>
-            {forkedFrom && (
+            {flashCardSet.forkedFrom && (
               <p>
-                {t("forkedFrom")}: {forkedFrom}
+                {t("forkedFrom")}: {flashCardSet.forkedFrom}
               </p>
             )}
             <p>
               {t("createdAt")}:{" "}
               {formatDistanceToNow(
-                createdAt ? new Date(createdAt) : new Date(),
+                flashCardSet.createdAt ? new Date(flashCardSet.createdAt) : new Date(),
                 {
                   addSuffix: true,
                   locale: i18n.language === "pl" ? pl : enUS,
@@ -213,7 +173,7 @@ export default function FlashcardsDetails() {
             <p>
               {t("lastModified")}:{" "}
               {formatDistanceToNow(
-                updatedAt ? new Date(updatedAt) : new Date(),
+                flashCardSet.updatedAt ? new Date(flashCardSet.updatedAt) : new Date(),
                 {
                   addSuffix: true,
                   locale: i18n.language === "pl" ? pl : enUS,
@@ -221,17 +181,17 @@ export default function FlashcardsDetails() {
               )}
             </p>
             <p>
-              {t("description")}: {description}
+              {t("description")}: {flashCardSet.description}
             </p>
             <p className="text-gray-400">
-              {t("publicity")}: {publicity}
+              {t("publicity")}: {t(flashCardSet.publicity.toLowerCase())}
             </p>
           </div>
 
           <div className="flex flex-col gap-4 mt-8">
             <p>{t("questionsAndAnswers")}:</p>
             <div className="flex flex-wrap gap-8 md:justify-start justify-around">
-              {flashCards.map((flashCard, i: number) => {
+              {flashCardSet.flashCards.map((flashCard, i: number) => {
                 return (
                   <motion.div
                     initial={{ opacity: 0, bottom: "-5px" }}

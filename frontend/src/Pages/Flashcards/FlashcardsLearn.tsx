@@ -42,7 +42,7 @@ export default function FlashcardsLearn() {
 
   const learnReducer = (state: progressSet, action: action) => {
     let updatedSet;
-    let updatedLeft = [];
+    const updatedLeft = [];
 
     switch (action.type) {
       case "CORRECT":

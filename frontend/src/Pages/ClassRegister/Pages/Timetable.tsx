@@ -20,7 +20,6 @@ export default function Timetable() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.statusCode >= 400)
           toast.error(t('errorLessons'));
         else {

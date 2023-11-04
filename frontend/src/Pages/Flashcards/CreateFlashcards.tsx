@@ -1,6 +1,6 @@
 import { motion, useIsPresent } from "framer-motion";
 import Input from "../../Components/Input.tsx";
-import { useRef } from "react";
+import { ChangeEvent, useRef } from "react";
 import Button from "../../Components/Button.tsx";
 import { useState } from "react";
 import Select from "../../Components/Select.tsx";
@@ -44,18 +44,18 @@ export default function CreateFlashcards() {
     });
   };
 
-  const updateQuestion = (e: any, index: number) => {
+  const updateQuestion = (value: string, index: number) => {
     setFlashcards((prevState) => {
       const updatedArr = [...prevState];
-      updatedArr[index].concept = e.target.value;
+      updatedArr[index].concept = value;
       return updatedArr;
     });
   };
 
-  const updateAnswer = (e: any, index: number) => {
+  const updateAnswer = (value: string, index: number) => {
     setFlashcards((prevState) => {
       const updatedArr = [...prevState];
-      updatedArr[index].definition = e.target.value;
+      updatedArr[index].definition = value;
       return updatedArr;
     });
   };
@@ -64,7 +64,6 @@ export default function CreateFlashcards() {
     setFlashcards((prevState) => {
       const newFlashcards = [...prevState];
       newFlashcards.splice(index, 1);
-      console.log(newFlashcards);
       return newFlashcards;
     });
   };
@@ -161,17 +160,13 @@ export default function CreateFlashcards() {
                 )}
               </div>
               <Input
-                onChange={(e) => {
-                  updateQuestion(e, index);
-                }}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateQuestion(e.target.value, index)}
                 className="sm:w-full"
                 value={_flashcard.concept}
                 placeholder={t("concept")}
               />
               <Input
-                onChange={(e) => {
-                  updateAnswer(e, index);
-                }}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateAnswer(e.target.value, index)}
                 className="sm:w-full"
                 value={_flashcard.definition}
                 placeholder={t("definition")}

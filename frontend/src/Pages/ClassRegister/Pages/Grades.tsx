@@ -76,7 +76,7 @@ export default function Grades() {
                           <span
                             key={grade.id}
                             title={
-                              grade.grade +
+                              grade.name +
                               " " +
                               grade.teacher +
                               " " +

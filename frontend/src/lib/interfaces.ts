@@ -100,8 +100,18 @@ export interface Flashcard {
 }
 
 export interface FlashcardSet {
-  title: string,
-  description?: string,
-  publicity: string,
-  flashCards: Flashcard[]
+  id: number;
+  title: string;
+  description?: string;
+  publicity: string;
+  flashCards: Flashcard[];
+  user?: PublicUser;
+  forkedFrom?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PublicUser {
+  id: number;
+  username: string;
 }

@@ -21,7 +21,6 @@ export default function VulcanLandingPage() {
         if (data.statusCode >= 400) {
           toast.error(t("indexPageError"));
         } else {
-          console.log(data);
           setLastGrades(data.lastGrades);
           setLuckyNumber(data.luckyNumber.number);
           setIsFetching(false);

@@ -35,7 +35,7 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchBanner = async () => {
-      await fetch(
+      fetch(
         `${import.meta.env.VITE_API_URL}/user/settings/banner/${userId}`,
         {
           method: "GET",
@@ -63,7 +63,7 @@ export default function Profile() {
     };
 
     const fetchData = async () => {
-      await fetch(`${import.meta.env.VITE_API_URL}/user/${userId}`, {
+      fetch(`${import.meta.env.VITE_API_URL}/user/${userId}`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -89,7 +89,7 @@ export default function Profile() {
 
     const fetchNotes = async () => {
       setIsFetching(true);
-      await fetch(`${import.meta.env.VITE_API_URL}/notes/user/${userId}`, {
+      fetch(`${import.meta.env.VITE_API_URL}/notes/user/${userId}`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -101,7 +101,6 @@ export default function Profile() {
             toast.error("Something went wrong!");
           } else {
             res.json().then((data) => {
-              console.log(data);
               setUserNotes(data);
             });
           }
@@ -149,13 +148,13 @@ export default function Profile() {
             {userData?.firstName} {userData?.lastName}
           </p>
           <p className="mt-4">
-            {userData?.description || "This user has no description yet!"}
+            {userData?.description || t('noDescriptionYet')}
           </p>
         </div>
         <div className="hidden md:block w-1 h-[90%] bg-bgLght rounded-full" />
         <div className="h-full md:w-1/2 w-full p-4 box-border items-center justify-center flex flex-col gap-4">
           <p className="text-2xl text-white text-center">
-            {userData?.username + "'s top 5 notes"}
+            {t('topNotes')}
           </p>
           {isFetching && <Loader width="200" />}
           {!isFetching &&

@@ -227,7 +227,7 @@ export default function Notes() {
             <div className="container w-full h-screen grid grid-cols-5 grid-rows-6 gap-2">
               <div className="shadow-xl col-span-3 row-start-1 gap-4 row-end-5 flex flex-col border-purple-400 border-4 rounded-xl p-4">
                 <p className="text-2xl roboto text-white">
-                  {notes[0].category}
+                  {t(notes[0].category)}
                 </p>
                 <div className="flex w-full">
                   {notes[0].isLiked ? (
@@ -259,7 +259,7 @@ export default function Notes() {
               </div>
               <div className="shadow-xl col-span-2 row-start-1 row-end-4 gap-4 flex flex-col border-purple-400 border-4 rounded-xl p-4">
                 <p className="text-2xl roboto text-white">
-                  {notes[1].category}
+                {t(notes[1].category)}
                 </p>
                 <div className="flex w-full">
                   {notes[1].isLiked ? (
@@ -291,7 +291,7 @@ export default function Notes() {
               </div>
               <div className="shadow-xl col-span-2 row-start-4 row-end-7 gap-4 flex flex-col border-purple-400 border-4 rounded-xl p-4">
                 <p className="text-2xl roboto text-white">
-                  {notes[2].category}
+                {t(notes[2].category)}
                 </p>
                 <div className="flex w-full">
                   {notes[2].isLiked ? (
@@ -379,7 +379,7 @@ export default function Notes() {
                 className="md:w-2/5 w-2/3 max-[500px]:w-full flex flex-col items-center gap-2 border-2 shadow-xl lg:border-gray-400 border-purple-400 h-[30rem] rounded-xl p-4"
               >
                 <h2 className="text-3xl roboto text-white text-center break-words">
-                  {note.category}
+                  {t(note.category)}
                 </h2>
                 <h2 className="w-full text-center text-white break-words">
                   {t("title")}: "{note.title}"

@@ -8,38 +8,27 @@ import Button from "../../Components/Button.tsx";
 import Loader from "../../Components/Loader.tsx";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../Atoms.ts";
-
-interface flashcard {
-  id: number;
-  title: string;
-  description: string;
-}
+import { FlashcardSet } from "../../lib/interfaces";
 
 export default function Flashcards() {
   const isPresent = useIsPresent();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLInputElement>();
 
-  const [myFlashcards, setMyFlashcards] = useState([]);
-  const [classFlashcards, setClassFlashcards] = useState([]);
-  const [publicFlashcards, setPublicFlashcards] = useState([]);
+  const [myFlashcards, setMyFlashcards] = useState<FlashcardSet[]>([]);
+  const [classFlashcards, setClassFlashcards] = useState<FlashcardSet[]>([]);
+  const [publicFlashcards, setPublicFlashcards] = useState<FlashcardSet[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const user = useAtomValue(userAtom);
 
   const searchHandler = async () => {
     setIsFetching(true);
 
-    await getFlashcards("my", searchRef.current?.value).then((data) => {
-      setMyFlashcards(data);
-    });
+    await getFlashcards("my", searchRef.current?.value).then((data) => setMyFlashcards(data));
 
-    await getFlashcards("class", searchRef.current?.value).then((data) => {
-      setClassFlashcards(data);
-    });
+    await getFlashcards("class", searchRef.current?.value).then((data) => setClassFlashcards(data));
 
-    await getFlashcards("public", searchRef.current?.value).then((data) => {
-      setPublicFlashcards(data);
-    });
+    await getFlashcards("public", searchRef.current?.value).then((data) => setPublicFlashcards(data));
 
     setIsFetching(false);
   };
@@ -93,7 +82,7 @@ export default function Flashcards() {
             <div className="w-full py-6">
               <h2 className="py-4 text-2xl">{t("personalSets")}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-                {myFlashcards.map((flashcard: flashcard) => {
+                {myFlashcards.map((flashcard: FlashcardSet) => {
                   return (
                     <Link
                       className="shadow-lg px-3 py-6 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
@@ -111,7 +100,7 @@ export default function Flashcards() {
             <div className="w-full py-6">
               <h2 className="py-4 text-2xl">{t("classSets")}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-                {classFlashcards.map((flashcard: flashcard) => {
+                {classFlashcards.map((flashcard: FlashcardSet) => {
                   return (
                     <Link
                       className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"
@@ -129,7 +118,7 @@ export default function Flashcards() {
             <div className="w-full py-6">
               <h2 className="py-4 text-2xl">{t("publicSets")}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-                {publicFlashcards.map((flashcard: flashcard) => {
+                {publicFlashcards.map((flashcard: FlashcardSet) => {
                   return (
                     <Link
                       className="shadow-lg px-3 py-5 text-white bg-violet-700 hover:bg-violet-800 transition rounded-xl"

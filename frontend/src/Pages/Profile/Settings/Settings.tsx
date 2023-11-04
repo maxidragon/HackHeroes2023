@@ -55,7 +55,7 @@ export default function Settings() {
     }
 
     const fetchData = async () => {
-      await fetch(`${import.meta.env.VITE_API_URL}/user/settings/get`, {
+      fetch(`${import.meta.env.VITE_API_URL}/user/settings/get`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -80,7 +80,7 @@ export default function Settings() {
     };
 
     const fetchBanner = async () => {
-      await fetch(
+      fetch(
         `${import.meta.env.VITE_API_URL}/user/settings/banner/${user.id}`,
         {
           method: "GET",
@@ -216,7 +216,7 @@ export default function Settings() {
   }
 
   const removeVulcan = async () => {
-    await fetch(`${import.meta.env.VITE_API_URL}/vulcan/remove`, {
+    fetch(`${import.meta.env.VITE_API_URL}/vulcan/remove`, {
       method: "DELETE",
       credentials: "include",
     })

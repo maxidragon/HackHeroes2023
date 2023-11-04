@@ -18,10 +18,11 @@ export default function EditFlashcards() {
   const navigate = useNavigate();
 
   const [existingSet, setExistingSet] = useState<FlashcardSet>({
+    id: 0,
     title: "",
     description: "",
     flashCards: [{ question: "", answer: "", key: Date.now() }],
-    publicity: "PRIVACY"
+    publicity: "PRIVATE"
   });
 
   useEffect(() => {
@@ -36,12 +37,14 @@ export default function EditFlashcards() {
           });
         });
         setExistingSet({
+          id: +id,
           title,
           description,
           publicity,
           flashCards: flashcardsWithKey
         });
       }).catch(err => {
+        toast.error(t("somethingWentWrong"));
         console.error(err);
       });
     }
@@ -55,8 +58,7 @@ export default function EditFlashcards() {
 
     const flashcardsArray: Flashcard[] = [];
 
-    existingSet.flashCards.map((_flashcard) => {
-
+    existingSet.flashCards.map((_flashcard: Flashcard) => {
       flashcardsArray.push({
         id: _flashcard.id,
         question: _flashcard.question,
@@ -64,9 +66,6 @@ export default function EditFlashcards() {
         isDelete: _flashcard.isDelete
       });
     });
-
-    console.log(flashcardsArray);
-
     if (titleRef.current?.value.length === 0) {
       return toast.error(t("flashCardsTitleEmpty"));
     }
@@ -112,10 +111,10 @@ export default function EditFlashcards() {
     });
   };
 
-  const updateQuestion = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  const updateQuestion = (value: string, index: number) => {
     setExistingSet(prevState => {
       const updatedArr = [...prevState.flashCards];
-      updatedArr[index].question = e.target.value;
+      updatedArr[index].question = value;
       return {
         ...prevState,
         flashCards: updatedArr
@@ -123,10 +122,10 @@ export default function EditFlashcards() {
     });
   };
 
-  const updateAnswer = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  const updateAnswer = (value: string, index: number) => {
     setExistingSet(prevState => {
       const updatedArr = [...prevState.flashCards];
-      updatedArr[index].answer = e.target.value;
+      updatedArr[index].answer = value;
       return {
         ...prevState,
         flashCards: updatedArr
@@ -154,7 +153,7 @@ export default function EditFlashcards() {
       </div>
       <div className="w-full flex gap-4">
         <Input containerClassName="w-full" className="sm:w-full" placeholder={t("title")} value={existingSet.title}
-               ref={titleRef} type="text" />
+          ref={titleRef} type="text" />
         <Select ref={publicityRef} defaultValue={existingSet.publicity}>
           <option value="PRIVATE">{t("private")}</option>
           <option value="PUBLIC">{t("public")}</option>
@@ -175,21 +174,19 @@ export default function EditFlashcards() {
       {existingSet.flashCards.map((flashcard: Flashcard, index) => {
         return flashcard.isDelete ? "" : (
           <div key={flashcard.key}
-               className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
+            className="w-full p-5 flex flex-col gap-4 border-4 border-blue-600 rounded-lg">
             <div className="flex justify-between items-center">
               <p className="text-white text-lg">Flashcard nr. {index + 1}</p>
               {existingSet.flashCards.length > 1 && <Button type="alt" width="w-42" className="text-lg" onClick={() => {
                 removeFlashcardByIndex(index);
               }}><FaXmark /></Button>}
             </div>
-            <Input className="sm:w-full" placeholder={t("concept")} onChange={(e) => {
-              updateQuestion(e, index);
-            }}
-                   value={flashcard.question} />
-            <Input className="sm:w-full" onChange={(e) => {
-              updateAnswer(e, index);
-            }}
-                   placeholder={t("definition")} value={flashcard.answer} />
+            <Input className="sm:w-full" placeholder={t("concept")}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => updateQuestion(e.target.value, index)}
+              value={flashcard.question} />
+            <Input className="sm:w-full"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => updateAnswer(e.target.value, index)}
+              placeholder={t("definition")} value={flashcard.answer} />
           </div>
         );
       })}
