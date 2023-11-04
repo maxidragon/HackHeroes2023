@@ -177,20 +177,17 @@ export default function CreateFlashcards() {
                 placeholder={t("definition")}
               />
             </div>
-            {index !== flashcards.length - 1 && <div className="w-full h-1 bg-bgLght rounded-full"/>}
+            {index !== flashcards.length - 1 && (
+              <div className="w-full h-1 bg-bgLght rounded-full" />
+            )}
           </>
         );
       })}
-      <div className="flex gap-4 w-full justify-center">
+      <div className="flex gap-4 w-full sm:flex-row flex-col justify-center">
         <Button type="default" width="w-full" onClick={addFlashcard}>
           {t("add")}
         </Button>
-      </div>
-      <div className="flex flex-col sm:gap-0 gap-6 sm:flex-row justify-between items-center w-full">
-        <h2 className="text-xl sm:text-3xl text-center">
-          {t("createNewFlashCardSet")}
-        </h2>
-        <Button type="default" width="sm:w-72 w-full" onClick={createSet}>
+        <Button type="alt" width="w-full" onClick={createSet}>
           {t("createBtn")}
         </Button>
       </div>

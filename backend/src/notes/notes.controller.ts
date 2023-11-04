@@ -71,10 +71,9 @@ export class NotesController {
     );
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('user')
+  @Get('user/:userId')
   async getUserNotes(
-    @GetUser() user: JwtAuthDto,
+    @Param ('userId') userId: number,
     @Query('search') search: string,
     @Query('category') category: string,
     @Query('skip') skip: number,
@@ -82,7 +81,7 @@ export class NotesController {
   ) {
     return await this.notesService.getUserNotes(
       category,
-      user.userId,
+      userId,
       search,
       skip,
       take,

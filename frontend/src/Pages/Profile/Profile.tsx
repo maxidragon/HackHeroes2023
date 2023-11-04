@@ -6,6 +6,15 @@ import { TbSettingsFilled } from "react-icons/tb";
 import toast from "react-hot-toast";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../Atoms";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCreative, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-creative";
+import "swiper/css/navigation";
+import { Note } from "../../lib/interfaces";
+import Loader from "../../Components/Loader";
+import MarkdownComponent from "../Notes/Components/MarkdownComponent";
+import { t } from "i18next";
 
 interface userData {
   username: string;
@@ -21,6 +30,8 @@ export default function Profile() {
   const [userData, setUserData] = useState<userData>();
   const navigate = useNavigate();
   const [banner, setBanner] = useState<string>();
+  const [userNotes, setUserNotes] = useState<Note[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -76,8 +87,36 @@ export default function Profile() {
         });
     };
 
+    const fetchNotes = async () => {
+      setIsFetching(true);
+      await fetch(`${import.meta.env.VITE_API_URL}/notes/user/${userId}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (res.status >= 400) {
+            toast.error("Something went wrong!");
+          } else {
+            res.json().then((data) => {
+              console.log(data);
+              setUserNotes(data);
+            });
+          }
+        })
+        .catch((err) => {
+          toast.error("Something went wrong!");
+          console.log(err);
+          navigate("/");
+        });
+      setIsFetching(false);
+    };
+
     fetchBanner();
     fetchData();
+    fetchNotes();
   }, []);
 
   return (
@@ -85,7 +124,9 @@ export default function Profile() {
       <div
         className={`flex items-center justify-center relative p-4 h-2/5`}
         style={{
-          background: banner ? `url('${banner}') no-repeat center center, linear-gradient(45deg, #7100db 0%, #ba64cf 60%)` : "linear-gradient(45deg, #7100db 0%, #ba64cf 60%)",
+          background: banner
+            ? `url('${banner}') no-repeat center center, linear-gradient(45deg, #7100db 0%, #ba64cf 60%)`
+            : "linear-gradient(45deg, #7100db 0%, #ba64cf 60%)",
         }}
       >
         <div className="flex items-center flex-col gap-4 text-4xl roboto text-gray-200 drop-shadow-[0px_0px_8px_rgba(0,0,0,1)]">
@@ -112,10 +153,54 @@ export default function Profile() {
           </p>
         </div>
         <div className="hidden md:block w-1 h-[90%] bg-bgLght rounded-full" />
-        <div className="h-full md:w-1/2 w-full">
-          {
-            //TODO: Add user's notes
-          }
+        <div className="h-full md:w-1/2 w-full p-4 box-border items-center justify-center flex flex-col gap-4">
+          <p className="text-2xl text-white text-center">
+            {userData?.username + "'s top 5 notes"}
+          </p>
+          {isFetching && <Loader width="200" />}
+          {!isFetching &&
+            (userNotes.length > 0 ? (
+              <Swiper
+                className="h-full w-full mySwiper relative"
+                grabCursor={true}
+                navigation={true}
+                effect={"creative"}
+                creativeEffect={{
+                  prev: {
+                    shadow: true,
+                    origin: "left center",
+                    translate: ["-5%", 0, -200],
+                    rotate: [0, 100, 0],
+                  },
+                  next: {
+                    origin: "right center",
+                    translate: ["5%", 0, -200],
+                    rotate: [0, -100, 0],
+                  },
+                }}
+                modules={[EffectCreative, Navigation]}
+              >
+                {userNotes.map((note) => (
+                  <SwiperSlide
+                    key={note.id}
+                    className="w-full h-full flex flex-col items-center gap-2 border-2 shadow-xl border-purple-400 bg-bgClr rounded-xl p-4"
+                  >
+                    <h2 className="text-3xl roboto text-white text-center break-words overflow-x-hidden">
+                      {note.category}
+                    </h2>
+                    <h2 className="w-full text-center text-white break-words">
+                      {t("title")}: "{note.title}"
+                    </h2>
+                    <MarkdownComponent
+                      value={note.content}
+                      className="overflow-y-auto text-lg text-white break-words"
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <p>{t("noNotes")}</p>
+            ))}
         </div>
       </div>
       <motion.div

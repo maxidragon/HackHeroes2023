@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --swiper-navigation-color: #8400fc;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -223,3 +227,4 @@ a {
 		background-position: 0% 50%;
 	}
 }
+

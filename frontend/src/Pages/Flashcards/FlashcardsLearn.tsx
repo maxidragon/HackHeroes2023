@@ -187,9 +187,9 @@ export default function FlashcardsLearn() {
   }, [id]);
 
   return (
-    <div className="flex-1 mx-auto sm:w-[80%] w-[90%] max-w-[1300px] text-white">
+    <div className="flex-1 mx-auto sm:w-[80%] w-[90%] max-w-[1300px] text-white flex justify-center">
       {learningSet.flashcardsLeft.length > 0 && (
-        <div className="flex flex-col items-center justify-center w-full px-4 h-full">
+        <div className="flex flex-col items-center justify-center w-[500px] px-4 h-full">
           <h2 className="text-2xl text-center mb-4">{t("flipFlashcard")}</h2>
           <div
             onClick={changeFlashCardSide}
@@ -254,9 +254,9 @@ export default function FlashcardsLearn() {
       {learningSet.flashcardsLeft.length === 0 &&
         learningSet.wrongAnswers.length === 0 && (
           <div className="w-full text-center py-8">
-            <div className="flex md:flex-row flex-col justify-between items-center mb-8">
+            <div className="flex flex-col justify-between items-center mb-8">
               <h2 className="text-2xl py-6">{t("allCorrect")}</h2>
-              <div className="flex gap-4 w-full">
+              <div className="flex gap-4 w-full max-w-[500px]">
                 <Button
                   width="md:w-42 w-full"
                   className="text-lg py-1.5 px-3"
@@ -283,7 +283,7 @@ export default function FlashcardsLearn() {
         )}
       {learningSet.flashcardsLeft.length === 0 &&
         learningSet.wrongAnswers.length !== 0 && (
-          <div className="py-8 flex flex-col gap-8">
+          <div className="py-8 flex flex-col gap-8 w-full">
             <div className="w-full">
               <div className="flex md:flex-row flex-col items-center gap-8 mb-6">
                 <ProgressBar progress={percentage} display={true} />

@@ -169,7 +169,6 @@ export class NotesService {
         title: true,
         content: true,
         category: true,
-        isMd: true,
         user: {
           select: { id: true, username: true },
         },
@@ -182,22 +181,7 @@ export class NotesService {
       skip: skip ? skip : 0,
       take: take ? take : 5,
     });
-    const count = await this.prisma.note.count({
-      where: whereParams,
-    });
-
-    const dataToReturn = [];
-    for (const note of data) {
-      const likesCount = await this.prisma.noteLike.count({
-        where: { noteId: note.id },
-      });
-      const isUserLiked = await this.prisma.noteLike.findFirst({
-        where: { noteId: note.id, userId: userId },
-      });
-      dataToReturn.push({ ...note, likesCount, isLiked: !!isUserLiked });
-    }
-
-    return { data: dataToReturn, count };
+    return data;
   }
 
   async getNoteById(id: number, userId: number) {
