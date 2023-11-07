@@ -59,12 +59,14 @@ export default function EditFlashcards() {
     const flashcardsArray: Flashcard[] = [];
 
     existingSet.flashCards.map((_flashcard: Flashcard) => {
-      flashcardsArray.push({
-        id: _flashcard.id,
-        question: _flashcard.question,
-        answer: _flashcard.answer,
-        isDelete: _flashcard.isDelete
-      });
+      if (_flashcard.question !== "" && _flashcard.answer !== "") {
+        flashcardsArray.push({
+          id: _flashcard.id,
+          question: _flashcard.question,
+          answer: _flashcard.answer,
+          isDelete: _flashcard.isDelete
+        });  
+      }
     });
     if (titleRef.current?.value.length === 0) {
       return toast.error(t("flashCardsTitleEmpty"));
