@@ -193,7 +193,7 @@ export default function Profile() {
               ))}
             </Swiper>
           ) : (
-            <p>{t("noNotes")}</p>
+            <p className="text-2xl text-white">{t("noNotes")}</p>
           )}
         </div>
       </div>

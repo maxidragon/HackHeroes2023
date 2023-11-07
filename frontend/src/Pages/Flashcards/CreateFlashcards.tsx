@@ -145,7 +145,7 @@ export default function CreateFlashcards() {
           <>
             <div key={_flashcard.key} className="w-full flex flex-col gap-4">
               <div className="flex justify-between items-center">
-                <p className="text-white text-lg">Flashcard nr. {index + 1}</p>
+                <p className="text-white text-lg">{t("flashcard")} nr. {index + 1}</p>
                 {flashcards.length > 1 && (
                   <Button
                     type="alt"

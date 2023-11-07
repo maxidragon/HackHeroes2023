@@ -60,12 +60,12 @@ const TodoCard = ({
       className="rounded-lg shadow-md p-4 relative bg-purple-600 md:w-64 w-full h-24"
     >
       <p
-        className="text-white font-semibold text-xl text-ellipsis overflow-hidden w-full"
+        className="text-white font-semibold text-xl text-ellipsis overflow-hidden whitespace-nowrap w-full"
         title={todo.text}
       >
         {todo.text}
       </p>
-      {todo.done && <p className="text-sm text-white opacity-80">Completed</p>}
+      {todo.done && <p className="text-sm text-white opacity-80">{t("completed")}</p>}
       <div className="absolute flex items-center gap-2 bottom-2 right-2 text-white">
         {!todo.done && (
           <MdDone
