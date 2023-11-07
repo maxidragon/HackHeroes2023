@@ -9,7 +9,7 @@ export default function MarkdownComponent({
 }) {
   return (
     <Markdown
-      className={className}
+      className={className + " text-white"}
       options={{
         overrides: {
           h1: {
@@ -42,7 +42,7 @@ export default function MarkdownComponent({
           },
           p: {
             props: {
-              className: "text-lg text-gray-200",
+              className: "text-lg text-white",
             },
           },
           code: {

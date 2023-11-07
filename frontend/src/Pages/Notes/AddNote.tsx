@@ -77,7 +77,7 @@ export default function AddNote() {
 
   return (
     <div className="flex-1 flex flex-col items-center gap-4">
-      <h1 className="text-center text-4xl roboto text-white mt-4">New Note</h1>
+      <h1 className="text-center text-4xl roboto text-white mt-4">{t("newNote")}</h1>
       <Input
         type="text"
         placeholder={t('title')}

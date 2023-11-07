@@ -174,7 +174,7 @@ export default function EditNote() {
             onChange={(e) => {
               setCategory(e.target.value);
             }}
-            defaultValue={category}
+            value={category}
             placeholder={t('selectCategoryPlaceholder')}
             className="w-full py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
@@ -188,7 +188,7 @@ export default function EditNote() {
             onChange={(e) => {
               setPublicity(e.target.value);
             }}
-            defaultValue={publicity}
+            value={publicity}
             placeholder={t('selectPublicityPlaceholder')}
             className="w-full py-2 text-center border-2 border-gray-500 focus:border-purple-400 bg-bgClr rounded-lg text-xl text-white roboto overflow-hidden cursor-pointer"
           >
